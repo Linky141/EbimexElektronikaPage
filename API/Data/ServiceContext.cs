@@ -2,6 +2,9 @@ namespace API.Data;
 
 public class ServiceContext : DbContext
 {
-    protected ServiceContext(DbContextOptions options) : base(options)
+    public ServiceContext(DbContextOptions options) : base(options)
     { }
+
+    public DbSet<Entities.Service> Services { get; set; }
+
 }
