@@ -26,7 +26,7 @@ namespace API.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ServiceId")
+                    b.Property<int>("ServiceId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -83,9 +83,13 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.Comment", b =>
                 {
-                    b.HasOne("API.Entities.Service", null)
+                    b.HasOne("API.Entities.Service", "Service")
                         .WithMany("Comments")
-                        .HasForeignKey("ServiceId");
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("API.Entities.PictureUrl", b =>

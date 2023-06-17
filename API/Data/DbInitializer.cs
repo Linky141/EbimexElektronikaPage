@@ -2,7 +2,7 @@ namespace API.Data;
 
 public static class DbInitializer
 {
-    public static async Task Initialize(ServiceContext serviceContext)
+    public static void Initialize(ServiceContext serviceContext)
     {
         if (serviceContext.Services.Any())
             return;
