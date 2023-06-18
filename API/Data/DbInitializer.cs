@@ -14,7 +14,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -31,7 +31,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.Opened,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -48,7 +48,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.ReadyToBePickedUp,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -65,7 +65,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.ReleasedToCustomer,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -82,7 +82,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.Testing,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -99,7 +99,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.WaitingForComponents,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -116,7 +116,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -133,7 +133,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -150,7 +150,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -167,7 +167,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -184,7 +184,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -201,7 +201,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -218,7 +218,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -235,7 +235,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -252,7 +252,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -269,7 +269,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -286,7 +286,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
@@ -303,7 +303,7 @@ public static class DbInitializer
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
-                PlannedDateOfCompletion = new DateTime(),
+                PlannedDateOfCompletion = DateTime.UtcNow,
                 PictureUrls = new List<Entities.PictureUrl> {
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
                     new Entities.PictureUrl {Url = "https://picsum.photos/200"},
