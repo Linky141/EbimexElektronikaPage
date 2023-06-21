@@ -1,4 +1,4 @@
-import { ListItem, ListItemAvatar, Avatar, ListItemText, Card, Button, CardActions, CardContent, Typography } from "@mui/material";
+import { Card, Button, CardActions, CardContent, Typography } from "@mui/material";
 import { Service } from "../../app/models/service";
 import Moment from 'moment';
 

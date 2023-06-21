@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Service } from "../models/service";
-import Services from "../../features/Services/Services";
+import { useState } from "react";
+import ServicesPage from "../../features/Services/ServicesPage";
 import Header from "./Header";
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
 function App() {
 
@@ -26,7 +26,7 @@ function App() {
       <CssBaseline />
       <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
       <Container>
-        <Services />
+        <Outlet />
       </Container>
     </ThemeProvider>
   );

@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { Service } from '../../app/models/service'
 import ServiceList from './ServiceList';
 
-interface Props {
-    services: Service[];
-    addServices: () => void;
-}
+// interface Props {
+//     services: Service[];
+//     addServices: () => void;
+// }
 
-export default function Services() {
+export default function ServicesPage() {
 
     const [services, setServices] = useState<Service[]>([]);
 

@@ -1,4 +1,4 @@
-import { Grid, List } from "@mui/material";
+import { Grid } from "@mui/material";
 import { Service } from "../../app/models/service";
 import ServiceCard from "./ServiceCard";
 
