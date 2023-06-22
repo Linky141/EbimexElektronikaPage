@@ -17,5 +17,7 @@ export interface Service {
   export interface Comment {
     id: number
     content: string
+    user: string
+    dateTime: string
   }
   

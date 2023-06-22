@@ -1,8 +1,13 @@
 import { useState } from "react";
-import ServicesPage from "../../features/Services/ServicesPage";
 import Header from "./Header";
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
+// import {
+//   experimental_extendTheme as materialExtendTheme,
+//   Experimental_CssVarsProvider as MaterialCssVarsProvider,
+//   THEME_ID as MATERIAL_THEME_ID,
+// } from '@mui/material/styles';
+// import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 
 function App() {
 
@@ -11,11 +16,12 @@ function App() {
   const theme = createTheme({
     palette: {
       mode: paletteType,
-      background:{
+      background: {
         default: paletteType === 'light' ? "#eaeaea" : "#121212"
       }
     }
   })
+  // const materialTheme = materialExtendTheme();
 
   function handleThemeChange() {
     setDarkMode(!darkMode);

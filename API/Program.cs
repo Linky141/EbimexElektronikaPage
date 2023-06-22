@@ -34,12 +34,12 @@ app.UseAuthorization();
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
-var context = scope.ServiceProvider.GetRequiredService<ServiceContext>();
+var servicecontext = scope.ServiceProvider.GetRequiredService<ServiceContext>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 try
 {
-    context.Database.Migrate();
-    DbInitializer.Initialize(context);
+    servicecontext.Database.Migrate();
+    DbInitializer.Initialize(servicecontext);
 }
 catch (Exception ex)
 {

@@ -7,5 +7,11 @@ public class MappingProfiles : AutoMapper.Profile
         CreateMap<Entities.Service, DTOs.ServiceDto>();
         CreateMap<Entities.PictureUrl, DTOs.PictureUrlDto>();
         CreateMap<Entities.Comment, DTOs.CommentDto>();
+
+        CreateMap<Entities.Contact, DTOs.ContactDto>();
+        CreateMap<Entities.ContactCustom, DTOs.ContactCustomDto>();
+
+        CreateMap<Entities.Info, DTOs.InfoDto>();
+        CreateMap<Entities.InfoAnnouncement, DTOs.InfoAnnouncementDto>();
     }
 }
