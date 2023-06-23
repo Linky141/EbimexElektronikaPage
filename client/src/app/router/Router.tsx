@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import ServiceDetails from "../../features/Services/ServiceDetails";
-import ServicesPage from "../../features/Services/ServicesPage";
+import ServiceDetails from "../../features/services/ServiceDetails";
+import ServicesPage from "../../features/services/ServicesPage";
 import HomePage from "../../features/homePage/HomePage";
 import App from "../layout/App";
 import InfoPage from "../../features/infoPage/InfoPage";

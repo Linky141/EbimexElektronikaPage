@@ -22,20 +22,5 @@ export default function ServiceCommentComponent({ content, dateTime, user }: Pro
                 {content}
             </Grid>
         </Box>
-
-
-        // <Box sx={{ background: 'lightblue', margin: '10px', padding: '10px', borderRadius: '20px' }}>
-        //     <Grid container>
-        //         <Grid item xs={6} fontSize="25px">
-        //             {user}
-        //         </Grid>
-        //         <Grid item xs={6} display="flex" justifyContent="flex-end" color="gray">
-        //             {dateTime}                
-        //         </Grid>
-        //     </Grid>
-        //     <Grid item>
-        //         {content}
-        //     </Grid>
-        // </Box>
     )
 }
