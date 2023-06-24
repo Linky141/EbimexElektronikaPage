@@ -65,7 +65,6 @@ export default function InfoOpenedHours({ editingOpenedHoursMode, setEditingOpen
                         </Grid>
                     </form>
                 )}
-
             </Grid>
         </>
     )

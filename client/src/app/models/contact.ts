@@ -2,8 +2,6 @@ export interface Contact {
     id: number
     email: string
     phone: string
-    email2: string
-    phone2: string
     addressCountry: string
     addressCity: string
     addressStreet: string

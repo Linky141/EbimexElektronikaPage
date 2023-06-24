@@ -346,9 +346,7 @@ public static class DbInitializer
         {
             new Entities.Contact{
                 Phone = "123345756",
-                Phone2 = "948594321",
                 Email = "testmail1@gmail.com",
-                Email2 = "testmail2@yahoo.com",
                 AddressCountry = "Poland",
                 AddressCity = "Lędziny",
                 AddressStreet = "Owocowa",

@@ -6,8 +6,6 @@ public class Contact
 
     public string Email { get; set; }
     public string Phone { get; set; }
-    public string Email2 { get; set; }
-    public string Phone2 { get; set; }
 
     public string AddressCountry { get; set; }
     public string AddressCity { get; set; }

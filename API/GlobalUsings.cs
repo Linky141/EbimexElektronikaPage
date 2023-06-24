@@ -12,3 +12,4 @@ global using API.Data;
 global using Microsoft.AspNetCore.Mvc;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using AutoMapper;
+global using System.Text.Json;

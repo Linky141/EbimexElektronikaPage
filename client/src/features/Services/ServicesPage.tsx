@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Service } from '../../app/models/service'
 import ServiceList from './ServiceList';
+import agent from '../../app/api/agent';
+import LoadingComponent from '../../app/layout/LoadingComponent';
 
 // interface Props {
 //     services: Service[];
@@ -8,34 +10,21 @@ import ServiceList from './ServiceList';
 // }
 
 export default function ServicesPage() {
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    const [services, setServices] = useState<Service[]>([]);
+  useEffect(() => {
+    agent.Service.list().then(services => setServices(services))
+      .catch(error => console.log(error))
+      .finally(() => setLoading(false))
+  }, [])
 
-    useEffect(() => {
-      fetch('http://localhost:5000/api/services')
-        .then(response => response.json())
-        .then(data => setServices(data));
-    }, [])
-  
-    function addService() {
-      setServices(prevState => [...prevState,
-      {
-        id: prevState.length + 1,
-        name: 'added' + (prevState.length + 1),
-        price: 1000,
-        currentStatus: 0,
-        description: 'description',
-        plannedDateOfCompletion: '2020-02-02',
-        comments: [],
-        pictureUrls: []
-      }])
-    }
-  
+  if (loading)
+    return <LoadingComponent message='Loading services...'/>
 
-    return (
-        <>
-            <ServiceList services={services} />
-            <button onClick={addService}>add</button>
-        </>
-    )
+  return (
+    <>
+      <ServiceList services={services} />
+    </>
+  )
 }

@@ -1,12 +1,14 @@
-import { Box, Button, Grid, List, ListItem, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
+import { Button, Grid, List, ListItem, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Service } from "../../app/models/service";
-import axios from "axios";
 import Moment from 'moment';
 import ServiceStatus from "./ServiceStatus";
 import ServiceCommentComponent from "./ServiceCommentComponent";
 import ServicePreviewImage from "./ServicePreviewImage";
+import agent from "../../app/api/agent";
+import NotFound from "../../app/errors/NotFound";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default function ServiceDetails() {
     const { id } = useParams<{ id: string }>();
@@ -16,16 +18,16 @@ export default function ServiceDetails() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/services/${id}`)
-            .then(response => setService(response.data))
+        agent.Service.details(parseInt(id!))
+            .then(response => setService(response))
             .catch(error => console.log(error))
-            .finally(() => setLoading(false));
+            .finally(() => setLoading(false))
     }, [id]);
 
     if (loading)
-        return <h3>Loading...</h3>
+        return <LoadingComponent message="Loading service details..."/>
     if (!service)
-        return <h3>Service not found.</h3>
+        return <NotFound/>
     if (selectedImage)
         return <ServicePreviewImage selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
 
@@ -38,8 +40,8 @@ export default function ServiceDetails() {
             </Grid>
             <Grid item xs={12}>
                 <List sx={{ display: 'flex' }}>
-                    {service.pictureUrls.map(({ url }) => (
-                        <ListItem>
+                    {service.pictureUrls.map(({ url, id }) => (
+                        <ListItem key={id}>
                             <Button onClick={() => setSelectedImage(url)}>
                                 <img src={url} alt={url} style={{ margin: '10px', width: '300px' }} />
                             </Button>
@@ -77,8 +79,8 @@ export default function ServiceDetails() {
             <Grid item xs={12}>
                 <Typography variant="h4">Comments</Typography>
                 <Grid container >
-                    {service.comments.map(({ content, dateTime, user }) => (
-                        <Grid item xs={12}>
+                    {service.comments.map(({ content, dateTime, user, id }) => (
+                        <Grid item xs={12} key={id}>
                             <ServiceCommentComponent content={content} dateTime={dateTime} user={user} />
                         </Grid>
                     ))}

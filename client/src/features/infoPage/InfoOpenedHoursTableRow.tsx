@@ -11,17 +11,16 @@ interface Props {
 export default function InfoOpenedHoursTableRow({ day, close, open, editMode }: Props) {
     const [isClosed, setIsClosed] = useState(false);
 
-    const [openSt, setOpenSt] = useState<string>();
-    const [closeSt, setCloseSt] = useState<string>();
+    const [openSt, setOpenSt] = useState<string>("");
+    const [closeSt, setCloseSt] = useState<string>("");
 
     useEffect(() => {
+        setOpenSt(open);
+        setCloseSt(close);
         if (open === "Closed" || close === "Closed")
             setIsClosed(true);
         else
             setIsClosed(false);
-
-            setOpenSt(open);
-            setCloseSt(close);
     }, [close, open]);
 
     function ChangeClosed() {
@@ -36,21 +35,13 @@ export default function InfoOpenedHoursTableRow({ day, close, open, editMode }: 
         setIsClosed(!isClosed);
     }
 
-    const onChangeOpen = (event: any) => {
-        setOpenSt(event.target.value)
-       }
-
-       const onChangeClose = (event: any) => {
-        setCloseSt(event.target.value)
-       }
-
     return (
         <>
             {!editMode ? (
                 <TableRow>
                     <TableCell>{day}</TableCell>
                     {!isClosed ? (
-                        <TableCell>{openSt} - {close}</TableCell>
+                        <TableCell>{openSt} - {closeSt}</TableCell>
                     ) : (
                         <TableCell>Closed</TableCell>
                     )}
@@ -67,7 +58,7 @@ export default function InfoOpenedHoursTableRow({ day, close, open, editMode }: 
                                 variant="outlined"
                                 value={!isClosed ? openSt : "Closed"}
                                 disabled={isClosed ? true : false}
-                                onChange={onChangeOpen}
+                                onChange={e => setOpenSt(e.target.value)}
                             />
                             <TextField
                                 id="outlined-basic"
@@ -75,11 +66,11 @@ export default function InfoOpenedHoursTableRow({ day, close, open, editMode }: 
                                 variant="outlined"
                                 value={!isClosed ? closeSt : "Closed"}
                                 disabled={isClosed ? true : false}
-                                onChange={onChangeClose}
+                                onChange={e => setCloseSt(e.target.value)}
                             />
                             <FormControlLabel
                                 control={
-                                    <Checkbox checked={isClosed} onChange={() => ChangeClosed()} />
+                                    <Checkbox checked={isClosed} onChange={ChangeClosed} />
                                 }
                                 label="Closed"
                             />

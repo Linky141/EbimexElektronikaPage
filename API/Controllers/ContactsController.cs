@@ -1,8 +1,6 @@
 namespace API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ContactsController : ControllerBase
+public class ContactsController : BaseApiController
 {
     private readonly IMapper mapper;
     private readonly ServiceContext serviceContext;
