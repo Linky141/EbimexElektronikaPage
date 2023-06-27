@@ -2,25 +2,26 @@ import { TableContainer, Table, TableBody } from "@mui/material";
 import { Contact } from "../../app/models/contact";
 import ContactAddressTableRow from "./ContactAddressTableRow";
 import { useState } from "react";
-import { UseControllerProps } from "react-hook-form";
+import { Control, FieldValues, UseControllerProps } from "react-hook-form";
 
 interface Props {
-    contact: Contact;
     editAddressMode: boolean;
+    control: Control<FieldValues, any>;
+    contact: Contact;
 }
 
-export default function ContactAddressTable({ contact, editAddressMode }: Props) {
+export default function ContactAddressTable({ editAddressMode, control, contact }: Props) {
 
     return (
         <TableContainer>
             <Table>
                 <TableBody>
-                    <ContactAddressTableRow fieldName="Country" fieldValue={contact.addressCountry} editAddressMode={editAddressMode} />
-                    <ContactAddressTableRow fieldName="City" fieldValue={contact.addressCity} editAddressMode={editAddressMode} />
-                    <ContactAddressTableRow fieldName="Postal code" fieldValue={contact.addressPostal} editAddressMode={editAddressMode} />
-                    <ContactAddressTableRow fieldName="Street" fieldValue={contact.addressStreet} editAddressMode={editAddressMode} />
-                    <ContactAddressTableRow fieldName="Building number" fieldValue={contact.addressNumber1} editAddressMode={editAddressMode} />
-                    <ContactAddressTableRow fieldName="Apartment number" fieldValue={contact.addressNumber2} editAddressMode={editAddressMode} />
+                    <ContactAddressTableRow label="Country" content={contact.addressCountry} control={control} editaddressmode={editAddressMode} name="AddressCountry" />
+                    <ContactAddressTableRow label="City" content={contact.addressCity} control={control} editaddressmode={editAddressMode} name="AddressCity" />
+                    <ContactAddressTableRow label="Postal code" content={contact.addressPostal} control={control} editaddressmode={editAddressMode} name="AddressPostal" />
+                    <ContactAddressTableRow label="Street" content={contact.addressStreet} control={control} editaddressmode={editAddressMode} name="AddressStreet" />
+                    <ContactAddressTableRow label="Building number" content={contact.addressNumber1} control={control} editaddressmode={editAddressMode} name="AddressNumber1" />
+                    <ContactAddressTableRow label="Apartment number" content={contact.addressNumber2} control={control} editaddressmode={editAddressMode} name="AddressNumber2" />
                 </TableBody>
             </Table>
         </TableContainer>

@@ -1,36 +1,31 @@
 import { TableRow, TableCell, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
+import { UseControllerProps, useController } from "react-hook-form";
 
-interface Props {
-    fieldName: string;
-    fieldValue: string;
-    editAddressMode: boolean;
+interface Props extends UseControllerProps {
+    label: string;
+    content: string;
+    editaddressmode: boolean;
 }
 
-export default function ContactAddressTableRow({ editAddressMode, fieldName, fieldValue }: Props) {
-    // const [fieldValueData, setFieldValueData] = useState<string>();
-
-    // useEffect(() => {
-    //     setFieldValueData(fieldValue)
-    // }, [fieldValue]);
+export default function ContactAddressTableRow(props: Props) {
+    const { field } = useController({ ...props, defaultValue: props.content });
 
     return (
         <>
-            {!editAddressMode ? (
+            {!props.editaddressmode ? (
                 <TableRow>
-                    <TableCell>{fieldName}</TableCell>
-                    <TableCell>{fieldValue}</TableCell>
+                    <TableCell>{props.label}</TableCell>
+                    <TableCell>{props.content}</TableCell>
                 </TableRow>
             ) : (
                 <TableRow>
                     <TableCell>
                         <TextField
-                            // value={fieldValueData}
-                            defaultValue={fieldValue}
-                            // onChange={e => setFieldValueData(e.target.value)}
-                            // onChange={e => fieldValue = e.target.value}
+                            {...field}
+                            defaultValue={props.defaultValue}
                             fullWidth
-                            label={fieldName}
+                            label={props.label}
                         />
                     </TableCell>
                 </TableRow>

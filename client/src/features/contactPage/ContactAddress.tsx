@@ -3,20 +3,28 @@ import { useEffect, useState } from "react";
 import { Contact } from "../../app/models/contact";
 import ContactAddressTable from "./ContactAddressTable";
 import agent from "../../app/api/agent";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 interface Props {
     contact: Contact;
+    setContacts: (contacts: any) => void;
 }
 
-export default function ContactAddress({ contact }: Props) {
-
+export default function ContactAddress({ contact, setContacts }: Props) {
+    const { control, handleSubmit } = useForm();
     const [editAddressMode, setEditAddressMode] = useState(false);
 
-    function handleOnSubmitAddress() {
-        agent.Contact.updateAddress(contact)
+    function handleOnSubmitAddress(data: FieldValues) {
+        data.Id = 1;
+        agent.Contact
+            .updateAddress(data)
             .catch(error => console.log(error));
+
         setEditAddressMode(false);
+
+
+        console.log(contact);
     }
 
     return (
@@ -31,6 +39,7 @@ export default function ContactAddress({ contact }: Props) {
                     </Grid>
                     <ContactAddressTable
                         contact={contact}
+                        control={control}
                         editAddressMode={editAddressMode}
                     />
                 </Grid>
@@ -40,11 +49,13 @@ export default function ContactAddress({ contact }: Props) {
                         <Typography variant="h4">Address</Typography>
                     </Grid>
                     <Grid item>
-                        <Button onClick={handleOnSubmitAddress} color="success">Submit</Button>
+                        {/* <Button onClick={handleOnSubmitAddress} color="success">Submit</Button> */}
+                        <Button onClick={handleSubmit(handleOnSubmitAddress)} color="success">Submit</Button>
                         <Button onClick={() => setEditAddressMode(false)} color="error">Cancel</Button>
                     </Grid>
                     <ContactAddressTable
                         contact={contact}
+                        control={control}
                         editAddressMode={editAddressMode}
                     />
                 </Grid>

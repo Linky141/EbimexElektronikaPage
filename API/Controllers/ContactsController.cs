@@ -22,25 +22,23 @@ public class ContactsController : BaseApiController
     }
 
     [HttpPut("UpdateAddress")]
-    public async Task<ActionResult<Entities.Contact>> UpdateAddress([FromForm] DTOs.UpdateContactDto updateContactDto)
+    public async Task<ActionResult<Entities.Contact>> UpdateAddress([FromForm] DTOs.UpdateContactAddressDto updateContactAddressDto)
     {
-        var contact = await serviceContext.Contacts.FindAsync(updateContactDto.Id);
+        var contact = await serviceContext.Contacts.FindAsync(updateContactAddressDto.Id);
 
-        if (updateContactDto.AddressCity == contact.AddressCity &&
-        updateContactDto.AddressCountry == contact.AddressCountry &&
-        updateContactDto.AddressNumber1 == contact.AddressNumber1 &&
-        updateContactDto.AddressNumber2 == contact.AddressNumber2 &&
-        updateContactDto.AddressPostal == contact.AddressPostal &&
-        updateContactDto.AddressStreet == contact.AddressStreet &&
-        updateContactDto.Email == contact.Email &&
-        updateContactDto.Phone == contact.Phone
+        if (updateContactAddressDto.AddressCity == contact.AddressCity &&
+        updateContactAddressDto.AddressCountry == contact.AddressCountry &&
+        updateContactAddressDto.AddressNumber1 == contact.AddressNumber1 &&
+        updateContactAddressDto.AddressNumber2 == contact.AddressNumber2 &&
+        updateContactAddressDto.AddressPostal == contact.AddressPostal &&
+        updateContactAddressDto.AddressStreet == contact.AddressStreet
         )
             return BadRequest(new ProblemDetails { Title = "Nothing changed" });
 
         if (contact == null)
             return NotFound();
 
-        mapper.Map(updateContactDto, contact);
+        mapper.Map(updateContactAddressDto, contact);
 
         var result = await serviceContext.SaveChangesAsync() > 0;
         if (result)

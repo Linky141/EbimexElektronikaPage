@@ -11,20 +11,22 @@ export default function ContactPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-       agent.Contact.list().then(contacts => setContacts(contacts))
-       .catch(error => console.log(error))
-       .finally(() => setLoading(false))
+        agent.Contact.list()
+        .then(c => setContacts(c))
+        .catch(error => console.log(error))
+        .finally(() => setLoading(false))
     }, [])
 
+
     if (loading)
-    return <LoadingComponent message='Loading contact info...'/>
+        return <LoadingComponent message='Loading contact info...' />
 
     return (
         <>
             {contacts.map(contact => (
                 <Grid container key={contact.id}>
-                    <ContactAddress contact={contact}/>
-                    <ContactContacts contact={contact}/>
+                    <ContactAddress contact={contact} setContacts={setContacts}/>
+                    <ContactContacts contact={contact} />
                 </Grid>
             ))
             }

@@ -1,10 +1,8 @@
 namespace API.DTOs;
 
-public class UpdateContactDto
+public class UpdateContactAddressDto
 {
     public int Id { get; set; }
-    public string Email { get; set; }
-    public string Phone { get; set; }
 
     public string AddressCountry { get; set; }
     public string AddressCity { get; set; }

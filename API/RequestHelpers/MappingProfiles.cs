@@ -10,7 +10,7 @@ public class MappingProfiles : AutoMapper.Profile
 
         CreateMap<Entities.Contact, DTOs.ContactDto>();
         CreateMap<Entities.ContactCustom, DTOs.ContactCustomDto>();
-        CreateMap<DTOs.UpdateContactDto, Entities.Contact>();
+        CreateMap<DTOs.UpdateContactAddressDto, Entities.Contact>();
 
         CreateMap<Entities.Info, DTOs.InfoDto>();
         CreateMap<Entities.InfoAnnouncement, DTOs.InfoAnnouncementDto>();
