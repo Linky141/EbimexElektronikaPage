@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css'
 // import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
 
 function App() {
-
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
   const theme = createTheme({

@@ -1,10 +1,9 @@
 import { Grid, Typography, Button } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Contact } from "../../app/models/contact";
 import ContactAddressTable from "./ContactAddressTable";
 import agent from "../../app/api/agent";
 import { FieldValues, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 
 interface Props {
     contact: Contact;
