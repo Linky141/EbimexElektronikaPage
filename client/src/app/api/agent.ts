@@ -5,6 +5,7 @@ import { router } from "../router/Router";
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
+axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -45,7 +46,21 @@ const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
-    delete: (url: string) => axios.delete(url).then(responseBody)
+    delete: (url: string) => axios.delete(url).then(responseBody),
+    postForm: (url: string, data: FormData) => axios.post(url, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(responseBody),
+    putForm: (url: string, data: FormData) => axios.put(url, data, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }).then(responseBody),
+}
+
+function createFormData(item: any) {
+    let formData = new FormData();
+    for (const key in item) {
+        formData.append(key, item[key])
+    }
+    return formData;
 }
 
 const Info = {
@@ -53,7 +68,8 @@ const Info = {
 }
 
 const Contact = {
-    list: () => requests.get('contacts')
+    list: () => requests.get('contacts'),
+    updateAddress: (contact: any) => requests.putForm('contacts/UpdateAddress', createFormData(contact))
 }
 
 const Service = {

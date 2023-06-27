@@ -8,11 +8,11 @@ interface Props {
 }
 
 export default function ContactAddressTableRow({ editAddressMode, fieldName, fieldValue }: Props) {
-    const [fieldValueData, setFieldValueData] = useState<string>();
+    // const [fieldValueData, setFieldValueData] = useState<string>();
 
-    useEffect(() => {
-        setFieldValueData(fieldValue)
-    }, [fieldValue]);
+    // useEffect(() => {
+    //     setFieldValueData(fieldValue)
+    // }, [fieldValue]);
 
     return (
         <>
@@ -25,8 +25,10 @@ export default function ContactAddressTableRow({ editAddressMode, fieldName, fie
                 <TableRow>
                     <TableCell>
                         <TextField
-                            value={fieldValueData}
-                            onChange={e => setFieldValueData(e.target.value)}
+                            // value={fieldValueData}
+                            defaultValue={fieldValue}
+                            // onChange={e => setFieldValueData(e.target.value)}
+                            // onChange={e => fieldValue = e.target.value}
                             fullWidth
                             label={fieldName}
                         />
