@@ -4,6 +4,9 @@ import './app/layout/style.css';
 import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Router';
+import { Provider } from 'react-redux';
+import { service } from './app/service/configureService';
+import { ServiceProvider } from './app/context/ServiceContext';
 
 
 const container = document.getElementById('root');
@@ -11,7 +14,11 @@ const root = createRoot(container!);
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <ServiceProvider>
+      <Provider store={service}>
+        <RouterProvider router={router} />
+      </Provider>
+    </ServiceProvider>
   </React.StrictMode>
 );
 
