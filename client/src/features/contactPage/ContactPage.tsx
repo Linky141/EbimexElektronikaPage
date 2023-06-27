@@ -5,18 +5,18 @@ import ContactAddress from "./ContactAddress";
 import ContactContacts from "./ContactContacts";
 import agent from "../../app/api/agent";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import { useAppDispatch } from "../../app/service/configureService";
+import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
+import { setContacts } from "./contactSlice";
 
 export default function ContactPage() {
     const dispatch = useAppDispatch();
+    const { contacts } = useAppSelector(state => state.contacts);
 
-    // const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         agent.Contact.list()
-            // .then(contacts => dispatch(setContacts(contacts)))
-            .then(contacts => dispatch(contacts.setContacts(contacts)))
+            .then(contacts => dispatch(setContacts(contacts)))
             .catch(error => console.log(error))
             .finally(() => setLoading(false))
     }, [dispatch])
@@ -27,13 +27,13 @@ export default function ContactPage() {
 
     return (
         <>
-            {/* {contacts.map(contact => (
+            {contacts!.map(contact => (
                 <Grid container key={contact.id}>
-                    <ContactAddress contact={contact} setContacts={setContacts} />
+                    <ContactAddress contact={contact} />
                     <ContactContacts contact={contact} />
                 </Grid>
             ))
-            } */}
+            }
         </>
     )
 }

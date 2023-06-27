@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Contact } from "../../app/models/contact";
 
-interface ContactsState{
-    contact: Contact[] | null
+interface ContactsState {
+    contacts: Contact[] | null
 }
 
 const initialState: ContactsState = {
-    contact: null
+    contacts: null
 }
 
 export const contactsSlice = createSlice({
@@ -14,7 +14,9 @@ export const contactsSlice = createSlice({
     initialState,
     reducers: {
         setContacts: (state, action) => {
-            state.contact = action.payload
+            state.contacts = action.payload
         }
     }
 })
+
+export const { setContacts } = contactsSlice.actions;

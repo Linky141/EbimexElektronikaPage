@@ -11,7 +11,7 @@ public class ContactsController : BaseApiController
 
     }
 
-    [HttpGet]
+    [HttpGet(Name = "GetContact")]
     public async Task<ActionResult<List<DTOs.ContactDto>>> GetContact()
     {
         var contact = await RetrieveContact();
@@ -40,9 +40,15 @@ public class ContactsController : BaseApiController
 
         mapper.Map(updateContactAddressDto, contact);
 
+
         var result = await serviceContext.SaveChangesAsync() > 0;
+
+        List<DTOs.ContactDto> dto = new();
+        dto.Add(new DTOs.ContactDto { AddressCity = contact.AddressCity, AddressCountry = contact.AddressCountry, AddressNumber1 = contact.AddressNumber1, AddressNumber2 = contact.AddressNumber2, AddressPostal = contact.AddressPostal, AddressStreet = contact.AddressStreet });
+
         if (result)
-            return Ok(contact);
+            // return Ok(new DTOs.ContactDto{ AddressCity = contact.AddressCity, AddressCountry = contact.AddressCountry, AddressNumber1 = contact.AddressNumber1, AddressNumber2 = contact.AddressNumber2, AddressPostal = contact.AddressPostal, AddressStreet = contact.AddressStreet});
+            return CreatedAtRoute("GetContact", dto);
         return BadRequest(new ProblemDetails { Title = "Problem updating address" });
     }
 

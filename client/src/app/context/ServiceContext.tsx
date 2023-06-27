@@ -15,12 +15,12 @@ export function useServiceContext() {
     return context;
 }
 
-export function ServiceProvider({children}: PropsWithChildren<any>) {
+export function ServiceProvider({ children }: PropsWithChildren<any>) {
     const [contacts, setContacts] = useState<Contact[] | null>(null);
 
-    
-    return(
-        <ServiceContext.Provider value={{contacts, setContacts}}>
+
+    return (
+        <ServiceContext.Provider value={{ contacts, setContacts }}>
             {children}
         </ServiceContext.Provider>
     )
