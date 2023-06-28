@@ -1,7 +1,8 @@
-import { TableContainer, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { TableContainer, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { Contact } from "../../app/models/contact";
 import ContactContactsTableCustoms from "./ContactContactsTableCustoms";
+import { Control, FieldValues } from "react-hook-form";
+import ContactContactsTextField from "./ContactContactsTextField";
 
 interface Props {
     contact: Contact;
@@ -9,37 +10,33 @@ interface Props {
     editingCustomContact: number;
     setEditingCustomContact: (state: number) => void;
     addingNewCustomContact: boolean;
+    control: Control<FieldValues, any>;
+    customContacts: [number, string, string][];
+    setCustomContacts: (contact: [number, string, string][]) => void;
 }
 
-export default function ContactContactsTable({ contact, editContactsMode, editingCustomContact, setEditingCustomContact, addingNewCustomContact }: Props) {
-    const [phoneData, setPhoneData] = useState<string>();
-    const [emailData, setEmailData] = useState<string>();
-
-    useEffect(() => {
-        setPhoneData(contact.phone);
-        setEmailData(contact.email)
-    }, [contact.email, contact.phone]);
-
+export default function ContactContactsTable(props: Props) {
     return (
         <>
-            {!editContactsMode ? (
+            {!props.editContactsMode ? (
                 <TableContainer>
                     <Table>
                         <TableBody>
                             <TableRow>
                                 <TableCell>Phone</TableCell>
-                                <TableCell>{contact.phone}</TableCell>
+                                <TableCell>{props.contact.phone}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>Email</TableCell>
-                                <TableCell>{contact.email}</TableCell>
+                                <TableCell>{props.contact.email}</TableCell>
                             </TableRow>
                             <ContactContactsTableCustoms
-                                contact={contact}
-                                editContactsMode={editContactsMode}
-                                editingCustomContact={editingCustomContact}
-                                setEditingCustomContact={setEditingCustomContact}
-                                addingNewCustomContact={addingNewCustomContact}
+                                editContactsMode={props.editContactsMode}
+                                editingCustomContact={props.editingCustomContact}
+                                setEditingCustomContact={props.setEditingCustomContact}
+                                addingNewCustomContact={props.addingNewCustomContact}
+                                customContacts={props.customContacts}
+                                setCustomContacts={props.setCustomContacts}                                
                             />
                         </TableBody>
                     </Table>
@@ -51,21 +48,23 @@ export default function ContactContactsTable({ contact, editContactsMode, editin
                             <TableBody>
                                 <TableRow>
                                     <TableCell>
-                                        <TextField
-                                            value={phoneData}
-                                            onChange={e => setPhoneData(e.target.value)}
-                                            fullWidth
+                                        <ContactContactsTextField
                                             label="Phone"
+                                            content={props.contact.phone}
+                                            fullWidth={true}
+                                            name={"Phone"}
+                                            control={props.control}
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>
-                                        <TextField
-                                            value={emailData}
-                                            onChange={e => setEmailData(e.target.value)}
-                                            fullWidth
+                                    <ContactContactsTextField
                                             label="Email"
+                                            content={props.contact.email}
+                                            fullWidth={true}
+                                            name={"Email"}
+                                            control={props.control}
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -73,11 +72,12 @@ export default function ContactContactsTable({ contact, editContactsMode, editin
                         </Table>
                     </TableContainer>
                     <ContactContactsTableCustoms
-                        contact={contact}
-                        editContactsMode={editContactsMode}
-                        editingCustomContact={editingCustomContact}
-                        setEditingCustomContact={setEditingCustomContact}
-                        addingNewCustomContact={addingNewCustomContact}
+                        editContactsMode={props.editContactsMode}
+                        editingCustomContact={props.editingCustomContact}
+                        setEditingCustomContact={props.setEditingCustomContact}
+                        addingNewCustomContact={props.addingNewCustomContact}
+                        customContacts={props.customContacts}
+                        setCustomContacts={props.setCustomContacts}    
                     />
                 </>
             )}
