@@ -26,7 +26,7 @@ export default function ContactPage() {
 
     return (
         <>
-            {contacts!.map(contact => (
+            {contacts?.map(contact => (
                 <Grid container key={contact.id}>
                     <ContactAddress contact={contact} />
                     <ContactContacts contact={contact} />

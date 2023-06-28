@@ -1,6 +1,6 @@
 import { Grid, Typography, Button, TableContainer, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Contact } from "../../app/models/contact";
+import { Contact, ContactCustom } from "../../app/models/contact";
 import ContactContactsTable from "./ContactContactsTable";
 import { FieldValues, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../app/service/configureService";
@@ -15,7 +15,7 @@ interface Props {
 export default function ContactContacts({ contact }: Props) {
     const { control, handleSubmit } = useForm();
     const dispatch = useAppDispatch();
-    const [customContacts, setCustomContacts] = useState<[number, string, string][]>([]);
+    const [customContacts, setCustomContacts] = useState<ContactCustom[]>([]);
 
     const [newNameState, setNewNameState] = useState<string>('');
     const [newContentState, setNewContentState] = useState<string>('');
@@ -28,9 +28,7 @@ export default function ContactContacts({ contact }: Props) {
 
     useEffect(() => {
         if (!customContactsLoaded) {
-            contact.contactCustoms.forEach(element => {
-                setCustomContacts(customContacts => [...customContacts, [element.id, element.name, element.content]]);
-            });
+            setCustomContacts(contact.contactCustoms);
         }
         setCustomContactsLoaded(true);
     }, [contact.contactCustoms, customContactsLoaded])
@@ -38,14 +36,14 @@ export default function ContactContacts({ contact }: Props) {
     function handleOnSubmitContactData(data: FieldValues) {
         setLoadingSubmit(true);
         data.Id = 1;
-        data.customs = customContacts;
+        data.contactCustoms = customContacts;
         agent.Contact
             .updateContact(data)
             .then(contacts => dispatch(setContacts(contacts)))
             .catch(error => console.log(error))
             .finally(finishActions);
 
-        function finishActions(){
+        function finishActions() {
             setLoadingSubmit(false);
             setEditContactsMode(false);
         }
@@ -53,8 +51,13 @@ export default function ContactContacts({ contact }: Props) {
         console.log(data);
     }
 
-    function addNewCustomContact(name: string, content: string) {
-        customContacts.push([customContacts.length > 0 ?  customContacts[customContacts.length-1][0] + 1 : 0, name, content]);
+    function addNewCustomContact() {
+        const lastItem = customContacts.length > 0 ? customContacts[customContacts.length - 1] : undefined;
+        const newItemId = lastItem && lastItem.id ? lastItem.id + 1 : 0;
+        const newItem: ContactCustom = { id: newItemId, name: newNameState, content: newContentState }
+        setCustomContacts(prevState => {
+            return [...prevState, newItem]
+        })
         setaddingNewCustomContact(false);
     }
 
@@ -125,7 +128,7 @@ export default function ContactContacts({ contact }: Props) {
                                                         />
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Button color="success" onClick={() => addNewCustomContact(newNameState, newContentState)}>Submit</Button>
+                                                        <Button color="success" onClick={addNewCustomContact}>Submit</Button>
                                                         <Button color="error" onClick={() => setaddingNewCustomContact(false)}>Cancel</Button>
                                                     </TableCell>
                                                 </TableRow>

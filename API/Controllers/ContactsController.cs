@@ -65,9 +65,9 @@ public class ContactsController : BaseApiController
     }
 
     [HttpPut("UpdateContactData")]
-    public async Task<ActionResult<Entities.Contact>> UpdateDontactData([FromForm] DTOs.UpdateContactContactDto updateContactContactDto)
+    public async Task<ActionResult<Entities.Contact>> UpdateContactData(DTOs.UpdateContactContactDto updateContactContactDto)
     {
-        var contact = await serviceContext.Contacts.FindAsync(updateContactContactDto.Id);
+        var contact = await serviceContext.Contacts.Include(x => x.ContactCustoms).SingleAsync(x => x.Id == updateContactContactDto.Id);
 
         bool contactCustomsTheSame = true;
         foreach (var customContact in updateContactContactDto.ContactCustoms)

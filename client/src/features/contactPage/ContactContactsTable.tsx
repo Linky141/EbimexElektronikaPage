@@ -1,5 +1,5 @@
 import { TableContainer, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { Contact } from "../../app/models/contact";
+import { Contact, ContactCustom } from "../../app/models/contact";
 import ContactContactsTableCustoms from "./ContactContactsTableCustoms";
 import { Control, FieldValues } from "react-hook-form";
 import ContactContactsTextField from "./ContactContactsTextField";
@@ -11,8 +11,8 @@ interface Props {
     setEditingCustomContact: (state: number) => void;
     addingNewCustomContact: boolean;
     control: Control<FieldValues, any>;
-    customContacts: [number, string, string][];
-    setCustomContacts: (contact: [number, string, string][]) => void;
+    customContacts: ContactCustom[];
+    setCustomContacts: (contact: ContactCustom[]) => void;
 }
 
 export default function ContactContactsTable(props: Props) {
@@ -36,7 +36,7 @@ export default function ContactContactsTable(props: Props) {
                                 setEditingCustomContact={props.setEditingCustomContact}
                                 addingNewCustomContact={props.addingNewCustomContact}
                                 customContacts={props.customContacts}
-                                setCustomContacts={props.setCustomContacts}                                
+                                setCustomContacts={props.setCustomContacts}
                             />
                         </TableBody>
                     </Table>
@@ -59,7 +59,7 @@ export default function ContactContactsTable(props: Props) {
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>
-                                    <ContactContactsTextField
+                                        <ContactContactsTextField
                                             label="Email"
                                             content={props.contact.email}
                                             fullWidth={true}
@@ -77,7 +77,7 @@ export default function ContactContactsTable(props: Props) {
                         setEditingCustomContact={props.setEditingCustomContact}
                         addingNewCustomContact={props.addingNewCustomContact}
                         customContacts={props.customContacts}
-                        setCustomContacts={props.setCustomContacts}    
+                        setCustomContacts={props.setCustomContacts}
                     />
                 </>
             )}
