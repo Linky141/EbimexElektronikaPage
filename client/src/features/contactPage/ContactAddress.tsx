@@ -33,8 +33,6 @@ export default function ContactAddress({ contact }: Props) {
             setLoadingSubmit(false);
             setEditAddressMode(false);
         }
-
-        console.log(contact);
     }
 
     return (

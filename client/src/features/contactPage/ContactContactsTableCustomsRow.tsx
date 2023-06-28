@@ -1,34 +1,50 @@
 import { Button, TableCell, TableRow, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
-import { ContactCustom } from "../../app/models/contact";
+import { useState } from "react";
 
 interface Props {
     editingCustomContact: number;
     setEditingCustomContact: (state: number) => void;
     addingNewCustomContact: boolean;
-    customContact: ContactCustom;
+    customContact: [number, string, string];
+    customContacts: [number, string, string][];
+    setCustomContacts: (contact: [number, string, string][]) => void;
 }
 
-export default function ContactContactsTableCustomsRow({ editingCustomContact, addingNewCustomContact, setEditingCustomContact, customContact }: Props) {
-    const [nameData, setNameData] = useState<string>();
-    const [contentData, setContentData] = useState<string>();
+export default function ContactContactsTableCustomsRow(props: Props) {
+    const [nameState, setNameState] = useState<string> (props.customContact[1]);
+    const [contentState, setContentState] = useState<string> (props.customContact[2]);
 
-    useEffect(() => {
-        setNameData(customContact.name);
-        setContentData(customContact.content);
-    }, [customContact.content, customContact.name]);
+    function submitEditCustomContact(id: number, name: string, content: string) {
+        const tmp: [number, string, string][] = props.customContacts.map(contact => {
+            if (contact[0] === id) 
+              return [id, name, content];
+            else 
+              return contact;
+          });
+
+          props.setCustomContacts(tmp);
+          props.setEditingCustomContact(-1);
+    }
+
+    function removeCustomContact(id: number){
+        props.setCustomContacts(
+            props.customContacts.filter(a =>
+              a[0] !== id
+            )
+          );
+    }
 
     return (
         <>
-            {!(editingCustomContact === customContact.id) ? (
+            {!(props.editingCustomContact === props.customContact[0]) ? (
                 <TableRow>
-                    <TableCell width="30%">{customContact.name}</TableCell>
-                    <TableCell width="54%">{customContact.content}</TableCell>
+                    <TableCell width="30%">{props.customContact[1]}</TableCell>
+                    <TableCell width="54%">{props.customContact[2]}</TableCell>
                     <TableCell>
-                        {(editingCustomContact === -1 && !addingNewCustomContact) ? (
+                        {(props.editingCustomContact === -1 && !props.addingNewCustomContact) ? (
                             <>
-                                <Button onClick={() => setEditingCustomContact(customContact.id)}>Edit</Button>
-                                <Button color="error" variant="outlined">Delete</Button>
+                                <Button onClick={() => props.setEditingCustomContact(props.customContact[0])}>Edit</Button>
+                                <Button onClick={() => removeCustomContact(props.customContact[0])} color="error" variant="outlined">Delete</Button>
                             </>
                         ) : (<></>)}
 
@@ -38,23 +54,23 @@ export default function ContactContactsTableCustomsRow({ editingCustomContact, a
                 <TableRow>
                     <TableCell width="30%">
                         <TextField
-                            value={nameData}
-                            onChange={e => setNameData(e.target.value)}
                             label="Contact name"
-                            fullWidth
+                            value={nameState}
+                            onChange={e => setNameState(e.target.value)}
+                            fullWidth={true}
                         />
                     </TableCell>
                     <TableCell width="55%">
                         <TextField
-                            value={contentData}
-                            onChange={e => setContentData(e.target.value)}
                             label="Contact data"
-                            fullWidth
+                            value={contentState}
+                            onChange={e => setContentState(e.target.value)}
+                            fullWidth={true}
                         />
                     </TableCell>
                     <TableCell>
-                        <Button color="success">Submit</Button>
-                        <Button onClick={() => setEditingCustomContact(-1)} color="error">Cancel</Button>
+                        <Button onClick={() => submitEditCustomContact(props.customContact[0], nameState, contentState)} color="success">Submit</Button>
+                        <Button onClick={() => props.setEditingCustomContact(-1)} color="error">Cancel</Button>
                     </TableCell>
                 </TableRow>
             )}

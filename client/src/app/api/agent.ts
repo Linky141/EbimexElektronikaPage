@@ -69,7 +69,8 @@ const Info = {
 
 const Contact = {
     list: () => requests.get('contacts'),
-    updateAddress: (contact: any) => requests.putForm('contacts/UpdateAddress', createFormData(contact))
+    updateAddress: (contact: any) => requests.putForm('contacts/UpdateAddress', createFormData(contact)),
+    updateContact: (contact: any) => requests.putForm('contacts/UpdateContactData', createFormData(contact))
 }
 
 const Service = {
