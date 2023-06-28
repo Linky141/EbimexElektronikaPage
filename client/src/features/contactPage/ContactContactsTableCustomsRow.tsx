@@ -1,50 +1,51 @@
 import { Button, TableCell, TableRow, TextField } from "@mui/material";
 import { useState } from "react";
+import { ContactCustom } from "../../app/models/contact";
 
 interface Props {
     editingCustomContact: number;
     setEditingCustomContact: (state: number) => void;
     addingNewCustomContact: boolean;
-    customContact: [number, string, string];
-    customContacts: [number, string, string][];
-    setCustomContacts: (contact: [number, string, string][]) => void;
+    customContact: ContactCustom;
+    customContacts: ContactCustom[];
+    setCustomContacts: (contact: ContactCustom[]) => void;
 }
 
 export default function ContactContactsTableCustomsRow(props: Props) {
-    const [nameState, setNameState] = useState<string> (props.customContact[1]);
-    const [contentState, setContentState] = useState<string> (props.customContact[2]);
+    const [nameState, setNameState] = useState<string>(props.customContact.name);
+    const [contentState, setContentState] = useState<string>(props.customContact.content);
 
     function submitEditCustomContact(id: number, name: string, content: string) {
-        const tmp: [number, string, string][] = props.customContacts.map(contact => {
-            if (contact[0] === id) 
-              return [id, name, content];
-            else 
-              return contact;
-          });
+        const tmp: ContactCustom[] = props.customContacts.map(contact => {
+            if (contact.id === id)
+                return { id: id, name: nameState, content: contentState };
+            else
+                return contact;
+        });
 
-          props.setCustomContacts(tmp);
-          props.setEditingCustomContact(-1);
+        props.setCustomContacts(tmp);
+        props.setEditingCustomContact(-1);
     }
 
-    function removeCustomContact(id: number){
+    function removeCustomContact(id: number) {
         props.setCustomContacts(
             props.customContacts.filter(a =>
-              a[0] !== id
+                a.id !== id
             )
-          );
+        );
     }
 
     return (
         <>
-            {!(props.editingCustomContact === props.customContact[0]) ? (
+            {!(props.editingCustomContact === props.customContact.id) ? (
                 <TableRow>
-                    <TableCell width="30%">{props.customContact[1]}</TableCell>
-                    <TableCell width="54%">{props.customContact[2]}</TableCell>
+                    <TableCell width="30%">{props.customContact.name}</TableCell>
+                    <TableCell width="54%">{props.customContact.content}</TableCell>
                     <TableCell>
                         {(props.editingCustomContact === -1 && !props.addingNewCustomContact) ? (
                             <>
-                                <Button onClick={() => props.setEditingCustomContact(props.customContact[0])}>Edit</Button>
-                                <Button onClick={() => removeCustomContact(props.customContact[0])} color="error" variant="outlined">Delete</Button>
+                                <Button onClick={() => props.setEditingCustomContact(props.customContact.id)}>Edit</Button>
+                                <Button onClick={() => removeCustomContact(props.customContact.id)} color="error" variant="outlined">Delete</Button>
                             </>
                         ) : (<></>)}
 
@@ -69,7 +70,7 @@ export default function ContactContactsTableCustomsRow(props: Props) {
                         />
                     </TableCell>
                     <TableCell>
-                        <Button onClick={() => submitEditCustomContact(props.customContact[0], nameState, contentState)} color="success">Submit</Button>
+                        <Button onClick={() => submitEditCustomContact(props.customContact.id, nameState, contentState)} color="success">Submit</Button>
                         <Button onClick={() => props.setEditingCustomContact(-1)} color="error">Cancel</Button>
                     </TableCell>
                 </TableRow>

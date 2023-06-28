@@ -83,7 +83,7 @@ public class ContactsController : BaseApiController
 
         if (contact == null)
             return NotFound();
-
+            
         mapper.Map(updateContactContactDto, contact);
 
 

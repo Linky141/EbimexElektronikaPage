@@ -1,5 +1,5 @@
 import { TableContainer, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { Contact } from "../../app/models/contact";
+import { Contact, ContactCustom } from "../../app/models/contact";
 import ContactContactsTableCustoms from "./ContactContactsTableCustoms";
 import { Control, FieldValues } from "react-hook-form";
 import ContactContactsTextField from "./ContactContactsTextField";
@@ -11,8 +11,8 @@ interface Props {
     setEditingCustomContact: (state: number) => void;
     addingNewCustomContact: boolean;
     control: Control<FieldValues, any>;
-    customContacts: [number, string, string][];
-    setCustomContacts: (contact: [number, string, string][]) => void;
+    customContacts: ContactCustom[];
+    setCustomContacts: (contact: ContactCustom[]) => void;
 }
 
 export default function ContactContactsTable(props: Props) {
