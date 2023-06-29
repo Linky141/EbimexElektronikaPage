@@ -1,8 +1,7 @@
 import { TableContainer, Table, TableBody } from "@mui/material";
 import { Contact } from "../../app/models/contact";
 import ContactAddressTableRow from "./ContactAddressTableRow";
-import { useState } from "react";
-import { Control, FieldValues, UseControllerProps } from "react-hook-form";
+import { Control, FieldValues } from "react-hook-form";
 
 interface Props {
     editAddressMode: boolean;

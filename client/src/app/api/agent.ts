@@ -50,7 +50,9 @@ const requests = {
 }
 
 const Info = {
-    list: () => requests.get('infos')
+    list: () => requests.get('infos'),
+    UpdateOpenHours: (contact: any) => requests.put('infos/UpdateOpenHours', contact),
+    UpdateAnnouncements: (contact: any) => requests.put('infos/UpdateAnnouncements', contact)
 }
 
 const Contact = {

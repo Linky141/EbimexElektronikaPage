@@ -16,5 +16,8 @@ public class MappingProfiles : AutoMapper.Profile
 
         CreateMap<Entities.Info, DTOs.InfoDto>();
         CreateMap<Entities.InfoAnnouncement, DTOs.InfoAnnouncementDto>();
+        CreateMap<DTOs.UpdateInfoOpehHoursDto, Entities.Info>();
+        CreateMap<DTOs.UpdateInfoAnnouncementsDto, Entities.Info>();
+        CreateMap<DTOs.InfoAnnouncementDto, Entities.InfoAnnouncement>();
     }
 }

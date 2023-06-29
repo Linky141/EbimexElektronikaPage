@@ -14,17 +14,17 @@ public class ContactsController : BaseApiController
     [HttpGet(Name = "GetContact")]
     public async Task<ActionResult<List<DTOs.ContactDto>>> GetContact()
     {
-        var contact = await RetrieveContact();
-        if (contact == null)
+        var contacts = await RetrieveContacts();
+        if (contacts == null)
             return NotFound();
-        var contactDto = contact.Select(c => mapper.Map<DTOs.ContactDto>(c)).ToList();
+        var contactDto = contacts.Select(c => mapper.Map<DTOs.ContactDto>(c)).ToList();
         return Ok(contactDto);
     }
 
     [HttpPut("UpdateAddress")]
-    public async Task<ActionResult<Entities.Contact>> UpdateAddress( DTOs.UpdateContactAddressDto updateContactAddressDto)
+    public async Task<ActionResult<Entities.Contact>> UpdateAddress(DTOs.UpdateContactAddressDto updateContactAddressDto)
     {
-        var contact = await serviceContext.Contacts.FindAsync(updateContactAddressDto.Id);
+        var contact = RetrieveContact(updateContactAddressDto.Id).Result;
 
         if (updateContactAddressDto.AddressCity == contact.AddressCity &&
         updateContactAddressDto.AddressCountry == contact.AddressCountry &&
@@ -43,21 +43,7 @@ public class ContactsController : BaseApiController
 
         var result = await serviceContext.SaveChangesAsync() > 0;
 
-        List<DTOs.ContactDto> dto = new();
-        dto.Add(new DTOs.ContactDto
-        {
-            AddressCity = contact.AddressCity,
-            AddressCountry = contact.AddressCountry,
-            AddressNumber1 = contact.AddressNumber1,
-            AddressNumber2 = contact.AddressNumber2,
-            AddressPostal = contact.AddressPostal,
-            AddressStreet = contact.AddressStreet,
-            Phone = contact.Phone,
-            Email = contact.Email,
-            ContactCustoms = contact.ContactCustoms.Select(item =>
-            new DTOs.ContactCustomDto() { Id = item.Id, Name = item.Name, Content = item.Content }
-            ).ToList()
-        });
+        var dto = CreateDto(contact);
 
         if (result)
             return CreatedAtRoute("GetContact", dto);
@@ -65,11 +51,13 @@ public class ContactsController : BaseApiController
     }
 
     [HttpPut("UpdateContactData")]
-    public async Task<ActionResult<Entities.Contact>> UpdateDontactData( DTOs.UpdateContactContactDto updateContactContactDto)
+    public async Task<ActionResult<Entities.Contact>> UpdateDontactData(DTOs.UpdateContactContactDto updateContactContactDto)
     {
-        var contact = await serviceContext.Contacts.FindAsync(updateContactContactDto.Id);
+        var contact = RetrieveContact(updateContactContactDto.Id).Result;
 
         bool contactCustomsTheSame = true;
+        if (updateContactContactDto.ContactCustoms.Count == 0 || contact.ContactCustoms.Count == 0)
+            contactCustomsTheSame = false;
         foreach (var customContact in updateContactContactDto.ContactCustoms)
         {
             if (contact.ContactCustoms.Any(item => customContact.Id != item.Id || customContact.Name != item.Name || customContact.Content != item.Content))
@@ -81,16 +69,27 @@ public class ContactsController : BaseApiController
         contactCustomsTheSame)
             return BadRequest(new ProblemDetails { Title = "Nothing changed" });
 
+
         if (contact == null)
             return NotFound();
-            
-        mapper.Map(updateContactContactDto, contact);
 
+        contact.ContactCustoms = new();
+        mapper.Map(updateContactContactDto, contact);
+        contact.ContactCustoms.ForEach(c => c.Id = 0);
 
         var result = await serviceContext.SaveChangesAsync() > 0;
 
-        List<DTOs.ContactDto> dto = new();
-        dto.Add(new DTOs.ContactDto
+        var dto = CreateDto(contact);
+
+        if (result)
+            return CreatedAtRoute("GetContact", dto);
+        return BadRequest(new ProblemDetails { Title = "Problem updating contact" });
+    }
+
+    private List<DTOs.ContactDto> CreateDto(Entities.Contact contact)
+    {
+        return new List<DTOs.ContactDto>{
+        new DTOs.ContactDto
         {
             AddressCity = contact.AddressCity,
             AddressCountry = contact.AddressCountry,
@@ -103,19 +102,21 @@ public class ContactsController : BaseApiController
             ContactCustoms = contact.ContactCustoms.Select(item =>
             new DTOs.ContactCustomDto() { Id = item.Id, Name = item.Name, Content = item.Content }
            ).ToList()
-        });
-
-
-        if (result)
-            return CreatedAtRoute("GetContact", dto);
-        return BadRequest(new ProblemDetails { Title = "Problem updating contact" });
+        }};
     }
 
 
-    private async Task<List<Entities.Contact>> RetrieveContact()
+    private async Task<List<Entities.Contact>> RetrieveContacts()
     {
         return await serviceContext.Contacts
         .Include(c => c.ContactCustoms)
         .ToListAsync();
+    }
+
+    private async Task<Entities.Contact> RetrieveContact(int id)
+    {
+        return await serviceContext.Contacts
+        .Include(c => c.ContactCustoms)
+        .SingleOrDefaultAsync(c => c.Id == id);
     }
 }

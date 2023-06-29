@@ -49,8 +49,6 @@ export default function ContactContacts({ contact }: Props) {
             setLoadingSubmit(false);
             setEditContactsMode(false);
         }
-
-        console.log(data);
     }
 
     function addNewCustomContact(name: string, content: string) {
@@ -61,6 +59,14 @@ export default function ContactContacts({ contact }: Props) {
             return [...prevState, newItem]
         })
         setaddingNewCustomContact(false);
+        setNewNameState('');
+        setNewContentState('');
+    }
+
+    function cancelAddNewCustomContact(){
+        setaddingNewCustomContact(false);
+        setNewNameState('');
+        setNewContentState('');
     }
 
     return (
@@ -131,7 +137,7 @@ export default function ContactContacts({ contact }: Props) {
                                                     </TableCell>
                                                     <TableCell>
                                                         <Button color="success" onClick={() => addNewCustomContact(newNameState, newContentState)}>Submit</Button>
-                                                        <Button color="error" onClick={() => setaddingNewCustomContact(false)}>Cancel</Button>
+                                                        <Button color="error" onClick={cancelAddNewCustomContact}>Cancel</Button>
                                                     </TableCell>
                                                 </TableRow>
                                             </TableBody>
