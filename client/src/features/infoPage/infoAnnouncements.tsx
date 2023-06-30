@@ -21,6 +21,10 @@ export default function InfoAnnouncements(props: Props) {
     const [newAnnouncementContent, setNewAnnouncementContent] = useState<string>('');
     const [editingAnnouncementMode, setEditingAnnouncementMode] = useState(-1);
 
+    useEffect(() => {
+        setValue("infoAnnouncements", props.info.infoAnnouncements);
+    }, [props.info.infoAnnouncements, setValue])
+
     function handleUpdateData(data: FieldValues) {
         data.Id = 1;
         agent.Info
@@ -43,10 +47,6 @@ export default function InfoAnnouncements(props: Props) {
         const tmp: InfoAnnouncement[] = [...props.info.infoAnnouncements, newItem];
         setValue("infoAnnouncements", tmp)
     }
-
-    useEffect(() => {
-        setValue("infoAnnouncements", props.info.infoAnnouncements)
-    }, [props.info.infoAnnouncements, setValue])
 
     return (
         <Grid item xs={12}>

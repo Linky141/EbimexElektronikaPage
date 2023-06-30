@@ -6,7 +6,7 @@ interface Props {
     //contact: Contact;
     editContactsMode: boolean;
     editingCustomContact: number;
-    setEditingCustomContact: (state: number) => void;
+    setEditingCustomContact: ((state: number) => void) | undefined;
     addingNewCustomContact: boolean;
     customContacts: ContactCustom[];
     setCustomContacts: (contact: ContactCustom[]) => void;
@@ -33,7 +33,7 @@ export default function ContactContactsTableCustoms(props: Props) {
                                 <ContactContactsTableCustomsRow
                                     key={customContact.id}
                                     editingCustomContact={props.editingCustomContact}
-                                    setEditingCustomContact={props.setEditingCustomContact}
+                                    setEditingCustomContact={props.setEditingCustomContact!}
                                     addingNewCustomContact={props.addingNewCustomContact}
                                     customContact={customContact}
                                     customContacts={props.customContacts}
