@@ -11,18 +11,16 @@ export default function InfoPage() {
     const dispatch = useAppDispatch();
     const { info } = useAppSelector(state => state.infos);
   
-    const [editingAnnouncementMode, setEditingAnnouncementMode] = useState(-1);
-    const [editingOpenedHoursMode, setEditingOpenedHoursMode] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loadingComponent, setLoadingComponent] = useState(true);
 
     useEffect(() => {
         agent.Info.list()
             .then(info => dispatch(setInfos(info)))
             .catch(error => console.log(error))
-            .finally(() => setLoading(false))
+            .finally(() => setLoadingComponent(false))
     }, [dispatch])
 
-    if (loading)
+    if (loadingComponent)
     return <LoadingComponent message='Loading info...'/>
 
     return (
@@ -30,12 +28,9 @@ export default function InfoPage() {
             {info!.map(info => (
                 <Grid container key={info.id}>
                     <InfoOpenedHours
-                        editingOpenedHoursMode={editingOpenedHoursMode}
-                        setEditingOpenedHoursMode={setEditingOpenedHoursMode}
                         info={info}
                     />
-                    <InfoAnnouncements editingAnnouncementMode={editingAnnouncementMode}
-                        setEditingAnnouncementMode={setEditingAnnouncementMode}
+                    <InfoAnnouncements 
                         info={info}
                     />
                 </Grid >

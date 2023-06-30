@@ -1,5 +1,5 @@
 import { TableRow, TableCell, Checkbox, FormControlLabel } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Control, FieldValues, UseFormSetValue } from "react-hook-form";
 import InfoOpenHoursTextField from "./InfoOpenHoursTextField";
 
@@ -16,6 +16,7 @@ interface Props {
 
 export default function InfoOpenedHoursTableRow(props: Props) {
     const [isClosed, setIsClosed] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
 
     function ChangeClosed() {
@@ -30,13 +31,30 @@ export default function InfoOpenedHoursTableRow(props: Props) {
         setIsClosed(!isClosed);
     }
 
+    useEffect(() => {
+        if (props.open === "Closed" || props.close === "Closed")
+            setIsClosed(true);
+        else
+            setIsClosed(false);
+
+        if (props.open === "" || props.close === "")
+            setIsEmpty(true);
+    }, [props.close, props.open])
+
     return (
         <>
             {!props.editMode ? (
                 <TableRow>
                     <TableCell>{props.day}</TableCell>
                     {!isClosed ? (
-                        <TableCell>{props.open} - {props.close}</TableCell>
+                        <>
+                            {!isEmpty ? (
+                                <TableCell>{props.open} - {props.close}</TableCell>
+                            ) : (
+                                <TableCell />
+                            )}
+                        </>
+
                     ) : (
                         <TableCell>Closed</TableCell>
                     )}
@@ -55,7 +73,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                                 name={props.nameStart}
                                 control={props.control}
                             />
-                             <InfoOpenHoursTextField
+                            <InfoOpenHoursTextField
                                 label="To"
                                 content={!isClosed ? props.close : "Closed"}
                                 fullWidth={false}
