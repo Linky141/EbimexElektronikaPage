@@ -1,21 +1,23 @@
 import { TableContainer, Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { Contact } from "../../app/models/contact";
 import ContactContactsTableCustomsRow from "./ContactContactsTableCustomsRow";
+import { ContactCustom } from "../../app/models/contact";
 
 interface Props {
-    contact: Contact;
+    //contact: Contact;
     editContactsMode: boolean;
     editingCustomContact: number;
-    setEditingCustomContact: (state: number) => void;
+    setEditingCustomContact: ((state: number) => void) | undefined;
     addingNewCustomContact: boolean;
+    customContacts: ContactCustom[];
+    setCustomContacts: (contact: ContactCustom[]) => void;
 }
 
-export default function ContactContactsTableCustoms({ editContactsMode, contact, editingCustomContact, addingNewCustomContact, setEditingCustomContact }: Props) {
+export default function ContactContactsTableCustoms(props: Props) {
     return (
         <>
-            {!editContactsMode ? (
+            {!props.editContactsMode ? (
                 <>
-                    {contact.contactCustoms.map(customContact => (
+                    {props.customContacts.map(customContact => (
                         <TableRow key={customContact.id}>
                             <TableCell>{customContact.name}</TableCell>
                             <TableCell>{customContact.content}</TableCell>
@@ -27,13 +29,15 @@ export default function ContactContactsTableCustoms({ editContactsMode, contact,
                 <TableContainer>
                     <Table>
                         <TableBody>
-                            {contact.contactCustoms.map(customContact => (
+                            {props.customContacts.map(customContact => (
                                 <ContactContactsTableCustomsRow
                                     key={customContact.id}
-                                    editingCustomContact={editingCustomContact}
-                                    setEditingCustomContact={setEditingCustomContact}
-                                    addingNewCustomContact={addingNewCustomContact}
+                                    editingCustomContact={props.editingCustomContact}
+                                    setEditingCustomContact={props.setEditingCustomContact!}
+                                    addingNewCustomContact={props.addingNewCustomContact}
                                     customContact={customContact}
+                                    customContacts={props.customContacts}
+                                    setCustomContacts={props.setCustomContacts}
                                 />
                             ))}
                         </TableBody>

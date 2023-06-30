@@ -1,5 +1,4 @@
 import { TableRow, TableCell, TextField } from "@mui/material";
-import { useState, useEffect } from "react";
 import { UseControllerProps, useController } from "react-hook-form";
 
 interface Props extends UseControllerProps {
@@ -14,10 +13,14 @@ export default function ContactAddressTableRow(props: Props) {
     return (
         <>
             {!props.editaddressmode ? (
-                <TableRow>
-                    <TableCell>{props.label}</TableCell>
-                    <TableCell>{props.content}</TableCell>
-                </TableRow>
+                <>
+                    {props.content ? (
+                        <TableRow>
+                            <TableCell>{props.label}</TableCell>
+                            <TableCell>{props.content}</TableCell>
+                        </TableRow>
+                    ) : (<></>)}
+                </>
             ) : (
                 <TableRow>
                     <TableCell>

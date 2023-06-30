@@ -1,69 +1,58 @@
-import { Grid, Typography, Button, TableContainer, Table, TableBody } from "@mui/material";
-import InfoOpenedHoursTableRow from "./InfoOpenedHoursTableRow";
+import { Grid } from "@mui/material";
 import { Info } from "../../app/models/info";
+import { useForm, FieldValues } from "react-hook-form";
+import { useAppDispatch } from "../../app/service/configureService";
+import { useState } from "react";
+import agent from "../../app/api/agent";
+import { setInfos } from "./infoSlice";
+import InfoOpenedHoursShow from "./InfoOpenedHoursShow";
+import InfoOpenedHoursEdit from "./InfoOpenedHoursEdit";
 
 interface Props {
-    editingOpenedHoursMode: boolean;
-    setEditingOpenedHoursMode: (state: boolean) => void;
     info: Info;
 }
 
-export default function InfoOpenedHours({ editingOpenedHoursMode, setEditingOpenedHoursMode, info}: Props) {
+export default function InfoOpenedHours(props: Props) {
+    const { control, handleSubmit, setValue } = useForm();
+    const dispatch = useAppDispatch();
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const [editingOpenedHoursMode, setEditingOpenedHoursMode] = useState(false);
 
+    function handleOnSubmitOpenHours(data: FieldValues) {
+        setLoadingSubmit(true);
+        data.Id = 1;
+
+        agent.Info
+            .UpdateOpenHours(data)
+            .then(infos => dispatch(setInfos(infos)))
+            .catch(error => console.log(error))
+            .finally(finishActions);
+
+        function finishActions() {
+            setLoadingSubmit(false);
+            setEditingOpenedHoursMode(false);
+        }
+    }
     return (
         <>
             <Grid item xs={12}>
                 {!editingOpenedHoursMode ? (
-                    <Grid container>
-                        <Grid item>
-                            <Typography variant="h4">Open hours</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button onClick={() => setEditingOpenedHoursMode(true)}>Edit</Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TableContainer>
-                                <Table>
-                                    <TableBody>
-                                        <InfoOpenedHoursTableRow day={"Monday"} open={info.openingHoursMondayStart} close={info.openingHoursMondayEnd} editMode={false} />
-                                        <InfoOpenedHoursTableRow day={"Tuesday"} open={info.openingHoursTuesdayStart} close={info.openingHoursTuesdayEnd} editMode={false} />
-                                        <InfoOpenedHoursTableRow day={"Wednesday"} open={info.openingHoursWednesdayStart} close={info.openingHoursWednesdayEnd} editMode={false} />
-                                        <InfoOpenedHoursTableRow day={"Thursday"} open={info.openingHoursThursdayStart} close={info.openingHoursThursdayEnd} editMode={false} />
-                                        <InfoOpenedHoursTableRow day={"Friday"} open={info.openingHoursFridayStart} close={info.openingHoursFridayEnd} editMode={false} />
-                                        <InfoOpenedHoursTableRow day={"Saturday"} open={info.openingHoursSaturdayStart} close={info.openingHoursSaturdayEnd} editMode={false} />
-                                        <InfoOpenedHoursTableRow day={"Sunday"} open={info.openingHoursSundayStart} close={info.openingHoursSundayEnd} editMode={false} />
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
-                    </Grid>
+                    <InfoOpenedHoursShow
+                        info={props.info}
+                        setEditingOpenedHoursMode={setEditingOpenedHoursMode}
+                        control={control}
+                        setValue={setValue}
+                    />
                 ) : (
-                    <form>
-                        <Grid container>
-                            <Grid item>
-                                <Typography variant="h4">Open hours</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Button type="submit" color="success">Submit</Button>
-                                <Button onClick={() => setEditingOpenedHoursMode(false)} color="error">Cancel</Button>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TableContainer>
-                                    <Table>
-                                        <TableBody>
-                                            <InfoOpenedHoursTableRow day={"Monday"} open={info.openingHoursMondayStart} close={info.openingHoursMondayEnd} editMode={true} />
-                                            <InfoOpenedHoursTableRow day={"Tuesday"} open={info.openingHoursTuesdayStart} close={info.openingHoursTuesdayEnd} editMode={true} />
-                                            <InfoOpenedHoursTableRow day={"Wednesday"} open={info.openingHoursWednesdayStart} close={info.openingHoursWednesdayEnd} editMode={true} />
-                                            <InfoOpenedHoursTableRow day={"Thursday"} open={info.openingHoursThursdayStart} close={info.openingHoursThursdayEnd} editMode={true} />
-                                            <InfoOpenedHoursTableRow day={"Friday"} open={info.openingHoursFridayStart} close={info.openingHoursFridayEnd} editMode={true} />
-                                            <InfoOpenedHoursTableRow day={"Saturday"} open={info.openingHoursSaturdayStart} close={info.openingHoursSaturdayEnd} editMode={true} />
-                                            <InfoOpenedHoursTableRow day={"Sunday"} open={info.openingHoursSundayStart} close={info.openingHoursSundayEnd} editMode={true} />
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </Grid>
-                        </Grid>
-                    </form>
+                    <InfoOpenedHoursEdit
+                        control={control}
+                        handleOnSubmitOpenHours={handleOnSubmitOpenHours}
+                        handleSubmit={handleSubmit}
+                        info={props.info}
+                        loadingSubmit={loadingSubmit}
+                        setEditingOpenedHoursMode={setEditingOpenedHoursMode}
+                        setValue={setValue}
+                    />
                 )}
             </Grid>
         </>

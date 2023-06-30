@@ -46,30 +46,19 @@ const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
-    delete: (url: string) => axios.delete(url).then(responseBody),
-    postForm: (url: string, data: FormData) => axios.post(url, data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    }).then(responseBody),
-    putForm: (url: string, data: FormData) => axios.put(url, data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    }).then(responseBody),
-}
-
-function createFormData(item: any) {
-    let formData = new FormData();
-    for (const key in item) {
-        formData.append(key, item[key])
-    }
-    return formData;
+    delete: (url: string) => axios.delete(url).then(responseBody)
 }
 
 const Info = {
-    list: () => requests.get('infos')
+    list: () => requests.get('infos'),
+    UpdateOpenHours: (contact: any) => requests.put('infos/UpdateOpenHours', contact),
+    UpdateAnnouncements: (contact: any) => requests.put('infos/UpdateAnnouncements', contact)
 }
 
 const Contact = {
     list: () => requests.get('contacts'),
-    updateAddress: (contact: any) => requests.putForm('contacts/UpdateAddress', createFormData(contact))
+    updateAddress: (contact: any) => requests.put('contacts/UpdateAddress', contact),
+    updateContact: (contact: any) => requests.put('contacts/UpdateContactData', contact)
 }
 
 const Service = {

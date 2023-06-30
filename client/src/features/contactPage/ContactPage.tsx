@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Contact } from "../../app/models/contact";
 import { Grid } from "@mui/material";
 import ContactAddress from "./ContactAddress";
 import ContactContacts from "./ContactContacts";

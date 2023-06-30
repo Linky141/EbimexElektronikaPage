@@ -1,89 +1,74 @@
-import { Grid, Typography, Button, TableContainer, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
-import { useState } from "react";
-import { Contact } from "../../app/models/contact";
-import ContactContactsTable from "./ContactContactsTable";
+import { Grid } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Contact, ContactCustom } from "../../app/models/contact";
+import { FieldValues, useForm } from "react-hook-form";
+import { useAppDispatch } from "../../app/service/configureService";
+import agent from "../../app/api/agent";
+import { setContacts } from "./contactSlice";
+import ContactContactsShow from "./ContactContactsShow";
+import ContactContactsEdit from "./ContactContactsEdit";
 
 interface Props {
     contact: Contact;
 }
 
 export default function ContactContacts({ contact }: Props) {
+    const { control, handleSubmit } = useForm();
+    const dispatch = useAppDispatch();
+    const [customContacts, setCustomContacts] = useState<ContactCustom[]>([]);
+
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [editContactsMode, setEditContactsMode] = useState(false);
-    const [editingCustomContact, setEditingCustomContact] = useState(-1);
-    const [addingNewCustomContact, setaddingNewCustomContact] = useState(false);
+    const [customContactsLoaded, setCustomContactsLoaded] = useState(false);
+
+    useEffect(() => {
+        if (!customContactsLoaded) {
+            contact.contactCustoms.forEach(element => {
+                setCustomContacts(contact.contactCustoms);
+            });
+        }
+        setCustomContactsLoaded(true);
+    }, [contact.contactCustoms, customContactsLoaded])
+
+    function handleUpdateData(data: FieldValues) {
+        setLoadingSubmit(true);
+        data.Id = 1;
+        data.contactCustoms = customContacts;
+        agent.Contact
+            .updateContact(data)
+            .then(contacts => dispatch(setContacts(contacts)))
+            .catch(error => console.log(error))
+            .finally(finishActions);
+
+        function finishActions() {
+            setLoadingSubmit(false);
+            setEditContactsMode(false);
+        }
+    }
 
     return (
         <Grid item xs={12}>
             {!editContactsMode ? (
-                <Grid container>
-                    <Grid item>
-                        <Typography variant="h4">Contact</Typography>
-                    </Grid>
-                    <Grid item>
-                        <Button onClick={() => setEditContactsMode(true)}>Edit</Button>
-                    </Grid>
-                    <ContactContactsTable
-                        contact={contact}
-                        editContactsMode={editContactsMode}
-                        editingCustomContact={editingCustomContact}
-                        setEditingCustomContact={setEditingCustomContact}
-                        addingNewCustomContact={addingNewCustomContact}
-                    />
-                </Grid>
+                <ContactContactsShow
+                    contact={contact}
+                    control={control}
+                    customContacts={customContacts}
+                    editContactsMode={editContactsMode}
+                    setCustomContacts={setCustomContacts}
+                    setEditContactsMode={setEditContactsMode}
+                />
             ) : (
-                <form>
-                    <Grid container>
-                        <Grid item>
-                            <Typography variant="h4">Contact</Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button color="success">Submit</Button>
-                            <Button onClick={() => setEditContactsMode(false)} color="error">Cancel</Button>
-                        </Grid>
-                        <ContactContactsTable
-                            contact={contact}
-                            editContactsMode={editContactsMode}
-                            editingCustomContact={editingCustomContact}
-                            setEditingCustomContact={setEditingCustomContact}
-                            addingNewCustomContact={addingNewCustomContact}
-                        />
-                        {editingCustomContact === -1 ? (
-                            <>
-                                {!addingNewCustomContact ? (
-                                    <Button onClick={() => setaddingNewCustomContact(true)}>Add new contact option</Button>
-                                ) : (
-                                    <>
-                                        <TableContainer>
-                                            <Table>
-                                                <TableBody>
-                                                    <TableRow>
-                                                        <TableCell width="30%">
-                                                            <TextField
-                                                                label="Contact name"
-                                                                fullWidth
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell width="55%">
-                                                            <TextField
-                                                                label="Contact data"
-                                                                fullWidth
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Button color="success">Submit</Button>
-                                                            <Button color="error" onClick={() => setaddingNewCustomContact(false)}>Cancel</Button>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </>
-                                )}
-                            </>
-                        ) : (<></>)}
-
-                    </Grid>
-                </form>
+                <ContactContactsEdit
+                    contact={contact}
+                    control={control}
+                    customContacts={customContacts}
+                    editContactsMode={editContactsMode}
+                    setCustomContacts={setCustomContacts}
+                    setEditContactsMode={setEditContactsMode}
+                    handleSubmit={handleSubmit}
+                    handleUpdateData={handleUpdateData}
+                    loadingSubmit={loadingSubmit}
+                />
             )}
         </Grid>
     )

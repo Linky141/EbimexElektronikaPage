@@ -1,47 +1,60 @@
-import { TableRow, TableCell, TextField, Checkbox, FormControlLabel } from "@mui/material";
+import { TableRow, TableCell, Checkbox, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
+import { Control, FieldValues, UseFormSetValue } from "react-hook-form";
+import InfoOpenHoursTextField from "./InfoOpenHoursTextField";
 
 interface Props {
+    nameStart: string;
+    nameEnd: string;
     day: string;
     open: string;
     close: string;
     editMode: boolean;
+    control: Control<FieldValues, any>;
+    setValue: UseFormSetValue<FieldValues>;
 }
 
-export default function InfoOpenedHoursTableRow({ day, close, open, editMode }: Props) {
+export default function InfoOpenedHoursTableRow(props: Props) {
     const [isClosed, setIsClosed] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
-    const [openSt, setOpenSt] = useState<string>("");
-    const [closeSt, setCloseSt] = useState<string>("");
-
-    useEffect(() => {
-        setOpenSt(open);
-        setCloseSt(close);
-        if (open === "Closed" || close === "Closed")
-            setIsClosed(true);
-        else
-            setIsClosed(false);
-    }, [close, open]);
 
     function ChangeClosed() {
         if (!isClosed) {
-            setOpenSt("Closed");
-            setCloseSt("Closed");
+            props.setValue(props.nameStart, "Closed");
+            props.setValue(props.nameEnd, "Closed");
         }
         else {
-            setOpenSt("");
-            setCloseSt("");
+            props.setValue(props.nameStart, "");
+            props.setValue(props.nameEnd, "");
         }
         setIsClosed(!isClosed);
     }
 
+    useEffect(() => {
+        if (props.open === "Closed" || props.close === "Closed")
+            setIsClosed(true);
+        else
+            setIsClosed(false);
+
+        if (props.open === "" || props.close === "")
+            setIsEmpty(true);
+    }, [props.close, props.open])
+
     return (
         <>
-            {!editMode ? (
+            {!props.editMode ? (
                 <TableRow>
-                    <TableCell>{day}</TableCell>
+                    <TableCell>{props.day}</TableCell>
                     {!isClosed ? (
-                        <TableCell>{openSt} - {closeSt}</TableCell>
+                        <>
+                            {!isEmpty ? (
+                                <TableCell>{props.open} - {props.close}</TableCell>
+                            ) : (
+                                <TableCell />
+                            )}
+                        </>
+
                     ) : (
                         <TableCell>Closed</TableCell>
                     )}
@@ -50,23 +63,23 @@ export default function InfoOpenedHoursTableRow({ day, close, open, editMode }: 
             ) : (
                 <>
                     <TableRow>
-                        <TableCell>{day}</TableCell>
+                        <TableCell>{props.day}</TableCell>
                         <TableCell>
-                            <TextField
-                                id="outlined-basic"
+                            <InfoOpenHoursTextField
                                 label="From"
-                                variant="outlined"
-                                value={!isClosed ? openSt : "Closed"}
+                                content={!isClosed ? props.open : "Closed"}
+                                fullWidth={false}
                                 disabled={isClosed ? true : false}
-                                onChange={e => setOpenSt(e.target.value)}
+                                name={props.nameStart}
+                                control={props.control}
                             />
-                            <TextField
-                                id="outlined-basic"
+                            <InfoOpenHoursTextField
                                 label="To"
-                                variant="outlined"
-                                value={!isClosed ? closeSt : "Closed"}
+                                content={!isClosed ? props.close : "Closed"}
+                                fullWidth={false}
                                 disabled={isClosed ? true : false}
-                                onChange={e => setCloseSt(e.target.value)}
+                                name={props.nameEnd}
+                                control={props.control}
                             />
                             <FormControlLabel
                                 control={

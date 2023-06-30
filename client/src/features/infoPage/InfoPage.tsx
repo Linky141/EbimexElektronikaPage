@@ -1,37 +1,36 @@
 import { Grid } from "@mui/material";
 import { useState, useEffect } from "react";
-import { Info } from "../../app/models/info";
 import InfoOpenedHours from "./InfoOpenedHours";
 import InfoAnnouncements from "./infoAnnouncements";
 import agent from "../../app/api/agent";
 import LoadingComponent from "../../app/layout/LoadingComponent";
+import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
+import { setInfos } from "./infoSlice";
 
 export default function InfoPage() {
-    const [infos, setInfos] = useState<Info[]>([]);
-    const [editingAnnouncementMode, setEditingAnnouncementMode] = useState(-1);
-    const [editingOpenedHoursMode, setEditingOpenedHoursMode] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useAppDispatch();
+    const { info } = useAppSelector(state => state.infos);
+  
+    const [loadingComponent, setLoadingComponent] = useState(true);
 
     useEffect(() => {
-        agent.Info.list().then(infos => setInfos(infos))
+        agent.Info.list()
+            .then(info => dispatch(setInfos(info)))
             .catch(error => console.log(error))
-            .finally(() => setLoading(false))
-    }, [])
+            .finally(() => setLoadingComponent(false))
+    }, [dispatch])
 
-    if (loading)
+    if (loadingComponent)
     return <LoadingComponent message='Loading info...'/>
 
     return (
         <>
-            {infos.map(info => (
+            {info!.map(info => (
                 <Grid container key={info.id}>
                     <InfoOpenedHours
-                        editingOpenedHoursMode={editingOpenedHoursMode}
-                        setEditingOpenedHoursMode={setEditingOpenedHoursMode}
                         info={info}
                     />
-                    <InfoAnnouncements editingAnnouncementMode={editingAnnouncementMode}
-                        setEditingAnnouncementMode={setEditingAnnouncementMode}
+                    <InfoAnnouncements 
                         info={info}
                     />
                 </Grid >
