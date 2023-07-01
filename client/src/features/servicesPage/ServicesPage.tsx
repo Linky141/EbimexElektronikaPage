@@ -4,11 +4,6 @@ import ServiceList from './ServiceList';
 import agent from '../../app/api/agent';
 import LoadingComponent from '../../app/layout/LoadingComponent';
 
-// interface Props {
-//     services: Service[];
-//     addServices: () => void;
-// }
-
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);

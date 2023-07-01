@@ -1,6 +1,6 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
-import ServiceDetails from "../../features/services/ServiceDetails";
-import ServicesPage from "../../features/services/ServicesPage";
+import ServiceDetails from "../../features/servicesPage/ServiceDetails";
+import ServicesPage from "../../features/servicesPage/ServicesPage";
 import HomePage from "../../features/homePage/HomePage";
 import App from "../layout/App";
 import InfoPage from "../../features/infoPage/InfoPage";
