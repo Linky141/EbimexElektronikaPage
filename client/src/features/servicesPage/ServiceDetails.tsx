@@ -25,18 +25,19 @@ export default function ServiceDetails() {
     }, [id]);
 
     if (loading)
-        return <LoadingComponent message="Loading service details..."/>
+        return <LoadingComponent message="Loading service details..." />
     if (!service)
-        return <NotFound/>
+        return <NotFound />
     if (selectedImage)
         return <ServicePreviewImage selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
 
     return (
         <Grid container spacing={6}>
             <Grid item xs={12}>
-                <Typography variant="h3">
-                    {service.name}
-                </Typography>
+                    <Button>Edit</Button>
+                    <Typography variant="h3">
+                        {service.name}
+                    </Typography>
             </Grid>
             <Grid item xs={12}>
                 <List sx={{ display: 'flex' }}>

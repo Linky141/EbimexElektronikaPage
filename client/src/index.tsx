@@ -8,7 +8,6 @@ import { Provider } from 'react-redux';
 import { service } from './app/service/configureService';
 import { ServiceProvider } from './app/context/ServiceContext';
 
-
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
