@@ -6,7 +6,7 @@ public class MappingProfiles : AutoMapper.Profile
     {
         CreateMap<Entities.Service, DTOs.ServiceDto>();
         CreateMap<DTOs.UpdateServiceDto, Entities.Service>();
-        CreateMap<DTOs.UpdateCommentsDto, Entities.Service>();
+        CreateMap<DTOs.AddNewCommentDto, Entities.Service>();
         CreateMap<DTOs.AddServiceDto, Entities.Service>();
         CreateMap<Entities.PictureUrl, DTOs.PictureUrlDto>();
         CreateMap<DTOs.PictureUrlDto, Entities.PictureUrl>();

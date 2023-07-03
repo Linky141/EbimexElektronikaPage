@@ -7,6 +7,7 @@ import InfoPage from "../../features/infoPage/InfoPage";
 import ContactPage from "../../features/contactPage/ContactPage";
 import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
+import ServiceForm from "../../features/servicesPage/ServiceForm";
 
 export const router = createBrowserRouter([
     {
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
             {path: 'services/:id', element: <ServiceDetails/>},
             {path: 'server-error', element: <ServerError/>},
             {path: 'not-found', element: <NotFound/>},
+            {path: 'serviceFrom/:id', element: <ServiceForm/>},
             {path: '*', element: <Navigate replace to='not-found'/> },
         ]
     }

@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
-// import {
-//   experimental_extendTheme as materialExtendTheme,
-//   Experimental_CssVarsProvider as MaterialCssVarsProvider,
-//   THEME_ID as MATERIAL_THEME_ID,
-// } from '@mui/material/styles';
-// import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+import { setContacts } from "../../features/contactPage/contactSlice";
+import agent from "../api/agent";
+import { useAppDispatch } from "../service/configureService";
+import LoadingComponent from "./LoadingComponent";
+import { setInfos } from "../../features/infoPage/infoSlice";
+import { setServices } from "../../features/servicesPage/servicesSlice";
 
 function App() {
+  const dispatch = useAppDispatch();
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
   const theme = createTheme({
@@ -22,11 +23,33 @@ function App() {
       }
     }
   })
-  // const materialTheme = materialExtendTheme();
+  const [loadingContacts, setLoadingContacts] = useState(true);
+  const [loadingInfos, setLoadingInfos] = useState(true);
+  const [loadingServices, setLoadingServices] = useState(true);
+
+  useEffect(() => {
+    agent.Contact.list()
+      .then(contacts => dispatch(setContacts(contacts)))
+      .catch(error => console.log(error))
+      .finally(() => setLoadingContacts(false));
+
+    agent.Info.list()
+      .then(info => dispatch(setInfos(info)))
+      .catch(error => console.log(error))
+      .finally(() => setLoadingInfos(false))
+
+    agent.Service.list()
+      .then(service => dispatch(setServices(service)))
+      .catch(error => console.log(error))
+      .finally(() => setLoadingServices(false))
+  }, [dispatch])
 
   function handleThemeChange() {
     setDarkMode(!darkMode);
   }
+
+  if (loadingContacts || loadingInfos || loadingServices)
+    return <LoadingComponent message='Loading app...' />
 
   return (
     <ThemeProvider theme={theme}>

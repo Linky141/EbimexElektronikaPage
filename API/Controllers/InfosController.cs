@@ -25,6 +25,8 @@ public class InfosController : BaseApiController
     public async Task<ActionResult<Entities.Contact>> UpdateOpenHours(DTOs.UpdateInfoOpehHoursDto updateInfoOpehHoursDto)
     {
         var info = RetrieveInfo(updateInfoOpehHoursDto.Id).Result;
+        if (info == null)
+            return NotFound();
 
         if (updateInfoOpehHoursDto.OpeningHoursMondayStart == info.OpeningHoursMondayStart &&
             updateInfoOpehHoursDto.OpeningHoursMondayEnd == info.OpeningHoursMondayEnd &&
@@ -39,28 +41,24 @@ public class InfosController : BaseApiController
             updateInfoOpehHoursDto.OpeningHoursSaturdayStart == info.OpeningHoursSaturdayStart &&
             updateInfoOpehHoursDto.OpeningHoursSaturdayEnd == info.OpeningHoursSaturdayEnd &&
             updateInfoOpehHoursDto.OpeningHoursSundayStart == info.OpeningHoursSundayStart &&
-            updateInfoOpehHoursDto.OpeningHoursSundayEnd == info.OpeningHoursSundayEnd 
+            updateInfoOpehHoursDto.OpeningHoursSundayEnd == info.OpeningHoursSundayEnd
         )
             return BadRequest(new ProblemDetails { Title = "Nothing changed" });
-
-        if (info == null)
-            return NotFound();
 
         mapper.Map(updateInfoOpehHoursDto, info);
 
         var result = await serviceContext.SaveChangesAsync() > 0;
-
-        var dto = CreateDto(info);
-
         if (result)
-            return CreatedAtRoute("GetInfo", dto);
+            return CreatedAtRoute("GetInfo", new List<DTOs.InfoDto>() { mapper.Map<DTOs.InfoDto>(info) });
         return BadRequest(new ProblemDetails { Title = "Problem updating open hours" });
     }
 
     [HttpPut("UpdateAnnouncements")]
     public async Task<ActionResult<Entities.Contact>> UpdateAnnouncements(DTOs.UpdateInfoAnnouncementsDto updateInfoAnnouncementsDto)
     {
-         var info = RetrieveInfo(updateInfoAnnouncementsDto.Id).Result;
+        var info = RetrieveInfo(updateInfoAnnouncementsDto.Id).Result;
+        if (info == null)
+            return NotFound();
 
         bool announcementTheSame = true;
         if (updateInfoAnnouncementsDto.InfoAnnouncements.Count == 0 || info.InfoAnnouncements.Count == 0)
@@ -74,46 +72,14 @@ public class InfosController : BaseApiController
         if (announcementTheSame)
             return BadRequest(new ProblemDetails { Title = "Nothing changed" });
 
-
-        if (info == null)
-            return NotFound();
-
         info.InfoAnnouncements = new();
         mapper.Map(updateInfoAnnouncementsDto, info);
         info.InfoAnnouncements.ForEach(c => c.Id = 0);
 
         var result = await serviceContext.SaveChangesAsync() > 0;
-
-        var dto = CreateDto(info);
-
         if (result)
-            return CreatedAtRoute("GetInfo", dto);
+            return CreatedAtRoute("GetInfo", new List<DTOs.InfoDto>() { mapper.Map<DTOs.InfoDto>(info) });
         return BadRequest(new ProblemDetails { Title = "Problem updating announcements" });
-    }
-
-    private List<DTOs.InfoDto> CreateDto(Entities.Info info)
-    {
-        return new List<DTOs.InfoDto>{
-        new DTOs.InfoDto
-        {
-            OpeningHoursMondayStart = info.OpeningHoursMondayStart,
-            OpeningHoursMondayEnd = info.OpeningHoursMondayEnd,
-            OpeningHoursTuesdayStart = info.OpeningHoursTuesdayStart,
-            OpeningHoursTuesdayEnd = info.OpeningHoursTuesdayEnd,
-            OpeningHoursWednesdayStart = info.OpeningHoursWednesdayStart,
-            OpeningHoursWednesdayEnd = info.OpeningHoursWednesdayEnd,
-            OpeningHoursThursdayStart = info.OpeningHoursThursdayStart,
-            OpeningHoursThursdayEnd = info.OpeningHoursThursdayEnd,
-            OpeningHoursFridayStart = info.OpeningHoursFridayStart,
-            OpeningHoursFridayEnd = info.OpeningHoursFridayEnd,
-            OpeningHoursSaturdayStart = info.OpeningHoursSaturdayStart,
-            OpeningHoursSaturdayEnd = info.OpeningHoursSaturdayEnd,
-            OpeningHoursSundayStart = info.OpeningHoursSundayStart,
-            OpeningHoursSundayEnd = info.OpeningHoursSundayEnd,
-            InfoAnnouncements =  info.InfoAnnouncements.Select(item =>
-            new DTOs.InfoAnnouncementDto() { Id = item.Id, DateAndTime = item.DateAndTime, Content = item.Content }
-           ).ToList()
-        }};
     }
 
     private async Task<List<Entities.Info>> RetrieveInfos()

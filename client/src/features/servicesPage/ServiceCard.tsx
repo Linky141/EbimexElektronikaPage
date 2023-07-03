@@ -3,12 +3,28 @@ import { Service } from "../../app/models/service";
 import Moment from 'moment';
 import { Link } from "react-router-dom";
 import ServiceStatus from "./ServiceStatus";
+import { useAppDispatch } from "../../app/service/configureService";
+import { removeService } from "./servicesSlice";
+import agent from "../../app/api/agent";
+import { LoadingButton } from "@mui/lab";
+import { useState } from "react";
 
 interface Props {
     service: Service;
 }
 
 export default function ServiceCard({ service }: Props) {
+    const dispatch = useAppDispatch();
+    const [loadingSubmit, setLoadingSubmit] = useState(false);
+
+    function RemoveService() {
+        setLoadingSubmit(true);
+        agent.Service.removeService(service.id)
+            .then(service => dispatch(removeService(service)))
+            .catch(error => console.log(error))
+            .finally(() => setLoadingSubmit(false))
+    }
+
     return (
         <Card>
             <CardContent>
@@ -28,6 +44,7 @@ export default function ServiceCard({ service }: Props) {
             </CardContent>
             <CardActions>
                 <Button size="small" component={Link} to={`/services/${service.id}`}>View</Button>
+                <LoadingButton loading={loadingSubmit} size="small" onClick={RemoveService} variant="outlined" color="error">Remove</LoadingButton>
             </CardActions>
         </Card>
     )

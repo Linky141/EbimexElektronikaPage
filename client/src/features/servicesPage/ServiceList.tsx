@@ -7,6 +7,7 @@ interface Props {
 }
 
 export default function ServiceList({ services }: Props) {
+
     return (
         <Grid container spacing={4}>
             {services.map(service => (

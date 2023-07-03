@@ -51,19 +51,21 @@ const requests = {
 
 const Info = {
     list: () => requests.get('infos'),
-    UpdateOpenHours: (contact: any) => requests.put('infos/UpdateOpenHours', contact),
-    UpdateAnnouncements: (contact: any) => requests.put('infos/UpdateAnnouncements', contact)
+    UpdateOpenHours: (body: any) => requests.put('infos/UpdateOpenHours', body),
+    UpdateAnnouncements: (body: any) => requests.put('infos/UpdateAnnouncements', body)
 }
 
 const Contact = {
     list: () => requests.get('contacts'),
-    updateAddress: (contact: any) => requests.put('contacts/UpdateAddress', contact),
-    updateContact: (contact: any) => requests.put('contacts/UpdateContactData', contact)
+    updateAddress: (body: any) => requests.put('contacts/UpdateAddress', body),
+    updateContact: (body: any) => requests.put('contacts/UpdateContactData', body)
 }
 
 const Service = {
     list: () => requests.get('services'),
-    details: (id: number) => requests.get(`services/${id}`)
+    details: (id: number) => requests.get(`services/${id}`),
+    removeService: (id: number) => requests.delete(`Services/RemoveService_${id}`),
+    addService: (body: any) => requests.post(`Services/AddNewService`, body)
 }
 
 const TestErrors = {

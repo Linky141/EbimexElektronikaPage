@@ -1,25 +1,24 @@
-import { useState, useEffect } from 'react';
-import { Service } from '../../app/models/service'
 import ServiceList from './ServiceList';
-import agent from '../../app/api/agent';
-import LoadingComponent from '../../app/layout/LoadingComponent';
+import { useAppSelector } from '../../app/service/configureService';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function ServicesPage() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    agent.Service.list().then(services => setServices(services))
-      .catch(error => console.log(error))
-      .finally(() => setLoading(false))
-  }, [])
-
-  if (loading)
-    return <LoadingComponent message='Loading services...'/>
+  const { service } = useAppSelector(state => state.services);
 
   return (
     <>
-      <ServiceList services={services} />
+      <Button
+        component={Link}
+        to={`/serviceFrom/${0}`}
+        fullWidth
+        variant='contained'
+        color='secondary'
+        style={{ marginBottom: 20 }}
+      >Add new service</Button>
+      <ServiceList
+        services={service!}
+      />
     </>
   )
 }

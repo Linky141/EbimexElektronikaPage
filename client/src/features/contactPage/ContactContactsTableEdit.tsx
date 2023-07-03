@@ -2,7 +2,8 @@ import { TableContainer, Table, TableBody, TableCell, TableRow } from "@mui/mate
 import { Contact, ContactCustom } from "../../app/models/contact";
 import ContactContactsTableCustoms from "./ContactContactsTableCustoms";
 import { Control, FieldValues } from "react-hook-form";
-import ContactContactsTextField from "./ContactContactsTextField";
+import AppTextInput from "../../app/components/AppTextInput";
+
 
 interface Props {
     contact: Contact;
@@ -23,7 +24,7 @@ export default function ContactContactsTableEdit(props: Props) {
                     <TableBody>
                         <TableRow>
                             <TableCell>
-                                <ContactContactsTextField
+                                <AppTextInput
                                     label="Phone"
                                     content={props.contact.phone}
                                     fullWidth={true}
@@ -34,7 +35,7 @@ export default function ContactContactsTableEdit(props: Props) {
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <ContactContactsTextField
+                                <AppTextInput
                                     label="Email"
                                     content={props.contact.email}
                                     fullWidth={true}
