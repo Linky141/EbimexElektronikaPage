@@ -29,17 +29,18 @@ export default function ServiceForm() {
             return { id: 0, name: "", pictureUrls: [], currentStatus: 0, price: 0, plannedDateOfCompletion: "", description: "", comments: [] };
     }
 
-
-
-
     function handleOnSubmitAddService(data: FieldValues) {
         setLoadingSubmit(true);
 
         agent.Service
             .addService(data)
-            .then(service => dispatch(setServices(service)))
             .catch(error => console.log(error))
-            .finally(finishActions);
+            .finally(() => {
+                agent.Service.list()
+                    .then(service => dispatch(setServices(service)))
+                    .catch(error => console.log(error))
+                    .finally(finishActions)
+            });
 
         function finishActions() {
             setLoadingSubmit(false);
@@ -47,7 +48,26 @@ export default function ServiceForm() {
         }
     }
 
+    function handleOnSubmitEditService(data: FieldValues) {
+        setLoadingSubmit(true);
+        data.Id = serviceEdit.id;
 
+        agent.Service
+            .updateService(data)
+            .catch(error => console.log(error))
+            .finally(() => {
+                agent.Service.list()
+                    .then(service => dispatch(setServices(service)))
+                    .catch(error => console.log(error))
+                    .finally(finishActions)
+            });
+
+        function finishActions() {
+            setLoadingSubmit(false);
+            console.log(data);
+            navigate(location.state?.from || '/services/' + serviceEdit.id);
+        }
+    }
 
     useEffect(() => {
         if (serviceEdit.id !== 0)
@@ -138,14 +158,19 @@ export default function ServiceForm() {
                         color="success"
                         variant="outlined"
                     >Add</LoadingButton>
-                    // <Button fullWidth color="success" variant="outlined" onClick={}>Add</Button>
                 ) : (
-                    <Button fullWidth color="success" variant="outlined">Submit</Button>
+                    <LoadingButton
+                        loading={loadingSubmit}
+                        onClick={handleSubmit(handleOnSubmitEditService)}
+                        fullWidth
+                        color="success"
+                        variant="outlined"
+                    >Submit</LoadingButton>
                 )}
 
             </Grid>
             <Grid item xs={6}>
-                <Button fullWidth color="error" variant="outlined">Cancel</Button>
+                <Button fullWidth color="error" variant="outlined" onClick={() => navigate(location.state?.from || '/services')}>Cancel</Button>
             </Grid>
         </Grid>
     )

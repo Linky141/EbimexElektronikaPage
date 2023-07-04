@@ -4,7 +4,7 @@ import Moment from 'moment';
 import { Link } from "react-router-dom";
 import ServiceStatus from "./ServiceStatus";
 import { useAppDispatch } from "../../app/service/configureService";
-import { removeService } from "./servicesSlice";
+import { setServices } from "./servicesSlice";
 import agent from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
@@ -20,11 +20,15 @@ export default function ServiceCard({ service }: Props) {
     function RemoveService() {
         setLoadingSubmit(true);
         agent.Service.removeService(service.id)
-            .then(service => dispatch(removeService(service)))
             .catch(error => console.log(error))
-            .finally(() => setLoadingSubmit(false))
+            .finally(() => {
+                agent.Service.list()
+                .then(service => dispatch(setServices(service)))
+                .catch(error => console.log(error))
+                .finally(() => setLoadingSubmit(false))
+            })
     }
-
+    
     return (
         <Card>
             <CardContent>
@@ -44,6 +48,7 @@ export default function ServiceCard({ service }: Props) {
             </CardContent>
             <CardActions>
                 <Button size="small" component={Link} to={`/services/${service.id}`}>View</Button>
+                <Button size="small" component={Link} to={`/serviceFrom/${service.id}`}>Edit</Button>
                 <LoadingButton loading={loadingSubmit} size="small" onClick={RemoveService} variant="outlined" color="error">Remove</LoadingButton>
             </CardActions>
         </Card>

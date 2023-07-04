@@ -62,9 +62,9 @@ public class ServicesController : BaseApiController
 
         service.Comments.Add(new Entities.Comment
         {
-            DateTime = commentsDto.Comment.DateTime,
-            User = commentsDto.Comment.User,
-            Content = commentsDto.Comment.Content
+            DateTime = commentsDto.DateTime,
+            User = commentsDto.User,
+            Content = commentsDto.Content
         });
 
         var result = await serviceContext.SaveChangesAsync() > 0;

@@ -65,7 +65,9 @@ const Service = {
     list: () => requests.get('services'),
     details: (id: number) => requests.get(`services/${id}`),
     removeService: (id: number) => requests.delete(`Services/RemoveService_${id}`),
-    addService: (body: any) => requests.post(`Services/AddNewService`, body)
+    addService: (body: any) => requests.post(`Services/AddNewService`, body),
+    addComment: (body: any) => requests.post(`Services/AddNewComment`, body),
+    updateService: (body: any) => requests.put(`Services/UpdataService`, body),
 }
 
 const TestErrors = {
