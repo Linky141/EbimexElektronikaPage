@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Router';
 import { Provider } from 'react-redux';
 import { service } from './app/service/configureService';
+import "./app/translations/i18n";
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

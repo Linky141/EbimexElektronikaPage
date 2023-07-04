@@ -1,6 +1,7 @@
 import { Button, TableCell, TableRow, TextField } from "@mui/material";
 import { useState } from "react";
 import { ContactCustom } from "../../app/models/contact";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     editingCustomContact: number;
@@ -14,6 +15,7 @@ interface Props {
 export default function ContactContactsTableCustomsRow(props: Props) {
     const [nameState, setNameState] = useState<string>(props.customContact.name);
     const [contentState, setContentState] = useState<string>(props.customContact.content);
+    const { t } = useTranslation();
 
     function submitEditCustomContact(id: number, name: string, content: string) {
         const tmp: ContactCustom[] = props.customContacts.map(contact => {
@@ -44,8 +46,8 @@ export default function ContactContactsTableCustomsRow(props: Props) {
                     <TableCell>
                         {(props.editingCustomContact === -1 && !props.addingNewCustomContact) ? (
                             <>
-                                <Button onClick={() => props.setEditingCustomContact(props.customContact.id)}>Edit</Button>
-                                <Button onClick={() => removeCustomContact(props.customContact.id)} color="error" variant="outlined">Delete</Button>
+                                <Button onClick={() => props.setEditingCustomContact(props.customContact.id)}>{t("edit")}</Button>
+                                <Button onClick={() => removeCustomContact(props.customContact.id)} color="error" variant="outlined">{t("delete")}</Button>
                             </>
                         ) : (<></>)}
 
@@ -55,7 +57,7 @@ export default function ContactContactsTableCustomsRow(props: Props) {
                 <TableRow>
                     <TableCell width="30%">
                         <TextField
-                            label="Contact name"
+                            label={t("contactName")}
                             value={nameState}
                             onChange={e => setNameState(e.target.value)}
                             fullWidth={true}
@@ -63,15 +65,15 @@ export default function ContactContactsTableCustomsRow(props: Props) {
                     </TableCell>
                     <TableCell width="55%">
                         <TextField
-                            label="Contact data"
+                            label={t("contactData")}
                             value={contentState}
                             onChange={e => setContentState(e.target.value)}
                             fullWidth={true}
                         />
                     </TableCell>
                     <TableCell>
-                        <Button onClick={() => submitEditCustomContact(props.customContact.id, nameState, contentState)} color="success">Submit</Button>
-                        <Button onClick={() => props.setEditingCustomContact(-1)} color="error">Cancel</Button>
+                        <Button onClick={() => submitEditCustomContact(props.customContact.id, nameState, contentState)} color="success">{t("submit")}</Button>
+                        <Button onClick={() => props.setEditingCustomContact(-1)} color="error">{t("cancel")}</Button>
                     </TableCell>
                 </TableRow>
             )}

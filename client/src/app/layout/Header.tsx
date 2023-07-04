@@ -1,22 +1,14 @@
-import { AppBar, Box, FormControlLabel, List, ListItem, Switch, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, List, ListItem, Toolbar, Typography } from "@mui/material";
+import { t } from "i18next";
 import { NavLink } from "react-router-dom";
+import OptionsMenu from "./OptionsMenu";
 
 interface Props {
     darkMode: boolean;
     handleThemeChange: () => void;
+    appLanguage: boolean;
+    handleLanguageChange: () => void;
 }
-
-const midLinks = [
-    { title: 'info', path: '/info' },
-    { title: 'contact', path: '/contact' },
-    { title: 'services', path: '/services' }
-]
-
-
-const rightLinks = [
-    { title: 'login', path: '/login' },
-    { title: 'register', path: '/register' }
-]
 
 const navStyles = {
     color: 'inherit',
@@ -30,15 +22,25 @@ const navStyles = {
     }
 }
 
-export default function Header({ darkMode, handleThemeChange }: Props) {
+export default function Header({ darkMode, handleThemeChange, appLanguage, handleLanguageChange }: Props) {
+    const midLinks = [
+        { title: t("info"), path: '/info' },
+        { title: t("contact"), path: '/contact' },
+        { title: t("services"), path: '/services' }
+    ]
+
+    const rightLinks = [
+        { title: t("login"), path: '/login' },
+        { title: t("register"), path: '/register' }
+    ]
+
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box display='flex' alignItems='center'>
                     <Typography variant="h6" component={NavLink} to='/' sx={navStyles}>
-                        Ebimex elektronika
+                        {t("title")}
                     </Typography>
-                    <FormControlLabel style={{ paddingLeft: 20 }} control={<Switch checked={darkMode} onChange={handleThemeChange} />} label="Dark mode" />
                 </Box>
                 <List sx={{ display: 'flex' }}>
                     {midLinks.map(({ title, path }) => (
@@ -48,13 +50,13 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                     ))}
                 </List>
                 <Box display='flex' alignItems='center'>
-                    <List sx={{ display: 'flex' }}>
-                        {rightLinks.map(({ title, path }) => (
-                            <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
-                                {title.toUpperCase()}
-                            </ListItem>
-                        ))}
-                    </List>
+                    <OptionsMenu
+                        darkMode={darkMode}
+                        handleThemeChange={handleThemeChange}
+                        appLanguage={appLanguage}
+                        handleLanguageChange={handleLanguageChange}
+                        rightLinks={rightLinks}
+                    />
                 </Box>
             </Toolbar>
         </AppBar>

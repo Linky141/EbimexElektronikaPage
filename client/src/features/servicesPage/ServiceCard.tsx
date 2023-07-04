@@ -8,6 +8,7 @@ import { setServices } from "./servicesSlice";
 import agent from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     service: Service;
@@ -16,6 +17,7 @@ interface Props {
 export default function ServiceCard({ service }: Props) {
     const dispatch = useAppDispatch();
     const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const { t } = useTranslation();
 
     function RemoveService() {
         setLoadingSubmit(true);
@@ -37,7 +39,7 @@ export default function ServiceCard({ service }: Props) {
                     {service.name}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    Deadline: {Moment(service.plannedDateOfCompletion).format('DD-MM-YYYY')}
+                {t("deadline")}: {Moment(service.plannedDateOfCompletion).format('DD-MM-YYYY')}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     {(service.price / 100).toFixed(2)} PLN
@@ -47,9 +49,9 @@ export default function ServiceCard({ service }: Props) {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small" component={Link} to={`/services/${service.id}`}>View</Button>
-                <Button size="small" component={Link} to={`/serviceFrom/${service.id}`}>Edit</Button>
-                <LoadingButton loading={loadingSubmit} size="small" onClick={RemoveService} variant="outlined" color="error">Remove</LoadingButton>
+                <Button size="small" component={Link} to={`/services/${service.id}`}>{t("view")}</Button>
+                <Button size="small" component={Link} to={`/serviceFrom/${service.id}`}>{t("edit")}</Button>
+                <LoadingButton loading={loadingSubmit} size="small" onClick={RemoveService} variant="outlined" color="error">{t("delete")}</LoadingButton>
             </CardActions>
         </Card>
     )

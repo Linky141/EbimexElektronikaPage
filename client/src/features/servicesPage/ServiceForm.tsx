@@ -8,6 +8,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import agent from "../../app/api/agent";
 import { setServices } from "./servicesSlice";
+import { useTranslation } from "react-i18next";
 
 export default function ServiceForm() {
     const { id } = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ export default function ServiceForm() {
     const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     function init() {
         const serviceLoad = service?.find(x => x.id === parseInt(id!));
@@ -78,7 +80,7 @@ export default function ServiceForm() {
         <Grid container spacing={6} marginBottom={10}>
             <Grid item xs={12}>
                 <AppTextInput
-                    label="Name"
+                    label={t("name")}
                     content={serviceEdit!.name}
                     name="Name"
                     control={control}
@@ -97,14 +99,14 @@ export default function ServiceForm() {
                 </List>
             </Grid>
             <Grid item xs={12}>
-                <Typography variant="h4">Details</Typography>
+                <Typography variant="h4">{t("details")}</Typography>
                 <TableContainer>
                     <Table>
                         <TableBody>
                             <TableRow>
                                 <TableCell>
                                     <AppTextInput
-                                        label="Description"
+                                        label={t("description")}
                                         content={serviceEdit!.description}
                                         name="Description"
                                         control={control}
@@ -115,7 +117,7 @@ export default function ServiceForm() {
                             <TableRow>
                                 <TableCell>
                                     <AppTextInput
-                                        label="Finish date"
+                                        label={t("finishDate")}
                                         content={serviceEdit!.plannedDateOfCompletion}
                                         name="Finish date"
                                         control={control}
@@ -126,7 +128,7 @@ export default function ServiceForm() {
                             <TableRow>
                                 <TableCell>
                                     <AppTextInput
-                                        label="Price"
+                                        label={t("price")}
                                         content={serviceEdit!.price.toString()}
                                         name="Price"
                                         control={control}
@@ -137,7 +139,7 @@ export default function ServiceForm() {
                             <TableRow>
                                 <TableCell>
                                     <AppTextInput
-                                        label="Status"
+                                        label={t("status")}
                                         content={serviceEdit!.currentStatus.toString()}
                                         name="Status"
                                         control={control}
@@ -157,7 +159,7 @@ export default function ServiceForm() {
                         fullWidth
                         color="success"
                         variant="outlined"
-                    >Add</LoadingButton>
+                    >{t("add")}</LoadingButton>
                 ) : (
                     <LoadingButton
                         loading={loadingSubmit}
@@ -165,12 +167,12 @@ export default function ServiceForm() {
                         fullWidth
                         color="success"
                         variant="outlined"
-                    >Submit</LoadingButton>
+                    >{t("submit")}</LoadingButton>
                 )}
 
             </Grid>
             <Grid item xs={6}>
-                <Button fullWidth color="error" variant="outlined" onClick={() => navigate(location.state?.from || '/services')}>Cancel</Button>
+                <Button fullWidth color="error" variant="outlined" onClick={() => navigate(location.state?.from || '/services')}>{t("cancel")}</Button>
             </Grid>
         </Grid>
     )

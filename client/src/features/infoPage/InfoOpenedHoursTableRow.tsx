@@ -2,6 +2,7 @@ import { TableRow, TableCell, Checkbox, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, UseFormSetValue } from "react-hook-form";
 import InfoOpenHoursTextField from "./InfoOpenHoursTextField";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     nameStart: string;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export default function InfoOpenedHoursTableRow(props: Props) {
+    const { t } = useTranslation();
     const [isClosed, setIsClosed] = useState(false);
     const [isEmpty, setIsEmpty] = useState(false);
 
@@ -56,7 +58,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                         </>
 
                     ) : (
-                        <TableCell>Closed</TableCell>
+                        <TableCell>{t("closed")}</TableCell>
                     )}
 
                 </TableRow>
@@ -66,7 +68,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                         <TableCell>{props.day}</TableCell>
                         <TableCell>
                             <InfoOpenHoursTextField
-                                label="From"
+                                label={t("from")}
                                 content={!isClosed ? props.open : "Closed"}
                                 fullWidth={false}
                                 disabled={isClosed ? true : false}
@@ -74,7 +76,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                                 control={props.control}
                             />
                             <InfoOpenHoursTextField
-                                label="To"
+                                label={t("to")}
                                 content={!isClosed ? props.close : "Closed"}
                                 fullWidth={false}
                                 disabled={isClosed ? true : false}
@@ -85,7 +87,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                                 control={
                                     <Checkbox checked={isClosed} onChange={ChangeClosed} />
                                 }
-                                label="Closed"
+                                label={t("closed")}
                             />
                         </TableCell>
                     </TableRow>

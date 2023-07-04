@@ -3,6 +3,7 @@ import { Info } from "../../app/models/info";
 import InfoAnnouncementBox from "./InfoAnnouncementBox";
 import { FieldValues, UseFormHandleSubmit, UseFormSetValue } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     info: Info;
@@ -19,7 +20,8 @@ interface Props {
 }
 
 export default function InfoAnnouncementsShow(props: Props) {
-
+    const { t } = useTranslation();
+    
     return (
         <>
             {props.info.infoAnnouncements.map(announcement => (
@@ -39,7 +41,7 @@ export default function InfoAnnouncementsShow(props: Props) {
             <>
                 <Grid marginLeft="30px" marginRight="30px">
                     <TextField
-                        label="New announcement"
+                        label={t("newAnnouncement")}
                         variant="outlined"
                         multiline
                         fullWidth
@@ -55,7 +57,7 @@ export default function InfoAnnouncementsShow(props: Props) {
                             props.setLoadingSubmit(0);
                             props.handleAddNewAnnouncement(props.newAnnouncementContent);
                             props.handleSubmit(props.handleUpdateData)();
-                        }}>Add</LoadingButton>
+                        }}>{t("add")}</LoadingButton>
                 </Grid>
             </>
         </>

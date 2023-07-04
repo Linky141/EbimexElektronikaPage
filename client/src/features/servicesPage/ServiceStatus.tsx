@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     status: number;
@@ -8,15 +9,17 @@ interface Props {
 }
 
 export default function ServiceStatus({ status, color, fontSize, gutterBottom }: Props) {
+    const { t } = useTranslation();
+    
     return (
         <Typography sx={{ fontSize: fontSize }} color={color} gutterBottom={gutterBottom}>
-            {status === 0 ? 'Not started' :
-                status === 1 ? 'Opened' :
-                    status === 2 ? 'Waiting for components' :
-                        status === 3 ? 'Testing' :
-                            status === 4 ? 'Ready to be picked up' :
-                                status === 5 ? 'Released to customer' :
-                                    '#error'}
+            {status === 0 ? t("notStarted") :
+                status === 1 ? t("opened") :
+                    status === 2 ? t("waitingForComponents") :
+                        status === 3 ? t("testing") :
+                            status === 4 ? t("readyToBePickedUp") :
+                                status === 5 ? t("releasedToCustomer") :
+                                    t("error")}
         </Typography>
     )
 }

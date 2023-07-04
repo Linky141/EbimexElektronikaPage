@@ -13,6 +13,7 @@ import { useForm, FieldValues } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
 import { setServices } from "./servicesSlice";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 export default function ServiceDetails() {
     const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ export default function ServiceDetails() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const { control, handleSubmit } = useForm();
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     function handleOnSubmitAddComment(data: FieldValues) {
         setLoadingSubmitNewComment(true);
@@ -57,7 +59,7 @@ export default function ServiceDetails() {
     return (
         <Grid container spacing={6}>
             <Grid item xs={12}>
-                <Button size="small" component={Link} to={`/serviceFrom/${selectedService().id}`}>Edit</Button>
+                <Button size="small" component={Link} to={`/serviceFrom/${selectedService().id}`}>{t("edit")}</Button>
                 <Typography variant="h3">
                     {selectedService().name}
                 </Typography>
@@ -74,24 +76,24 @@ export default function ServiceDetails() {
                 </List>
             </Grid>
             <Grid item xs={12}>
-                <Typography variant="h4">Details</Typography>
+                <Typography variant="h4">{t("details")}</Typography>
                 <TableContainer>
                     <Table>
                         <TableBody>
                             <TableRow>
-                                <TableCell>Description</TableCell>
+                                <TableCell>{t("description")}</TableCell>
                                 <TableCell>{selectedService().description}</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>Finish date</TableCell>
+                                <TableCell>{t("finishDate")}</TableCell>
                                 <TableCell>{Moment(selectedService().plannedDateOfCompletion).format('DD-MM-YYYY')}</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>Price</TableCell>
+                                <TableCell>{t("price")}</TableCell>
                                 <TableCell>{(selectedService().price / 100).toFixed(2)} PLN</TableCell>
                             </TableRow>
                             <TableRow>
-                                <TableCell>Status</TableCell>
+                                <TableCell>{t("status")}</TableCell>
                                 <TableCell>
                                     <ServiceStatus status={selectedService().currentStatus} fontSize={14} color={"text.secondary"} gutterBottom={true} />
                                 </TableCell>
@@ -101,7 +103,7 @@ export default function ServiceDetails() {
                 </TableContainer>
             </Grid>
             <Grid item xs={12}>
-                <Typography variant="h4">Comments</Typography>
+                <Typography variant="h4">{t("comments")}</Typography>
                 <Grid container >
                     {selectedService().comments.map(({ content, dateTime, user, id }) => (
                         <Grid item xs={12} key={id}>
@@ -114,7 +116,7 @@ export default function ServiceDetails() {
                         <>
                             <Grid marginLeft="30px" marginRight="30px">
                                 <AppTextInput
-                                    label="Comment"
+                                    label={t("comment")}
                                     variant="outlined"
                                     content={""}
                                     fullWidth
@@ -130,12 +132,12 @@ export default function ServiceDetails() {
                                     fullWidth
                                     color="success"
                                     variant="outlined"
-                                >Add</LoadingButton>
+                                >{t("add")}</LoadingButton>
                             </Grid>
                         </>
                     ) : (
                         <Grid display="flex" justifyContent="flex-end" marginRight="30px" marginBottom="70px">
-                            <Button variant="contained" onClick={() => setaddingCommentState(true)}>Add comment</Button>
+                            <Button variant="contained" onClick={() => setaddingCommentState(true)}>{t("addComment")}</Button>
                         </Grid>
                     )}
                 </Grid>

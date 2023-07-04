@@ -3,6 +3,7 @@ import { Contact } from "../../app/models/contact";
 import ContactAddressTable from "./ContactAddressTable";
 import { Control, FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     contact: Contact;
@@ -15,18 +16,20 @@ interface Props {
 }
 
 export default function ContactAddressEdit(props: Props) {
+    const { t } = useTranslation();
+    
     return (
         <Grid container>
             <Grid item>
-                <Typography variant="h4">Address</Typography>
+                <Typography variant="h4">{t("address")}</Typography>
             </Grid>
             <Grid item>
                 <LoadingButton
                     loading={props.loadingSubmit}
                     onClick={props.handleSubmit(props.handleOnSubmitAddress)}
                     color="success"
-                >Submit</LoadingButton>
-                <Button onClick={() => props.setEditAddressMode(false)} color="error">Cancel</Button>
+                >{t("submit")}</LoadingButton>
+                <Button onClick={() => props.setEditAddressMode(false)} color="error">{t("cancel")}</Button>
             </Grid>
             <ContactAddressTable
                 contact={props.contact}

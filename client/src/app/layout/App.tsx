@@ -10,10 +10,12 @@ import { useAppDispatch } from "../service/configureService";
 import LoadingComponent from "./LoadingComponent";
 import { setInfos } from "../../features/infoPage/infoSlice";
 import { setServices } from "../../features/servicesPage/servicesSlice";
+import i18n from "../translations/i18n";
 
 function App() {
   const dispatch = useAppDispatch();
   const [darkMode, setDarkMode] = useState(false);
+  const [appLanguage, setAppLanguage] = useState(true);
   const paletteType = darkMode ? 'dark' : 'light';
   const theme = createTheme({
     palette: {
@@ -48,6 +50,11 @@ function App() {
     setDarkMode(!darkMode);
   }
 
+  const handleLanguageChange = () => {
+    setAppLanguage(!appLanguage);
+    i18n.changeLanguage(appLanguage ? 'en' : 'pl');
+  };
+
   if (loadingContacts || loadingInfos || loadingServices)
     return <LoadingComponent message='Loading app...' />
 
@@ -55,7 +62,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <ToastContainer position="bottom-right" theme="colored" closeOnClick={false} draggable={false} pauseOnHover hideProgressBar />
       <CssBaseline />
-      <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
+      <Header darkMode={darkMode} handleThemeChange={handleThemeChange} appLanguage={appLanguage} handleLanguageChange={handleLanguageChange} />
       <Container>
         <Outlet />
       </Container>

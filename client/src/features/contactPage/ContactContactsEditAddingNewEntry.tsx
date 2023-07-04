@@ -1,6 +1,7 @@
 import { Button, TableContainer, Table, TableBody, TableCell, TableRow, TextField } from "@mui/material";
 import { useState } from "react";
 import { ContactCustom } from "../../app/models/contact";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     customContacts: ContactCustom[];
@@ -13,6 +14,7 @@ interface Props {
 export default function ContactContactsEditAddingNewEntry(props: Props) {
     const [newNameState, setNewNameState] = useState<string>('');
     const [newContentState, setNewContentState] = useState<string>('');
+    const { t } = useTranslation();
 
     function handleAddNewCustomContact(name: string, content: string) {
         const lastItem = props.customContacts.length > 0 ? props.customContacts[props.customContacts.length - 1] : undefined;
@@ -37,7 +39,7 @@ export default function ContactContactsEditAddingNewEntry(props: Props) {
             {props.editingCustomContact === -1 ? (
                 <>
                     {!props.addingNewCustomContact ? (
-                        <Button onClick={() => props.setaddingNewCustomContact(true)}>Add new contact option</Button>
+                        <Button onClick={() => props.setaddingNewCustomContact(true)}>{t("addNewContactOption")}</Button>
                     ) : (
                         <>
                             <TableContainer>
@@ -46,7 +48,7 @@ export default function ContactContactsEditAddingNewEntry(props: Props) {
                                         <TableRow>
                                             <TableCell width="30%">
                                                 <TextField
-                                                    label="Contact name"
+                                                    label={t("contactName")}
                                                     fullWidth
                                                     value={newNameState}
                                                     onChange={e => setNewNameState(e.target.value)}
@@ -54,15 +56,15 @@ export default function ContactContactsEditAddingNewEntry(props: Props) {
                                             </TableCell>
                                             <TableCell width="55%">
                                                 <TextField
-                                                    label="Contact data"
+                                                    label={t("contactData")}
                                                     fullWidth
                                                     value={newContentState}
                                                     onChange={e => setNewContentState(e.target.value)}
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                <Button color="success" onClick={() => handleAddNewCustomContact(newNameState, newContentState)}>Submit</Button>
-                                                <Button color="error" onClick={handleCancelAddNewCustomContact}>Cancel</Button>
+                                                <Button color="success" onClick={() => handleAddNewCustomContact(newNameState, newContentState)}>{t("submit")}</Button>
+                                                <Button color="error" onClick={handleCancelAddNewCustomContact}>{t("cancel")}</Button>
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>

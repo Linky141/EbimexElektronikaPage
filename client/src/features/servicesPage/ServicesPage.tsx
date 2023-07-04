@@ -2,9 +2,11 @@ import ServiceList from './ServiceList';
 import { useAppSelector } from '../../app/service/configureService';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export default function ServicesPage() {
   const { service } = useAppSelector(state => state.services);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -15,7 +17,7 @@ export default function ServicesPage() {
         variant='contained'
         color='secondary'
         style={{ marginBottom: 20 }}
-      >Add new service</Button>
+      >{t("addNewService")}</Button>
       <ServiceList
         services={service!}
       />
