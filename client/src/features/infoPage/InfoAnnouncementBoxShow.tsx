@@ -3,6 +3,7 @@ import { InfoAnnouncement } from "../../app/models/info";
 import Moment from 'moment';
 import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     announcement: InfoAnnouncement;
@@ -15,7 +16,8 @@ interface Props {
 }
 
 export default function InfoAnnouncementBoxShow(props: Props) {
-
+    const { t } = useTranslation();
+    
     return (
         <Box sx={{ margin: '10px', padding: '10px', borderStyle: 'solid', borderColor: 'primary.main', borderWidth: '2px', borderRadius: '20px' }}>
             <Grid container>
@@ -23,7 +25,7 @@ export default function InfoAnnouncementBoxShow(props: Props) {
                     {Moment(props.announcement.dateAndTime).format('DD-MM-YYYY HH:mm')}
                 </Grid>
                 <Grid item xs={6} display="flex" justifyContent="flex-end" color="text.secondary">
-                    <Button onClick={() => props.setEditingAnnouncementMode(props.announcement.id)}>Edit</Button>
+                    <Button onClick={() => props.setEditingAnnouncementMode(props.announcement.id)}>{t("edit")}</Button>
                     <LoadingButton
                         loading={props.loadingSubmit === props.announcement.id}
                         onClick={() => {
@@ -32,7 +34,7 @@ export default function InfoAnnouncementBoxShow(props: Props) {
                             props.handleSubmit(props.handleUpdateData)();
                         }}
                         color="error"
-                        variant="outlined">Delete</LoadingButton>
+                        variant="outlined">{t("delete")}</LoadingButton>
                 </Grid>
             </Grid>
             <Grid item>

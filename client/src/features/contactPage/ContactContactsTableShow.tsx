@@ -1,6 +1,7 @@
 import { TableContainer, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { Contact, ContactCustom } from "../../app/models/contact";
 import ContactContactsTableCustoms from "./ContactContactsTableCustoms";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     contact: Contact;
@@ -13,16 +14,18 @@ interface Props {
 }
 
 export default function ContactContactsTableShow(props: Props) {
+    const { t } = useTranslation();
+    
     return (
         <TableContainer>
             <Table>
                 <TableBody>
                     <TableRow>
-                        <TableCell>Phone</TableCell>
+                        <TableCell>{t("phone")}</TableCell>
                         <TableCell>{props.contact.phone}</TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell>Email</TableCell>
+                        <TableCell>{t("email")}</TableCell>
                         <TableCell>{props.contact.email}</TableCell>
                     </TableRow>
                     <ContactContactsTableCustoms

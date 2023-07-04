@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { useState } from "react";
 import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     announcement: InfoAnnouncement;
@@ -18,7 +19,8 @@ interface Props {
 
 export default function InfoAnnouncementBoxEdit(props: Props) {
     const [announcementContent, setAnnouncementContent] = useState<string>(props.announcement.content);
-
+    const { t } = useTranslation();
+    
     return (
         <Box sx={{ margin: '10px', padding: '10px', borderStyle: 'solid', borderColor: 'primary.main', borderWidth: '2px', borderRadius: '20px' }}>
             <Grid container>
@@ -36,8 +38,8 @@ export default function InfoAnnouncementBoxEdit(props: Props) {
                                     props.handleSubmit(props.handleUpdateData)();
                                 }}
                                 color="success"
-                            >Submit</LoadingButton>
-                            <Button onClick={() => props.setEditingAnnouncementMode(-1)} color="error">Cancel</Button>
+                            >{t("submit")}</LoadingButton>
+                            <Button onClick={() => props.setEditingAnnouncementMode(-1)} color="error">{t("cancel")}</Button>
                         </>
                     ) : (<></>)}
                 </Grid>

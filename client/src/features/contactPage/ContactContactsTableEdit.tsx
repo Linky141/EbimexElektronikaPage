@@ -2,7 +2,9 @@ import { TableContainer, Table, TableBody, TableCell, TableRow } from "@mui/mate
 import { Contact, ContactCustom } from "../../app/models/contact";
 import ContactContactsTableCustoms from "./ContactContactsTableCustoms";
 import { Control, FieldValues } from "react-hook-form";
-import ContactContactsTextField from "./ContactContactsTextField";
+import AppTextInput from "../../app/components/AppTextInput";
+import { useTranslation } from "react-i18next";
+
 
 interface Props {
     contact: Contact;
@@ -16,6 +18,8 @@ interface Props {
 }
 
 export default function ContactContactsTableEdit(props: Props) {
+    const { t } = useTranslation();
+    
     return (
         <>
             <TableContainer>
@@ -23,8 +27,8 @@ export default function ContactContactsTableEdit(props: Props) {
                     <TableBody>
                         <TableRow>
                             <TableCell>
-                                <ContactContactsTextField
-                                    label="Phone"
+                                <AppTextInput
+                                    label={t("phone")}
                                     content={props.contact.phone}
                                     fullWidth={true}
                                     name={"Phone"}
@@ -34,8 +38,8 @@ export default function ContactContactsTableEdit(props: Props) {
                         </TableRow>
                         <TableRow>
                             <TableCell>
-                                <ContactContactsTextField
-                                    label="Email"
+                                <AppTextInput
+                                    label={t("email")}
                                     content={props.contact.email}
                                     fullWidth={true}
                                     name={"Email"}

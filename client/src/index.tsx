@@ -1,4 +1,3 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './app/layout/style.css';
 import reportWebVitals from './reportWebVitals';
@@ -6,19 +5,16 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Router';
 import { Provider } from 'react-redux';
 import { service } from './app/service/configureService';
-import { ServiceProvider } from './app/context/ServiceContext';
-
+import "./app/translations/i18n";
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
 
 root.render(
   // <React.StrictMode>
-    <ServiceProvider>
-      <Provider store={service}>
-        <RouterProvider router={router} />
-      </Provider>
-    </ServiceProvider>
+  <Provider store={service}>
+    <RouterProvider router={router} />
+  </Provider>
   // </React.StrictMode>
 );
 
