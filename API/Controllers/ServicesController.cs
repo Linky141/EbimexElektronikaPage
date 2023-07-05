@@ -4,8 +4,10 @@ public class ServicesController : BaseApiController
 {
     private readonly ServiceContext serviceContext;
     private readonly IMapper mapper;
-    public ServicesController(ServiceContext serviceContext, IMapper mapper)
+    private readonly ApiServices.ImageService imageService;
+    public ServicesController(ServiceContext serviceContext, IMapper mapper, ApiServices.ImageService imageService)
     {
+        this.imageService = imageService;
         this.mapper = mapper;
         this.serviceContext = serviceContext;
     }
@@ -46,6 +48,30 @@ public class ServicesController : BaseApiController
 
         mapper.Map(serviceDto, service);
 
+        foreach (var file in service.PictureUrls)
+        {
+            if (!string.IsNullOrEmpty(file.PublicId))
+                await imageService.DeleteImageAsync(file.PublicId);
+        }
+        service.PictureUrls = new();
+
+        foreach (var file in serviceDto.Files)
+        {
+            if (!string.IsNullOrEmpty(file))
+            {
+                var iFile = ApiServices.Base64Service.Base64ToImage(file);
+                var imageResult = await imageService.AddImageAsync(iFile);
+                if (imageResult.Error != null)
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+                Entities.PictureUrl url = new Entities.PictureUrl
+                {
+                    PublicId = imageResult.PublicId,
+                    Url = imageResult.SecureUrl.ToString()
+                };
+                service.PictureUrls.Add(url);
+            }
+        }
+
         var result = await serviceContext.SaveChangesAsync() > 0;
         if (result)
             return CreatedAtRoute("", mapper.Map<DTOs.ServiceDto>(service));
@@ -77,8 +103,25 @@ public class ServicesController : BaseApiController
     public async Task<ActionResult> AddNewService(DTOs.AddServiceDto serviceDto)
     {
         var service = mapper.Map<Entities.Service>(serviceDto);
-        serviceContext.Services.Add(service);
 
+        foreach (var file in serviceDto.Files)
+        {
+            if (!string.IsNullOrEmpty(file))
+            {
+                var iFile = ApiServices.Base64Service.Base64ToImage(file);
+                var imageResult = await imageService.AddImageAsync(iFile);
+                if (imageResult.Error != null)
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+                Entities.PictureUrl url = new Entities.PictureUrl
+                {
+                    PublicId = imageResult.PublicId,
+                    Url = imageResult.SecureUrl.ToString()
+                };
+                service.PictureUrls.Add(url);
+            }
+        }
+
+        serviceContext.Services.Add(service);
         var result = await serviceContext.SaveChangesAsync() > 0;
         if (result)
             return StatusCode(201);
@@ -91,6 +134,12 @@ public class ServicesController : BaseApiController
         var service = RetrieveService(id).Result;
         if (service == null)
             return NotFound();
+
+        foreach (var file in service.PictureUrls)
+        {
+            if (!string.IsNullOrEmpty(file.PublicId))
+                await imageService.DeleteImageAsync(file.PublicId);
+        }
 
         serviceContext.Services.Remove(service);
 

@@ -11,6 +11,7 @@ builder.Services.AddDbContext<ServiceContext> (opt => {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
+builder.Services.AddScoped<API.ApiServices.ImageService>();
 
 var app = builder.Build();
 
