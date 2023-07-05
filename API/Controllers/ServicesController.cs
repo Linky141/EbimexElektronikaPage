@@ -38,39 +38,41 @@ public class ServicesController : BaseApiController
         if (service == null)
             return NotFound();
 
-        if (serviceDto.Name == service.Name &&
-            serviceDto.CurrentStatus == service.CurrentStatus &&
-            serviceDto.Description == service.Description &&
-            serviceDto.PlannedDateOfCompletion == service.PlannedDateOfCompletion &&
-            serviceDto.Price == service.Price
-        )
-            return BadRequest(new ProblemDetails { Title = "Nothing changed" });
-
         mapper.Map(serviceDto, service);
 
         foreach (var file in service.PictureUrls)
         {
-            if (!string.IsNullOrEmpty(file.PublicId))
+            if (!string.IsNullOrEmpty(file.PublicId) && !serviceDto.Files.Contains(file.Url))
                 await imageService.DeleteImageAsync(file.PublicId);
         }
-        service.PictureUrls = new();
+        List<Entities.PictureUrl> tmpPicUrl = new();
 
         foreach (var file in serviceDto.Files)
         {
             if (!string.IsNullOrEmpty(file))
             {
-                var iFile = ApiServices.Base64Service.Base64ToImage(file);
-                var imageResult = await imageService.AddImageAsync(iFile);
-                if (imageResult.Error != null)
-                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
-                Entities.PictureUrl url = new Entities.PictureUrl
+                bool isUrl = Uri.IsWellFormedUriString(file, UriKind.Absolute);
+
+                if (isUrl)
                 {
-                    PublicId = imageResult.PublicId,
-                    Url = imageResult.SecureUrl.ToString()
-                };
-                service.PictureUrls.Add(url);
+                    tmpPicUrl.Add(service.PictureUrls.FirstOrDefault(x => x.Url == file));
+                }
+                else
+                {
+                    var iFile = ApiServices.Base64Service.Base64ToImage(file);
+                    var imageResult = await imageService.AddImageAsync(iFile);
+                    if (imageResult.Error != null)
+                        return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+                    Entities.PictureUrl url = new Entities.PictureUrl
+                    {
+                        PublicId = imageResult.PublicId,
+                        Url = imageResult.SecureUrl.ToString()
+                    };
+                    tmpPicUrl.Add(url);
+                }
             }
         }
+        service.PictureUrls = tmpPicUrl;
 
         var result = await serviceContext.SaveChangesAsync() > 0;
         if (result)

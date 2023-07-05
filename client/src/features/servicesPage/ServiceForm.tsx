@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
 import { useEffect, useState } from "react";
-import { Button, Grid, List, ListItem, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Grid, Input, List, ListItem, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import { Service } from "../../app/models/service";
 import AppTextInput from "../../app/components/AppTextInput";
 import { FieldValues, useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ export default function ServiceForm() {
     const { id } = useParams<{ id: string }>();
     const { service } = useAppSelector(state => state.services);
     const [serviceEdit, setServiceEdit] = useState<Service>(init);
+    const [pictures, setPictures] = useState<string[]>([]);
     const [newService, setNewService] = useState(true);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const { control, handleSubmit } = useForm();
@@ -33,6 +34,7 @@ export default function ServiceForm() {
 
     function handleOnSubmitAddService(data: FieldValues) {
         setLoadingSubmit(true);
+        data.files = pictures;
 
         agent.Service
             .addService(data)
@@ -53,7 +55,9 @@ export default function ServiceForm() {
     function handleOnSubmitEditService(data: FieldValues) {
         setLoadingSubmit(true);
         data.Id = serviceEdit.id;
+        data.files = pictures;
 
+        // console.log(data);
         agent.Service
             .updateService(data)
             .catch(error => console.log(error))
@@ -74,10 +78,34 @@ export default function ServiceForm() {
     useEffect(() => {
         if (serviceEdit.id !== 0)
             setNewService(false);
+
+        serviceEdit.pictureUrls.forEach(element => {
+            if (pictures === undefined) {
+                setPictures([element.url]);
+            }
+            else {
+                setPictures(previousState => [...previousState, element.url]);
+            }
+        });
     }, [serviceEdit.id])
+
+    function handleChange(event: any) {
+        let file = event.target.files[0];
+        if (file !== undefined) {
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                setPictures(previousState => [...previousState, reader.result!.toString()]);
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+        }
+    }
 
     return (
         <Grid container spacing={6} marginBottom={10}>
+
             <Grid item xs={12}>
                 <AppTextInput
                     label={t("name")}
@@ -88,15 +116,36 @@ export default function ServiceForm() {
                 />
             </Grid>
             <Grid item xs={12}>
-                <List sx={{ display: 'flex' }}>
-                    {serviceEdit!.pictureUrls.map(({ url, id }) => (
-                        <ListItem key={id}>
-                            {/* <Button onClick={() => setSelectedImage(url)}> */}
-                            <img src={url} alt={url} style={{ margin: '10px', width: '300px' }} />
-                            {/* </Button> */}
-                        </ListItem>
-                    ))}
-                </List>
+                <Grid item xs={12}>
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        component="label"
+                    >{t("uploadNewImage")}
+                        <input
+                            type="file"
+                            onChange={handleChange}
+                            hidden
+                        /></Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container>
+                        {pictures.map(url => (
+                            <Grid item key={url} xs={4}>
+                                <Card sx={{ maxWidth: 345, marginTop: 5 }}>
+                                    <img src={url} alt={url} style={{ margin: '10px', width: '325px', }} />
+                                    <CardActions>
+                                        <Button size="small" color="error" fullWidth onClick={() => {
+                                            setPictures((current) =>
+                                                current.filter((pic) => pic !== url)
+                                            );
+                                        }}>{t("delete")}</Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Typography variant="h4">{t("details")}</Typography>

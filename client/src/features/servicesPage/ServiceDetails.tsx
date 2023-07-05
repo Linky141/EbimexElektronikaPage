@@ -41,13 +41,13 @@ export default function ServiceDetails() {
                     .finally(finishActions)
             });
 
-            function finishActions() {
-                setLoadingSubmitNewComment(false);
-                setaddingCommentState(false);
-            }
+        function finishActions() {
+            setLoadingSubmitNewComment(false);
+            setaddingCommentState(false);
+        }
     }
 
-    function selectedService(){
+    function selectedService() {
         return service?.find(x => x.id === parseInt(id!))!;
     }
 
@@ -65,15 +65,15 @@ export default function ServiceDetails() {
                 </Typography>
             </Grid>
             <Grid item xs={12}>
-                <List sx={{ display: 'flex' }}>
+                <Grid container>
                     {selectedService().pictureUrls.map(({ url, id }) => (
-                        <ListItem key={id}>
+                        <Grid item key={id} xs={4}>
                             <Button onClick={() => setSelectedImage(url)}>
                                 <img src={url} alt={url} style={{ margin: '10px', width: '300px' }} />
                             </Button>
-                        </ListItem>
+                        </Grid>
                     ))}
-                </List>
+                </Grid>
             </Grid>
             <Grid item xs={12}>
                 <Typography variant="h4">{t("details")}</Typography>
