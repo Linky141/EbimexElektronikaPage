@@ -69,7 +69,8 @@ i18n.use(initReactI18next).init({
                 pageNotFound: "Page not found",
                 GoBackToHomePage: "Go back to home page",
                 menu: "Menu",
-                uploadNewImage: "Upload new Image"
+                uploadNewImage: "Upload new Image",
+                isMandatory: "is mandatory.",
             }
         },
         pl: {
@@ -133,7 +134,8 @@ i18n.use(initReactI18next).init({
                 pageNotFound: "Strona nie odnaleziona",
                 GoBackToHomePage: "Powrót do strony głównej",
                 menu: "Menu",
-                uploadNewImage: "Prześlij nowe zdjęcie"
+                uploadNewImage: "Prześlij nowe zdjęcie",
+                isMandatory: "jest wymagane.",
             }
         },
     }

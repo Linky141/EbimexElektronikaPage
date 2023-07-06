@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
+import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
 
 interface Props {
     announcement: InfoAnnouncement;
@@ -38,9 +39,7 @@ export default function InfoAnnouncementBoxShow(props: Props) {
                 </Grid>
             </Grid>
             <Grid item>
-                {props.announcement.content.split("\n").map((i, key) => {
-                    return <div key={key}>{i}</div>;
-                })}
+                <AppShowTextMultiline content={props.announcement.content}/>
             </Grid>
         </Box>
     )
