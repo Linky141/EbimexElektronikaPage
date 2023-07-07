@@ -17,6 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import { CreateSendDate } from "../../app/utils/ServicesUtils";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ServiceFormSchema } from "../Validations/ServicesPageValidations";
 
 
 export default function ServiceForm() {
@@ -29,7 +31,9 @@ export default function ServiceForm() {
     const [statusLocal, setStatusLocal] = useState<number>(-1);
     const [dateLocal, setDateLocal] = useState<string>('0001-01-01T00:00:00');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const { control, handleSubmit } = useForm();
+    const { control, handleSubmit } = useForm<any>({
+        resolver: yupResolver(ServiceFormSchema())
+    });
     const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate();
@@ -220,6 +224,10 @@ export default function ServiceForm() {
                                         control={control}
                                         fullWidth
                                         type="number"
+                                        inputProps={{
+                                            step: 0.5,
+                                            min: 0,
+                                          }}
                                     />
                                 </TableCell>
                             </TableRow>

@@ -8,10 +8,10 @@ import { useTranslation } from "react-i18next";
 interface Props {
     info: Info;
     setEditingOpenedHoursMode: React.Dispatch<React.SetStateAction<boolean>>;
-    control: Control<FieldValues, any>;
-    setValue: UseFormSetValue<FieldValues>;
+    control: Control<any>;
+    setValue: UseFormSetValue<any>;
     loadingSubmit: boolean;
-    handleSubmit: UseFormHandleSubmit<FieldValues, undefined>;
+    handleSubmit: UseFormHandleSubmit<any, undefined>;
     handleOnSubmitOpenHours: (data: FieldValues) => void;
 }
 

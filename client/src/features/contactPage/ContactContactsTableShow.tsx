@@ -15,19 +15,23 @@ interface Props {
 
 export default function ContactContactsTableShow(props: Props) {
     const { t } = useTranslation();
-    
+
     return (
         <TableContainer>
             <Table>
                 <TableBody>
-                    <TableRow>
-                        <TableCell>{t("phone")}</TableCell>
-                        <TableCell>{props.contact.phone}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>{t("email")}</TableCell>
-                        <TableCell>{props.contact.email}</TableCell>
-                    </TableRow>
+                    {props.contact.phone ? (
+                        <TableRow>
+                            <TableCell>{t("phone")}</TableCell>
+                            <TableCell>{props.contact.phone}</TableCell>
+                        </TableRow>
+                    ) : (<></>)}
+                    {props.contact.email ? (
+                        <TableRow>
+                            <TableCell>{t("email")}</TableCell>
+                            <TableCell>{props.contact.email}</TableCell>
+                        </TableRow>
+                    ) : (<></>)}
                     <ContactContactsTableCustoms
                         editContactsMode={props.editContactsMode}
                         editingCustomContact={props.editingCustomContact}

@@ -4,6 +4,7 @@ import InfoAnnouncementBox from "./InfoAnnouncementBox";
 import { FieldValues, UseFormHandleSubmit, UseFormSetValue } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 interface Props {
     info: Info;
@@ -21,7 +22,7 @@ interface Props {
 
 export default function InfoAnnouncementsShow(props: Props) {
     const { t } = useTranslation();
-    
+
     return (
         <>
             {props.info.infoAnnouncements.map(announcement => (
@@ -54,9 +55,14 @@ export default function InfoAnnouncementsShow(props: Props) {
                         variant="contained"
                         loading={props.loadingSubmit === 0}
                         onClick={() => {
-                            props.setLoadingSubmit(0);
-                            props.handleAddNewAnnouncement(props.newAnnouncementContent);
-                            props.handleSubmit(props.handleUpdateData)();
+                            if (props.newAnnouncementContent === '') {
+                                toast.error(t('fieldIsMandatory'));
+                            }
+                            else {
+                                props.setLoadingSubmit(0);
+                                props.handleAddNewAnnouncement(props.newAnnouncementContent);
+                                props.handleSubmit(props.handleUpdateData)();
+                            }
                         }}>{t("add")}</LoadingButton>
                 </Grid>
             </>

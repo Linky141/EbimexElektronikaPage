@@ -70,7 +70,12 @@ i18n.use(initReactI18next).init({
                 GoBackToHomePage: "Go back to home page",
                 menu: "Menu",
                 uploadNewImage: "Upload new Image",
-                isMandatory: "is mandatory.",
+                isMandatory: "is mandatory",
+                fieldIsMandatory: "Field is mandatory",
+                timeFormatValidationError: "Field should have format hh:mm",
+                nameAndContantAreMandatory: "Field name and contant of contact are mandatory",
+                newCommentShouldNotBeEmpty: "New comment should not be empty",
+                fieldCanBeOnlyR2Precision: "Field can have only 2 digits after comma",
             }
         },
         pl: {
@@ -135,7 +140,12 @@ i18n.use(initReactI18next).init({
                 GoBackToHomePage: "Powrót do strony głównej",
                 menu: "Menu",
                 uploadNewImage: "Prześlij nowe zdjęcie",
-                isMandatory: "jest wymagane.",
+                isMandatory: "jest wymagane",
+                fieldIsMandatory: "Pole jest wymagane",
+                timeFormatValidationError: "Pole musi mieć format hh:mm",
+                nameAndContantAreMandatory: "Pole nazwa i zawartość kontaktu są wymagane",
+                newCommentShouldNotBeEmpty: "Nowy komentarz nie może być pusty",
+                fieldCanBeOnlyR2Precision: "Pole może mieć tylko 2 miejsca po przecinku",
             }
         },
     }

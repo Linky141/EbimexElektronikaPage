@@ -2,6 +2,7 @@ import { Button, TableContainer, Table, TableBody, TableCell, TableRow, TextFiel
 import { useState } from "react";
 import { ContactCustom } from "../../app/models/contact";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 interface Props {
     customContacts: ContactCustom[];
@@ -63,7 +64,14 @@ export default function ContactContactsEditAddingNewEntry(props: Props) {
                                                 />
                                             </TableCell>
                                             <TableCell>
-                                                <Button color="success" onClick={() => handleAddNewCustomContact(newNameState, newContentState)}>{t("submit")}</Button>
+                                                <Button color="success" onClick={() => {
+                                                    if (newNameState === '' || newContentState === '') {
+                                                        toast.error(t("nameAndContantAreMandatory"))
+                                                    }
+                                                    else {
+                                                        handleAddNewCustomContact(newNameState, newContentState)
+                                                    }
+                                                }}>{t("submit")}</Button>
                                                 <Button color="error" onClick={handleCancelAddNewCustomContact}>{t("cancel")}</Button>
                                             </TableCell>
                                         </TableRow>

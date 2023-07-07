@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import ServiceDetailsComments from "./ServiceDetailsComments";
 import { findServiceId } from "../../app/utils/ServicesUtils";
 import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
+import { toast } from "react-toastify";
 
 export default function ServiceDetails() {
     const { id } = useParams<{ id: string }>();
@@ -26,26 +27,30 @@ export default function ServiceDetails() {
     const { t } = useTranslation();
 
     function handleOnSubmitAddComment(data: FieldValues) {
-        setLoadingSubmitNewComment(true);
-        data.Id = id;
-        data.user = "SAMPLE_USER";
-        data.dateTime = moment().format("YYYY-MM-DDThh:mm:ss");
-
-        agent.Service
-            .addComment(data)
-            .catch(error => console.log(error))
-            .finally(() => {
-                agent.Service.list()
-                    .then(service => dispatch(setServices(service)))
-                    .catch(error => console.log(error))
-                    .finally(finishActions)
-            });
-
-        function finishActions() {
-            setValue("content", "");
-            setLoadingSubmitNewComment(false);
-            setaddingCommentState(false);
+        if (data.content.replace(/\s+/g, '') === '') {
+            toast.error(t('newCommentShouldNotBeEmpty'));
         }
+        else{
+            setLoadingSubmitNewComment(true);
+            data.Id = id;
+            data.user = "SAMPLE_USER";
+            data.dateTime = moment().format("YYYY-MM-DDThh:mm:ss");
+            console.log(data);
+            agent.Service
+                .addComment(data)
+                .catch(error => console.log(error))
+                .finally(() => {
+                    agent.Service.list()
+                        .then(service => dispatch(setServices(service)))
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                            setValue("content", "");
+                            setLoadingSubmitNewComment(false);
+                            setaddingCommentState(false);
+                        })
+                });
+        }
+       
     }
 
     if (!service?.find(x => x.id === parseInt(id!)))
@@ -79,7 +84,7 @@ export default function ServiceDetails() {
                         <TableBody>
                             <TableRow>
                                 <TableCell>{t("description")}</TableCell>
-                                <TableCell><AppShowTextMultiline content={findServiceId(service, id).description}/></TableCell>
+                                <TableCell><AppShowTextMultiline content={findServiceId(service, id).description} /></TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>{t("finishDate")}</TableCell>

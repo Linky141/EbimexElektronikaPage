@@ -1,8 +1,8 @@
 import { TableRow, TableCell, Checkbox, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Control, FieldValues, UseFormSetValue } from "react-hook-form";
-import InfoOpenHoursTextField from "./InfoOpenHoursTextField";
+import { Control, UseFormSetValue } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import AppTextInput from "../../app/components/AppTextInput";
 
 interface Props {
     nameStart: string;
@@ -11,8 +11,8 @@ interface Props {
     open: string;
     close: string;
     editMode: boolean;
-    control: Control<FieldValues, any>;
-    setValue: UseFormSetValue<FieldValues>;
+    control: Control<any>;
+    setValue: UseFormSetValue<any>;
 }
 
 export default function InfoOpenedHoursTableRow(props: Props) {
@@ -67,7 +67,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                     <TableRow>
                         <TableCell>{props.day}</TableCell>
                         <TableCell>
-                            <InfoOpenHoursTextField
+                            <AppTextInput
                                 label={t("from")}
                                 content={!isClosed ? props.open : "Closed"}
                                 fullWidth={false}
@@ -75,7 +75,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                                 name={props.nameStart}
                                 control={props.control}
                             />
-                            <InfoOpenHoursTextField
+                            <AppTextInput
                                 label={t("to")}
                                 content={!isClosed ? props.close : "Closed"}
                                 fullWidth={false}

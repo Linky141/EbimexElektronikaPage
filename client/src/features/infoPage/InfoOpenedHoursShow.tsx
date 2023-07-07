@@ -1,18 +1,18 @@
 import { Grid, Typography, Button, TableContainer, Table, TableBody } from "@mui/material";
 import InfoOpenedHoursTableRow from "./InfoOpenedHoursTableRow";
 import { Info } from "../../app/models/info";
-import { FieldValues, Control, UseFormSetValue } from "react-hook-form";
+import { Control, UseFormSetValue } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 interface Props {
     info: Info;
     setEditingOpenedHoursMode: React.Dispatch<React.SetStateAction<boolean>>;
-    control: Control<FieldValues, any>;
-    setValue: UseFormSetValue<FieldValues>;
+    control: Control<any>;
+    setValue: UseFormSetValue<any>;
 }
 
 export default function InfoOpenedHoursShow(props: Props) {
-    const { i18n, t } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Grid container>
