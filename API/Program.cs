@@ -7,10 +7,14 @@ builder.Services.AddAutoMapper(typeof(API.RequestHelpers.MappingProfiles).Assemb
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ServiceContext> (opt => {
+builder.Services.AddDbContext<ServiceContext>(opt =>
+{
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
+builder.Services.AddIdentityCore<API.Entities.User>().AddRoles<IdentityRole>().AddEntityFrameworkStores<ServiceContext>();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 builder.Services.AddScoped<API.ApiServices.ImageService>();
 
 var app = builder.Build();
@@ -25,7 +29,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(opt => {
+app.UseCors(opt =>
+{
     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
 });
 
@@ -35,11 +40,12 @@ app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var servicecontext = scope.ServiceProvider.GetRequiredService<ServiceContext>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<API.Entities.User>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 try
 {
-    servicecontext.Database.Migrate();
-    DbInitializer.Initialize(servicecontext);
+    await servicecontext.Database.MigrateAsync();
+    await DbInitializer.Initialize(servicecontext, userManager);
 }
 catch (Exception ex)
 {

@@ -51,7 +51,8 @@ public class ServicesController : BaseApiController
         {
             if (!string.IsNullOrEmpty(file))
             {
-                bool isUrl = Uri.IsWellFormedUriString(file, UriKind.Absolute);
+                // bool isUrl = Uri.IsWellFormedUriString(file, UriKind.Absolute);
+                bool isUrl = file.Contains("https://");
 
                 if (isUrl)
                 {

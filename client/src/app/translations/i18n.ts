@@ -76,6 +76,7 @@ i18n.use(initReactI18next).init({
                 nameAndContantAreMandatory: "Field name and contant of contact are mandatory",
                 newCommentShouldNotBeEmpty: "New comment should not be empty",
                 fieldCanBeOnlyR2Precision: "Field can have only 2 digits after comma",
+                back: "Back",
             }
         },
         pl: {
@@ -146,6 +147,7 @@ i18n.use(initReactI18next).init({
                 nameAndContantAreMandatory: "Pole nazwa i zawartość kontaktu są wymagane",
                 newCommentShouldNotBeEmpty: "Nowy komentarz nie może być pusty",
                 fieldCanBeOnlyR2Precision: "Pole może mieć tylko 2 miejsca po przecinku",
+                back: "Wstecz",
             }
         },
     }
