@@ -30,6 +30,7 @@ public class ServicesController : BaseApiController
         return mapper.Map<DTOs.ServiceDto>(service);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("UpdataService")]
     public async Task<ActionResult<Entities.Service>> UpdataService(DTOs.UpdateServiceDto serviceDto)
     {
@@ -81,6 +82,7 @@ public class ServicesController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem updating service" });
     }
 
+    [Authorize(Roles = "Admin,Member")]
     [HttpPost("AddNewComment")]
     public async Task<ActionResult<Entities.Service>> AddNewComment(DTOs.AddNewCommentDto commentsDto)
     {
@@ -102,6 +104,7 @@ public class ServicesController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem adding comment" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("AddNewService")]
     public async Task<ActionResult> AddNewService(DTOs.AddServiceDto serviceDto)
     {
@@ -131,6 +134,7 @@ public class ServicesController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem adding service" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("RemoveService_{id}")]
     public async Task<ActionResult> RemoveService(int id)
     {

@@ -21,6 +21,7 @@ public class InfosController : BaseApiController
         return Ok(infoDto);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("UpdateOpenHours")]
     public async Task<ActionResult<Entities.Contact>> UpdateOpenHours(DTOs.UpdateInfoOpehHoursDto updateInfoOpehHoursDto)
     {
@@ -53,6 +54,7 @@ public class InfosController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem updating open hours" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("UpdateAnnouncements")]
     public async Task<ActionResult<Entities.Contact>> UpdateAnnouncements(DTOs.UpdateInfoAnnouncementsDto updateInfoAnnouncementsDto)
     {

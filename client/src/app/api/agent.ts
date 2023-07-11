@@ -78,11 +78,18 @@ const TestErrors = {
     getValidationError: () => requests.get('buggy/validation-error'),
 }
 
+const Account = {
+    login: (values: any) => requests.post('account/login', values),
+    register: (values: any) => requests.post('account/register', values),
+    currentUser: () => requests.get('account/currentUser')
+}
+
 const agent = {
     Info,
     Contact,
     Service,
-    TestErrors
+    TestErrors,
+    Account
 }
 
 export default agent;

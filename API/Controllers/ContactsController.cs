@@ -21,6 +21,7 @@ public class ContactsController : BaseApiController
         return Ok(contactDto);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("UpdateAddress")]
     public async Task<ActionResult<Entities.Contact>> UpdateAddress(DTOs.UpdateContactAddressDto updateContactAddressDto)
     {
@@ -46,6 +47,7 @@ public class ContactsController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem updating address" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("UpdateContactData")]
     public async Task<ActionResult<Entities.Contact>> UpdateDontactData(DTOs.UpdateContactContactDto updateContactContactDto)
     {
