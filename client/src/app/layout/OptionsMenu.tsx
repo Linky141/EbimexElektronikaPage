@@ -14,6 +14,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons/faEllipsisV';
 import assetsPlFlag from './../../Assets/images/flags/PL.png';
 import assetsUkFlag from './../../Assets/images/flags/UK.png';
+import UnsignedinMenuOptions from './UnsignedinMenuOptions';
+import { useAppSelector } from '../service/configureService';
+import SignedinMenuOptions from './SignedinMenuOptions';
 
 
 interface Props {
@@ -21,10 +24,10 @@ interface Props {
     handleThemeChange: () => void;
     appLanguage: boolean;
     handleLanguageChange: () => void;
-    rightLinks: { title: string; path: string; }[];
 }
 
 export default function OptionsMenu(props: Props) {
+    const { user } = useAppSelector(state => state.account);
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLButtonElement>(null);
     const { t } = useTranslation();
@@ -111,13 +114,11 @@ export default function OptionsMenu(props: Props) {
                                     <MenuItem>
                                         <FormControlLabel control={<Switch checked={props.darkMode} onChange={props.handleThemeChange} />} label={t("darkMode")} />
                                     </MenuItem>
-
-                                    {props.rightLinks.map(({ title, path }) => (
-                                        <MenuItem component={NavLink} to={path} key={path}>
-                                            {title.toUpperCase()}
-                                        </MenuItem>
-                                    ))}
-
+                                    {user ? (
+                                        <SignedinMenuOptions />
+                                    ) : (
+                                        <UnsignedinMenuOptions />
+                                    )}
                                 </MenuList>
                             </ClickAwayListener>
                         </Paper>

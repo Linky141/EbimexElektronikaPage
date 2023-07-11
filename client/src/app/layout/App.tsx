@@ -11,6 +11,7 @@ import LoadingComponent from "./LoadingComponent";
 import { setInfos } from "../../features/infoPage/infoSlice";
 import { setServices } from "../../features/servicesPage/servicesSlice";
 import i18n from "../translations/i18n";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -30,6 +31,8 @@ function App() {
   const [loadingServices, setLoadingServices] = useState(true);
 
   useEffect(() => {
+    dispatch(fetchCurrentUser());
+
     agent.Contact.list()
       .then(contacts => dispatch(setContacts(contacts)))
       .catch(error => console.log(error))

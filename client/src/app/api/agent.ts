@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Router";
+import { service } from "../service/configureService";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
@@ -8,6 +9,13 @@ axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.response.use(config => {
+    const token = service.getState().account.user?.token;
+    if (token)
+        config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
 
 axios.interceptors.response.use(async response => {
     await sleep();
@@ -28,7 +36,7 @@ axios.interceptors.response.use(async response => {
             toast.error(data.title);
             break;
         case 401:
-            toast.error(data.title);
+            toast.error(data.title || 'Unauthorized');
             break;
         case 403:
             toast.error('Access denied');
