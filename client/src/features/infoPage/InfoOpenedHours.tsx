@@ -7,13 +7,17 @@ import agent from "../../app/api/agent";
 import { setInfos } from "./infoSlice";
 import InfoOpenedHoursShow from "./InfoOpenedHoursShow";
 import InfoOpenedHoursEdit from "./InfoOpenedHoursEdit";
+import { yupResolver } from '@hookform/resolvers/yup';
+import {  OpenHoursSchema } from "../Validations/InfoPageValidations";
 
 interface Props {
     info: Info;
 }
 
 export default function InfoOpenedHours(props: Props) {
-    const { control, handleSubmit, setValue } = useForm();
+    const { control, handleSubmit, setValue } = useForm<any>({
+        resolver: yupResolver(OpenHoursSchema())
+    });
     const dispatch = useAppDispatch();
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const [editingOpenedHoursMode, setEditingOpenedHoursMode] = useState(false);
@@ -21,18 +25,16 @@ export default function InfoOpenedHours(props: Props) {
     function handleOnSubmitOpenHours(data: FieldValues) {
         setLoadingSubmit(true);
         data.Id = 1;
-
         agent.Info
             .UpdateOpenHours(data)
             .then(infos => dispatch(setInfos(infos)))
             .catch(error => console.log(error))
-            .finally(finishActions);
-
-        function finishActions() {
-            setLoadingSubmit(false);
-            setEditingOpenedHoursMode(false);
-        }
+            .finally(() => {
+                setLoadingSubmit(false);
+                setEditingOpenedHoursMode(false);
+            });
     }
+
     return (
         <>
             <Grid item xs={12}>
@@ -45,12 +47,12 @@ export default function InfoOpenedHours(props: Props) {
                     />
                 ) : (
                     <InfoOpenedHoursEdit
-                        control={control}
                         handleOnSubmitOpenHours={handleOnSubmitOpenHours}
                         handleSubmit={handleSubmit}
                         info={props.info}
                         loadingSubmit={loadingSubmit}
                         setEditingOpenedHoursMode={setEditingOpenedHoursMode}
+                        control={control}
                         setValue={setValue}
                     />
                 )}

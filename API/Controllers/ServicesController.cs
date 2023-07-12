@@ -4,8 +4,10 @@ public class ServicesController : BaseApiController
 {
     private readonly ServiceContext serviceContext;
     private readonly IMapper mapper;
-    public ServicesController(ServiceContext serviceContext, IMapper mapper)
+    private readonly ApiServices.ImageService imageService;
+    public ServicesController(ServiceContext serviceContext, IMapper mapper, ApiServices.ImageService imageService)
     {
+        this.imageService = imageService;
         this.mapper = mapper;
         this.serviceContext = serviceContext;
     }
@@ -28,6 +30,7 @@ public class ServicesController : BaseApiController
         return mapper.Map<DTOs.ServiceDto>(service);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("UpdataService")]
     public async Task<ActionResult<Entities.Service>> UpdataService(DTOs.UpdateServiceDto serviceDto)
     {
@@ -36,15 +39,42 @@ public class ServicesController : BaseApiController
         if (service == null)
             return NotFound();
 
-        if (serviceDto.Name == service.Name &&
-            serviceDto.CurrentStatus == service.CurrentStatus &&
-            serviceDto.Description == service.Description &&
-            serviceDto.PlannedDateOfCompletion == service.PlannedDateOfCompletion &&
-            serviceDto.Price == service.Price
-        )
-            return BadRequest(new ProblemDetails { Title = "Nothing changed" });
-
         mapper.Map(serviceDto, service);
+
+        foreach (var file in service.PictureUrls)
+        {
+            if (!string.IsNullOrEmpty(file.PublicId) && !serviceDto.Files.Contains(file.Url))
+                await imageService.DeleteImageAsync(file.PublicId);
+        }
+        List<Entities.PictureUrl> tmpPicUrl = new();
+
+        foreach (var file in serviceDto.Files)
+        {
+            if (!string.IsNullOrEmpty(file))
+            {
+                // bool isUrl = Uri.IsWellFormedUriString(file, UriKind.Absolute);
+                bool isUrl = file.Contains("https://");
+
+                if (isUrl)
+                {
+                    tmpPicUrl.Add(service.PictureUrls.FirstOrDefault(x => x.Url == file));
+                }
+                else
+                {
+                    var iFile = ApiServices.Base64Service.Base64ToImage(file);
+                    var imageResult = await imageService.AddImageAsync(iFile);
+                    if (imageResult.Error != null)
+                        return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+                    Entities.PictureUrl url = new Entities.PictureUrl
+                    {
+                        PublicId = imageResult.PublicId,
+                        Url = imageResult.SecureUrl.ToString()
+                    };
+                    tmpPicUrl.Add(url);
+                }
+            }
+        }
+        service.PictureUrls = tmpPicUrl;
 
         var result = await serviceContext.SaveChangesAsync() > 0;
         if (result)
@@ -52,6 +82,7 @@ public class ServicesController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem updating service" });
     }
 
+    [Authorize(Roles = "Admin,Member")]
     [HttpPost("AddNewComment")]
     public async Task<ActionResult<Entities.Service>> AddNewComment(DTOs.AddNewCommentDto commentsDto)
     {
@@ -73,24 +104,49 @@ public class ServicesController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem adding comment" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("AddNewService")]
     public async Task<ActionResult> AddNewService(DTOs.AddServiceDto serviceDto)
     {
         var service = mapper.Map<Entities.Service>(serviceDto);
-        serviceContext.Services.Add(service);
 
+        foreach (var file in serviceDto.Files)
+        {
+            if (!string.IsNullOrEmpty(file))
+            {
+                var iFile = ApiServices.Base64Service.Base64ToImage(file);
+                var imageResult = await imageService.AddImageAsync(iFile);
+                if (imageResult.Error != null)
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+                Entities.PictureUrl url = new Entities.PictureUrl
+                {
+                    PublicId = imageResult.PublicId,
+                    Url = imageResult.SecureUrl.ToString()
+                };
+                service.PictureUrls.Add(url);
+            }
+        }
+
+        serviceContext.Services.Add(service);
         var result = await serviceContext.SaveChangesAsync() > 0;
         if (result)
             return StatusCode(201);
         return BadRequest(new ProblemDetails { Title = "Problem adding service" });
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("RemoveService_{id}")]
     public async Task<ActionResult> RemoveService(int id)
     {
         var service = RetrieveService(id).Result;
         if (service == null)
             return NotFound();
+
+        foreach (var file in service.PictureUrls)
+        {
+            if (!string.IsNullOrEmpty(file.PublicId))
+                await imageService.DeleteImageAsync(file.PublicId);
+        }
 
         serviceContext.Services.Remove(service);
 

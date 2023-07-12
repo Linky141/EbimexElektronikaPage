@@ -2,9 +2,27 @@ namespace API.Data;
 
 public static class DbInitializer
 {
-    public static void Initialize(ServiceContext serviceContext)
+    public static async Task Initialize(ServiceContext serviceContext, UserManager<Entities.User> userManager)
     {
-        if (serviceContext.Services.Any())
+        if(!userManager.Users.Any()){
+            var user = new Entities.User {
+                UserName = "TestMember",
+                Email = "testmember@test.com"
+             };
+
+             await userManager.CreateAsync(user, "zaq1@WSX");
+             await userManager.AddToRoleAsync(user, "Member");
+
+                var admin = new Entities.User {
+                UserName = "TestAdmin",
+                Email = "testadmin@test.com"
+             };
+
+             await userManager.CreateAsync(admin, "zaq1@WSX");
+             await userManager.AddToRolesAsync(admin, new[] {"Member", "Admin"});
+        }
+
+        if (serviceContext.Services.Any() || serviceContext.Infos.Any() || serviceContext.Contacts.Any())
             return;
 
         var services = new List<Entities.Service>

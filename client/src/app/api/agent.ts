@@ -1,6 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Router";
+import { service } from "../service/configureService";
+import { t } from "i18next";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
@@ -8,6 +10,13 @@ axios.defaults.baseURL = "http://localhost:5000/api/";
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.request.use(config => {
+    const token = service.getState().account.user?.token;
+    if (token)
+        config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
 
 axios.interceptors.response.use(async response => {
     await sleep();
@@ -31,7 +40,7 @@ axios.interceptors.response.use(async response => {
             toast.error(data.title);
             break;
         case 403:
-            toast.error('Access denied');
+            toast.error(t('accessDenied'));
             break;
         case 500:
             router.navigate('/server-error', { state: { error: data } });
@@ -78,11 +87,18 @@ const TestErrors = {
     getValidationError: () => requests.get('buggy/validation-error'),
 }
 
+const Account = {
+    login: (values: any) => requests.post('account/login', values),
+    register: (values: any) => requests.post('account/register', values),
+    currentUser: () => requests.get('account/currentUser')
+}
+
 const agent = {
     Info,
     Contact,
     Service,
-    TestErrors
+    TestErrors,
+    Account
 }
 
 export default agent;

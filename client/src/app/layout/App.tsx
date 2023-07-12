@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Header from "./Header";
 import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
@@ -11,6 +11,7 @@ import LoadingComponent from "./LoadingComponent";
 import { setInfos } from "../../features/infoPage/infoSlice";
 import { setServices } from "../../features/servicesPage/servicesSlice";
 import i18n from "../translations/i18n";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -25,26 +26,38 @@ function App() {
       }
     }
   })
-  const [loadingContacts, setLoadingContacts] = useState(true);
-  const [loadingInfos, setLoadingInfos] = useState(true);
-  const [loadingServices, setLoadingServices] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [loadingC, setLoadingC] = useState(true);
+  const [loadingI, setLoadingI] = useState(true);
+  const [loadingS, setLoadingS] = useState(true);
+
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+
+      agent.Contact.list()
+        .then(contacts => dispatch(setContacts(contacts)))
+        .catch(error => console.log(error))
+        .finally(() => setLoadingC(false))
+
+      agent.Info.list()
+        .then(info => dispatch(setInfos(info)))
+        .catch(error => console.log(error))
+        .finally(() => setLoadingI(false))
+
+      agent.Service.list()
+        .then(service => dispatch(setServices(service)))
+        .catch(error => console.log(error))
+        .finally(() => setLoadingS(false))
+
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch])
 
   useEffect(() => {
-    agent.Contact.list()
-      .then(contacts => dispatch(setContacts(contacts)))
-      .catch(error => console.log(error))
-      .finally(() => setLoadingContacts(false));
-
-    agent.Info.list()
-      .then(info => dispatch(setInfos(info)))
-      .catch(error => console.log(error))
-      .finally(() => setLoadingInfos(false))
-
-    agent.Service.list()
-      .then(service => dispatch(setServices(service)))
-      .catch(error => console.log(error))
-      .finally(() => setLoadingServices(false))
-  }, [dispatch])
+    initApp().then(() => setLoading(false));
+  }, [initApp])
 
   function handleThemeChange() {
     setDarkMode(!darkMode);
@@ -55,7 +68,7 @@ function App() {
     i18n.changeLanguage(appLanguage ? 'en' : 'pl');
   };
 
-  if (loadingContacts || loadingInfos || loadingServices)
+  if (loading || loadingC || loadingI || loadingS)
     return <LoadingComponent message='Loading app...' />
 
   return (

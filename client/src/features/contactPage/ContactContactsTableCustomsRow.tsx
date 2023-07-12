@@ -2,6 +2,7 @@ import { Button, TableCell, TableRow, TextField } from "@mui/material";
 import { useState } from "react";
 import { ContactCustom } from "../../app/models/contact";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 interface Props {
     editingCustomContact: number;
@@ -72,7 +73,14 @@ export default function ContactContactsTableCustomsRow(props: Props) {
                         />
                     </TableCell>
                     <TableCell>
-                        <Button onClick={() => submitEditCustomContact(props.customContact.id, nameState, contentState)} color="success">{t("submit")}</Button>
+                        <Button onClick={() => {
+                            if (nameState === '' || contentState === '') {
+                                toast.error(t("nameAndContantAreMandatory"))
+                            }
+                            else {
+                                submitEditCustomContact(props.customContact.id, nameState, contentState);
+                            }
+                        }} color="success">{t("submit")}</Button>
                         <Button onClick={() => props.setEditingCustomContact(-1)} color="error">{t("cancel")}</Button>
                     </TableCell>
                 </TableRow>

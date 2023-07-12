@@ -4,6 +4,8 @@ import InfoAnnouncementBox from "./InfoAnnouncementBox";
 import { FieldValues, UseFormHandleSubmit, UseFormSetValue } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import { useAppSelector } from "../../app/service/configureService";
 
 interface Props {
     info: Info;
@@ -21,7 +23,8 @@ interface Props {
 
 export default function InfoAnnouncementsShow(props: Props) {
     const { t } = useTranslation();
-    
+    const { user } = useAppSelector(state => state.account);
+
     return (
         <>
             {props.info.infoAnnouncements.map(announcement => (
@@ -38,28 +41,35 @@ export default function InfoAnnouncementsShow(props: Props) {
                     loadingSubmit={props.loadingSubmit}
                 />
             ))}
-            <>
-                <Grid marginLeft="30px" marginRight="30px">
-                    <TextField
-                        label={t("newAnnouncement")}
-                        variant="outlined"
-                        multiline
-                        fullWidth
-                        value={props.newAnnouncementContent}
-                        onChange={e => props.setNewAnnouncementContent(e.target.value)}
-                    />
-                </Grid>
-                <Grid marginTop="10px" display="flex" justifyContent="flex-end" marginRight="30px" marginBottom="5px">
-                    <LoadingButton
-                        variant="contained"
-                        loading={props.loadingSubmit === 0}
-                        onClick={() => {
-                            props.setLoadingSubmit(0);
-                            props.handleAddNewAnnouncement(props.newAnnouncementContent);
-                            props.handleSubmit(props.handleUpdateData)();
-                        }}>{t("add")}</LoadingButton>
-                </Grid>
-            </>
+            {user && user.roles?.includes('Admin') &&
+                <>
+                    <Grid marginLeft="30px" marginRight="30px">
+                        <TextField
+                            label={t("newAnnouncement")}
+                            variant="outlined"
+                            multiline
+                            fullWidth
+                            value={props.newAnnouncementContent}
+                            onChange={e => props.setNewAnnouncementContent(e.target.value)}
+                        />
+                    </Grid>
+                    <Grid marginTop="10px" display="flex" justifyContent="flex-end" marginRight="30px" marginBottom="5px">
+                        <LoadingButton
+                            variant="contained"
+                            loading={props.loadingSubmit === 0}
+                            onClick={() => {
+                                if (props.newAnnouncementContent === '') {
+                                    toast.error(t('fieldIsMandatory'));
+                                }
+                                else {
+                                    props.setLoadingSubmit(0);
+                                    props.handleAddNewAnnouncement(props.newAnnouncementContent);
+                                    props.handleSubmit(props.handleUpdateData)();
+                                }
+                            }}>{t("add")}</LoadingButton>
+                    </Grid>
+                </>
+            }
         </>
     )
 }

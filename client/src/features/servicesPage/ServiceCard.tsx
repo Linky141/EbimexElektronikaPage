@@ -3,7 +3,7 @@ import { Service } from "../../app/models/service";
 import Moment from 'moment';
 import { Link } from "react-router-dom";
 import ServiceStatus from "./ServiceStatus";
-import { useAppDispatch } from "../../app/service/configureService";
+import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
 import { setServices } from "./servicesSlice";
 import agent from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
@@ -18,6 +18,7 @@ export default function ServiceCard({ service }: Props) {
     const dispatch = useAppDispatch();
     const [loadingSubmit, setLoadingSubmit] = useState(false);
     const { t } = useTranslation();
+    const { user } = useAppSelector(state => state.account);
 
     function RemoveService() {
         setLoadingSubmit(true);
@@ -25,12 +26,12 @@ export default function ServiceCard({ service }: Props) {
             .catch(error => console.log(error))
             .finally(() => {
                 agent.Service.list()
-                .then(service => dispatch(setServices(service)))
-                .catch(error => console.log(error))
-                .finally(() => setLoadingSubmit(false))
+                    .then(service => dispatch(setServices(service)))
+                    .catch(error => console.log(error))
+                    .finally(() => setLoadingSubmit(false))
             })
     }
-    
+
     return (
         <Card>
             <CardContent>
@@ -39,7 +40,7 @@ export default function ServiceCard({ service }: Props) {
                     {service.name}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {t("deadline")}: {Moment(service.plannedDateOfCompletion).format('DD-MM-YYYY')}
+                    {t("deadline")}: {Moment(service.plannedDateOfCompletion).format('DD-MM-YYYY')}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                     {(service.price / 100).toFixed(2)} PLN
@@ -50,8 +51,12 @@ export default function ServiceCard({ service }: Props) {
             </CardContent>
             <CardActions>
                 <Button size="small" component={Link} to={`/services/${service.id}`}>{t("view")}</Button>
-                <Button size="small" component={Link} to={`/serviceFrom/${service.id}`}>{t("edit")}</Button>
-                <LoadingButton loading={loadingSubmit} size="small" onClick={RemoveService} variant="outlined" color="error">{t("delete")}</LoadingButton>
+                {user && user.roles?.includes('Admin') &&
+                    <>
+                        <Button size="small" component={Link} to={`/serviceFrom/${service.id}`}>{t("edit")}</Button>
+                        <LoadingButton loading={loadingSubmit} size="small" onClick={RemoveService} variant="outlined" color="error">{t("delete")}</LoadingButton>
+                    </>
+                }
             </CardActions>
         </Card>
     )

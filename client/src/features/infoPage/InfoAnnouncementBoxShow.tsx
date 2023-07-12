@@ -4,6 +4,8 @@ import Moment from 'moment';
 import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
+import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
+import { useAppSelector } from "../../app/service/configureService";
 
 interface Props {
     announcement: InfoAnnouncement;
@@ -17,30 +19,31 @@ interface Props {
 
 export default function InfoAnnouncementBoxShow(props: Props) {
     const { t } = useTranslation();
-    
+    const { user } = useAppSelector(state => state.account);
+
     return (
         <Box sx={{ margin: '10px', padding: '10px', borderStyle: 'solid', borderColor: 'primary.main', borderWidth: '2px', borderRadius: '20px' }}>
             <Grid container>
                 <Grid item xs={6} color="text.secondary">
                     {Moment(props.announcement.dateAndTime).format('DD-MM-YYYY HH:mm')}
                 </Grid>
-                <Grid item xs={6} display="flex" justifyContent="flex-end" color="text.secondary">
-                    <Button onClick={() => props.setEditingAnnouncementMode(props.announcement.id)}>{t("edit")}</Button>
-                    <LoadingButton
-                        loading={props.loadingSubmit === props.announcement.id}
-                        onClick={() => {
-                            props.setLoadingSubmit(props.announcement.id);
-                            props.handleDeleteAnnouncement();
-                            props.handleSubmit(props.handleUpdateData)();
-                        }}
-                        color="error"
-                        variant="outlined">{t("delete")}</LoadingButton>
-                </Grid>
+                {user && user.roles?.includes('Admin') &&
+                    <Grid item xs={6} display="flex" justifyContent="flex-end" color="text.secondary">
+                        <Button onClick={() => props.setEditingAnnouncementMode(props.announcement.id)}>{t("edit")}</Button>
+                        <LoadingButton
+                            loading={props.loadingSubmit === props.announcement.id}
+                            onClick={() => {
+                                props.setLoadingSubmit(props.announcement.id);
+                                props.handleDeleteAnnouncement();
+                                props.handleSubmit(props.handleUpdateData)();
+                            }}
+                            color="error"
+                            variant="outlined">{t("delete")}</LoadingButton>
+                    </Grid>
+                }
             </Grid>
             <Grid item>
-                {props.announcement.content.split("\n").map((i, key) => {
-                    return <div key={key}>{i}</div>;
-                })}
+                <AppShowTextMultiline content={props.announcement.content} />
             </Grid>
         </Box>
     )

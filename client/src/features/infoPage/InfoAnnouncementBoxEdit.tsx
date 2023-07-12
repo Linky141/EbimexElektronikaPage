@@ -5,6 +5,7 @@ import { useState } from "react";
 import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 interface Props {
     announcement: InfoAnnouncement;
@@ -20,7 +21,7 @@ interface Props {
 export default function InfoAnnouncementBoxEdit(props: Props) {
     const [announcementContent, setAnnouncementContent] = useState<string>(props.announcement.content);
     const { t } = useTranslation();
-    
+
     return (
         <Box sx={{ margin: '10px', padding: '10px', borderStyle: 'solid', borderColor: 'primary.main', borderWidth: '2px', borderRadius: '20px' }}>
             <Grid container>
@@ -33,9 +34,14 @@ export default function InfoAnnouncementBoxEdit(props: Props) {
                             <LoadingButton
                                 loading={props.loadingSubmit === props.announcement.id}
                                 onClick={() => {
-                                    props.setLoadingSubmit(props.announcement.id);
-                                    props.handleEditAnnouncement(announcementContent);
-                                    props.handleSubmit(props.handleUpdateData)();
+                                    if (announcementContent === '') {
+                                        toast.error(t('fieldIsMandatory'));
+                                    }
+                                    else {
+                                        props.setLoadingSubmit(props.announcement.id);
+                                        props.handleEditAnnouncement(announcementContent);
+                                        props.handleSubmit(props.handleUpdateData)();
+                                    }
                                 }}
                                 color="success"
                             >{t("submit")}</LoadingButton>
