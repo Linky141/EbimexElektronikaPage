@@ -3,6 +3,9 @@ import { User } from "../../app/models/user";
 import { FieldValues } from "react-hook-form";
 import agent from "../../app/api/agent";
 import { router } from "../../app/router/Router";
+import { toast } from "react-toastify";
+import { t } from "i18next";
+import { service } from "../../app/service/configureService";
 
 interface AccountState {
     user: User | null;
@@ -54,15 +57,25 @@ export const AccountSlice = createSlice({
             router.navigate('/');
         },
         setUser: (state, action) => {
-            state.user = action.payload;
+            let claims = JSON.parse(atob(action.payload.token.split('.')[1]));
+            let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            state.user = { ...action.payload, roles: typeof (roles) === 'string' ? [roles] : roles }
         }
     },
     extraReducers: (builder => {
-        builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
-            state.user = action.payload;
+        builder.addCase(fetchCurrentUser.rejected, (state) => {
+            state.user = null;
+            localStorage.removeItem('user');
+            toast.error(t('sessionExpired'));
+            router.navigate('/');
         });
-        builder.addMatcher(isAnyOf(signInUser.rejected, fetchCurrentUser.rejected), (state, action) => {
-            console.log(action.payload);
+        builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
+            let claims = JSON.parse(atob(action.payload.token.split('.')[1]));
+            let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            state.user = { ...action.payload, roles: typeof (roles) === 'string' ? [roles] : roles }
+        });
+        builder.addMatcher(isAnyOf(signInUser.rejected), (state, action) => {
+            throw action.payload;
         });
     })
 })

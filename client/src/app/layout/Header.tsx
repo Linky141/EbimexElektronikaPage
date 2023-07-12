@@ -27,12 +27,6 @@ const navStyles = {
 export default function Header({ darkMode, handleThemeChange, appLanguage, handleLanguageChange }: Props) {
     const { user } = useAppSelector(state => state.account);
 
-    const midLinks = [
-        { title: t("info"), path: '/info' },
-        { title: t("contact"), path: '/contact' },
-        { title: t("services"), path: '/services' }
-    ]
-
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -51,11 +45,10 @@ export default function Header({ darkMode, handleThemeChange, appLanguage, handl
                     ) : (<></>)}
                 </Box>
                 <List sx={{ display: 'flex'}}>
-                    {midLinks.map(({ title, path }) => (
-                        <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
-                            {title.toUpperCase()}
-                        </ListItem>
-                    ))}
+                        <ListItem component={NavLink} to='/info' key='/info' sx={navStyles}>{t("info").toUpperCase()}</ListItem>
+                        <ListItem component={NavLink} to='/contact' key='/contact' sx={navStyles}>{t("contact").toUpperCase()}</ListItem>
+                        {user && (user.roles?.includes('Admin') || user.roles?.includes('Member')) && <ListItem component={NavLink} to='/services' key='/services' sx={navStyles}>{t("services").toUpperCase()}</ListItem>}
+                        
                 </List>
                 <Box width={100}>
                     <Typography variant="h6"> EBIMEX </Typography>

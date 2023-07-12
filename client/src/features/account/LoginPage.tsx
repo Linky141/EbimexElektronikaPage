@@ -11,18 +11,23 @@ import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { useAppDispatch } from '../../app/service/configureService';
 import { signInUser } from './accountSlice';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
         mode: 'onTouched'
     });
 
-
     async function submitForm(data: FieldValues) {
-        await dispatch(signInUser(data));
-        navigate('/services');
+        try {
+            await dispatch(signInUser(data));
+            navigate('/services');
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -31,24 +36,24 @@ export default function LoginPage() {
                 <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-                Sign in
+                {t('login')}
             </Typography>
             <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
                 <TextField
                     margin="normal"
                     fullWidth
-                    label="Username"
+                    label={t('username')}
                     autoFocus
-                    {...register('username', { required: "Username is required" })}
+                    {...register('username', { required: t('usernameIsRequired') })}
                     error={!!errors.username}
                     helperText={errors.username?.message as string}
                 />
                 <TextField
                     margin="normal"
                     fullWidth
-                    label="Password"
+                    label={t('password')}
                     type="password"
-                    {...register('password', { required: "Password is required" })}
+                    {...register('password', { required: t('passwordIsRequired') })}
                     error={!!errors.password}
                     helperText={errors.password?.message as string}
                 />
@@ -60,12 +65,12 @@ export default function LoginPage() {
                     disabled={!isValid}
                     loading={isSubmitting}
                 >
-                    Sign In
+                    {t('loginAction')}
                 </LoadingButton>
                 <Grid container>
                     <Grid item>
                         <Link to='/register'>
-                            {"Don't have an account? Sign Up"}
+                            {t('dontHaveAccountSignUp')}
                         </Link>
                     </Grid>
                 </Grid>

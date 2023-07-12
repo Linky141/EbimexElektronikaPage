@@ -25,17 +25,17 @@ export default function ServiceDetails() {
     const { control, handleSubmit, setValue } = useForm();
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
+    const { user } = useAppSelector(state => state.account);
 
     function handleOnSubmitAddComment(data: FieldValues) {
         if (data.content.replace(/\s+/g, '') === '') {
             toast.error(t('newCommentShouldNotBeEmpty'));
         }
-        else{
+        else {
             setLoadingSubmitNewComment(true);
             data.Id = id;
-            data.user = "SAMPLE_USER";
+            data.user = user!.username;
             data.dateTime = moment().format("YYYY-MM-DDThh:mm:ss");
-            console.log(data);
             agent.Service
                 .addComment(data)
                 .catch(error => console.log(error))
@@ -50,7 +50,7 @@ export default function ServiceDetails() {
                         })
                 });
         }
-       
+
     }
 
     if (!service?.find(x => x.id === parseInt(id!)))
@@ -61,7 +61,9 @@ export default function ServiceDetails() {
     return (
         <Grid container spacing={6}>
             <Grid item xs={12}>
-                <Button size="small" component={Link} to={`/serviceFrom/${findServiceId(service, id).id}`}>{t("edit")}</Button>
+                {user && user.roles?.includes('Admin') &&
+                    <Button size="small" component={Link} to={`/serviceFrom/${findServiceId(service, id).id}`}>{t("edit")}</Button>
+                }
                 <Typography variant="h3">
                     {findServiceId(service, id).name}
                 </Typography>

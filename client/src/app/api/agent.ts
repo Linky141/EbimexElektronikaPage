@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Router";
 import { service } from "../service/configureService";
+import { t } from "i18next";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
@@ -10,7 +11,7 @@ axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.response.use(config => {
+axios.interceptors.request.use(config => {
     const token = service.getState().account.user?.token;
     if (token)
         config.headers.Authorization = `Bearer ${token}`;
@@ -36,10 +37,10 @@ axios.interceptors.response.use(async response => {
             toast.error(data.title);
             break;
         case 401:
-            toast.error(data.title || 'Unauthorized');
+            toast.error(data.title);
             break;
         case 403:
-            toast.error('Access denied');
+            toast.error(t('accessDenied'));
             break;
         case 500:
             router.navigate('/server-error', { state: { error: data } });

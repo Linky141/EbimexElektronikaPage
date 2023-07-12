@@ -1,5 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import Moment from 'moment';
+import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
 
 interface Props {
     content: string;
@@ -19,7 +20,7 @@ export default function ServiceCommentComponent({ content, dateTime, user }: Pro
                 </Grid>
             </Grid>
             <Grid item>
-                {content}
+                <AppShowTextMultiline content={content}/>
             </Grid>
         </Box>
     )

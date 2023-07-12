@@ -19,6 +19,7 @@ public class AccountController : BaseApiController
             return Unauthorized();
         return new DTOs.UserDto
         {
+            Username = user.UserName,
             Email = user.Email,
             Token = await tokenService.GenerateToken(user)
         };
@@ -52,6 +53,7 @@ public class AccountController : BaseApiController
         var user = await userManager.FindByNameAsync(User.Identity.Name);
         return new DTOs.UserDto
         {
+            Username = user.UserName,
             Email = user.Email,
             Token = await tokenService.GenerateToken(user)
         };
