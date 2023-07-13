@@ -7,5 +7,6 @@ export function ServiceFormSchema() {
         Description: string().required(t("fieldIsMandatory")),
         name: string().required(t("fieldIsMandatory")),
         Price: string().required(t("fieldIsMandatory")).test('is-decimal', t('fieldCanBeOnlyR2Precision'), value => /^\d*\.{0,1}\d{0,2}$/.test(value)),
+        ClientUsername: string().required(t("fieldIsMandatory")),
     })
 }

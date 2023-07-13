@@ -202,6 +202,12 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ClientEmail")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClientUsername")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CurrentStatus")
                         .HasColumnType("INTEGER");
 
@@ -314,13 +320,13 @@ namespace API.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b960eaa5-33b9-4833-bb4f-702adacac0cf",
+                            Id = "3dea0458-44a2-45ab-9336-2453685ea0ce",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
-                            Id = "d764bee1-a37c-41af-a2c5-aaf7c5529077",
+                            Id = "6102ba97-d1c5-4c11-8fd3-144e4516e53e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

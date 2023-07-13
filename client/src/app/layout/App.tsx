@@ -9,7 +9,6 @@ import agent from "../api/agent";
 import { useAppDispatch } from "../service/configureService";
 import LoadingComponent from "./LoadingComponent";
 import { setInfos } from "../../features/infoPage/infoSlice";
-import { setServices } from "../../features/servicesPage/servicesSlice";
 import i18n from "../translations/i18n";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 
@@ -29,7 +28,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [loadingC, setLoadingC] = useState(true);
   const [loadingI, setLoadingI] = useState(true);
-  const [loadingS, setLoadingS] = useState(true);
+  // const [loadingS, setLoadingS] = useState(true);
 
   const initApp = useCallback(async () => {
     try {
@@ -45,10 +44,10 @@ function App() {
         .catch(error => console.log(error))
         .finally(() => setLoadingI(false))
 
-      agent.Service.list()
-        .then(service => dispatch(setServices(service)))
-        .catch(error => console.log(error))
-        .finally(() => setLoadingS(false))
+      // agent.Service.GetServices(JSON.parse(localStorage.getItem('user')!).email)
+      //   .then(service => dispatch(setServices(service)))
+      //   .catch(error => console.log(error))
+      //   .finally(() => setLoadingS(false))
 
     } catch (error) {
       console.log(error);
@@ -68,7 +67,8 @@ function App() {
     i18n.changeLanguage(appLanguage ? 'en' : 'pl');
   };
 
-  if (loading || loadingC || loadingI || loadingS)
+  // if (loading || loadingC || loadingI || loadingS)
+  if (loading || loadingC || loadingI)
     return <LoadingComponent message='Loading app...' />
 
   return (

@@ -1,5 +1,7 @@
 export interface Service {
     id: number
+    clientEmail: string
+    clientUsername: string
     name: string
     pictureUrls: PictureUrl[]
     currentStatus: number

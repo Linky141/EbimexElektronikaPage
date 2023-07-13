@@ -71,8 +71,9 @@ const Contact = {
 }
 
 const Service = {
-    list: () => requests.get('services'),
-    details: (id: number) => requests.get(`services/${id}`),
+    list: () => requests.get('Services'),
+    GetServices: (email: string) => requests.get(`Services/GetServices/${email}`),
+    details: (id: number) => requests.get(`Services/${id}`),
     removeService: (id: number) => requests.delete(`Services/RemoveService_${id}`),
     addService: (body: any) => requests.post(`Services/AddNewService`, body),
     addComment: (body: any) => requests.post(`Services/AddNewComment`, body),
@@ -90,7 +91,8 @@ const TestErrors = {
 const Account = {
     login: (values: any) => requests.post('account/login', values),
     register: (values: any) => requests.post('account/register', values),
-    currentUser: () => requests.get('account/currentUser')
+    currentUser: () => requests.get('account/currentUser'),
+    users: () => requests.get('account/users')
 }
 
 const agent = {

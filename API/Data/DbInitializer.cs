@@ -5,17 +5,25 @@ public static class DbInitializer
     public static async Task Initialize(ServiceContext serviceContext, UserManager<Entities.User> userManager)
     {
         if(!userManager.Users.Any()){
-            var user = new Entities.User {
-                UserName = "TestMember",
-                Email = "testmember@test.com"
+            var user1 = new Entities.User {
+                UserName = "Member1",
+                Email = "member1@test.com"
              };
 
-             await userManager.CreateAsync(user, "zaq1@WSX");
-             await userManager.AddToRoleAsync(user, "Member");
+             await userManager.CreateAsync(user1, "zaq1@WSX");
+             await userManager.AddToRoleAsync(user1, "Member");
+
+              var user2 = new Entities.User {
+                UserName = "Member2",
+                Email = "member2@test.com"
+             };
+
+             await userManager.CreateAsync(user2, "zaq1@WSX");
+             await userManager.AddToRoleAsync(user2, "Member");
 
                 var admin = new Entities.User {
-                UserName = "TestAdmin",
-                Email = "testadmin@test.com"
+                UserName = "Admin",
+                Email = "admin@test.com"
              };
 
              await userManager.CreateAsync(admin, "zaq1@WSX");
@@ -28,6 +36,8 @@ public static class DbInitializer
         var services = new List<Entities.Service>
         {
             new Entities.Service{
+                ClientEmail = "member1@test.com",
+                ClientUsername = "Member1",
                 Name = "Naprawa telewizora Fujitsu 100",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -45,6 +55,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member1@test.com",
+                ClientUsername = "Member1",
                 Name = "Naprawa telewizora Fujitsu 2000",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.Opened,
@@ -62,6 +74,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member1@test.com",
+                ClientUsername = "Member1",
                 Name = "Naprawa telewizora Fujitsu 300",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.ReadyToBePickedUp,
@@ -79,6 +93,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member1@test.com",
+                ClientUsername = "Member1",
                 Name = "Naprawa telewizora Fujitsu 400",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.ReleasedToCustomer,
@@ -96,6 +112,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member1@test.com",
+                ClientUsername = "Member1",
                 Name = "Naprawa telewizora Fujitsu 500",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.Testing,
@@ -113,6 +131,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 7700",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.WaitingForComponents,
@@ -130,6 +150,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 1100",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -147,6 +169,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 12000",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -164,6 +188,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 121300",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -181,6 +207,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 154300",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -198,6 +226,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 108670",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -215,6 +245,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 103460",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -232,6 +264,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 12678900",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -249,6 +283,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 23",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -266,6 +302,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 1010",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -283,6 +321,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member2@test.com",
+                ClientUsername = "Member2",
                 Name = "Naprawa telewizora Fujitsu 106530",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -300,6 +340,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member3@test.com",
+                ClientUsername = "Member3",
                 Name = "Naprawa telewizora Fujitsu 1gf00",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,
@@ -317,6 +359,8 @@ public static class DbInitializer
                 }
             },
              new Entities.Service{
+                ClientEmail = "member1@test.com",
+                ClientUsername = "Member1",
                 Name = "Naprawa telewizora Fujitsu 1wrfe00",
                 Description = "usterka polega na wymianie kondensatora w zasilaczu",
                 CurrentStatus = Entities.StatusOfService.NotStarted,

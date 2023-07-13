@@ -58,4 +58,17 @@ public class AccountController : BaseApiController
             Token = await tokenService.GenerateToken(user)
         };
     }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("users")]
+    public ActionResult<List<DTOs.UserDto>> GetUsers()
+    {
+        var users = userManager.Users;
+        List<DTOs.UserDto> dto = new();
+        foreach (var user in users)
+        {
+            dto.Add(new DTOs.UserDto { Username = user.UserName, Email = user.Email });
+        }
+        return dto;
+    }
 }

@@ -91,6 +91,8 @@ i18n.use(initReactI18next).init({
                 sessionExpired: "Session expired - please login again",
                 accessDenied: "Access denied",
                 loggedOut: "Succesfly logged out",
+                clientName: "Client name",
+                clientEmail: "Client email address",
             }
         },
         pl: {
@@ -176,6 +178,8 @@ i18n.use(initReactI18next).init({
                 sessionExpired: "Sesja wygasła - proszę zalogować się ponownie",
                 accessDenied: "Odmowa dostępu",
                 loggedOut: "Wylogowano pomyślnie",
+                clientName: "Nazwa klienta",
+                clientEmail: "Adres email klienta",
             }
         },
     }

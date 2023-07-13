@@ -16,19 +16,22 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers";
-import { CreateSendDate } from "../../app/utils/ServicesUtils";
+import { CreateSendDate, findServiceId } from "../../app/utils/ServicesUtils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ServiceFormSchema } from "../Validations/ServicesPageValidations";
-import { toast } from "react-toastify";
+import AppSelectList from "../../app/components/AppSelectList";
+import LoadingComponent from "../../app/layout/LoadingComponent";
+import { User } from "../../app/models/user";
+import NotFound from "../../app/errors/NotFound";
 
 
 export default function ServiceForm() {
     const { id } = useParams<{ id: string }>();
     const { service } = useAppSelector(state => state.services);
-    const [serviceEdit] = useState<Service>(init);
     const [pictures, setPictures] = useState<string[]>([]);
     const [newService, setNewService] = useState(true);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const [loadingUsers, setLoadingUsers] = useState(true);
     const [statusLocal, setStatusLocal] = useState<number>(-1);
     const [dateLocal, setDateLocal] = useState<string>('0001-01-01T00:00:00');
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -39,6 +42,9 @@ export default function ServiceForm() {
     const location = useLocation();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const [users, setUsers] = useState<User[]>([]);
+    const { user } = useAppSelector(state => state.account);
+    const [loadingS, setLoadingS] = useState(true);
 
     const statusItems = [
         { value: 0, label: t("notStarted") },
@@ -49,42 +55,39 @@ export default function ServiceForm() {
         { value: 5, label: t("releasedToCustomer") }
     ];
 
-    function init() {
-        const serviceLoad = service?.find(x => x.id === parseInt(id!));
-        if (serviceLoad !== undefined) {
-            const servic: Service = {
-                id: serviceLoad.id,
-                comments: serviceLoad.comments,
-                currentStatus: serviceLoad.currentStatus,
-                description: serviceLoad.description,
-                name: serviceLoad.name,
-                pictureUrls: serviceLoad.pictureUrls,
-                plannedDateOfCompletion: serviceLoad.plannedDateOfCompletion,
-                price: (serviceLoad.price / 100)
-            }
-            return servic;
-        }
-        else
-            return { id: 0, name: "", pictureUrls: [], currentStatus: 0, price: 0, plannedDateOfCompletion: "", description: "", comments: [] };
-    }
-
     useEffect(() => {
-        if (serviceEdit.id !== 0)
+        if (id !== '0')
+        {
             setNewService(false);
+            setStatusLocal(findServiceId(service, id).currentStatus);
+            setDateLocal(findServiceId(service, id).plannedDateOfCompletion);
 
-        setStatusLocal(serviceEdit.currentStatus);
-        setDateLocal(serviceEdit.plannedDateOfCompletion);
+            findServiceId(service, id).pictureUrls.forEach(element => {
+                if (pictures === undefined) {
+                    setPictures([element.url]);
+                }
+                else {
+                    setPictures(previousState => [...previousState, element.url]);
+                }
+            });
+        }
+        else {
+            setStatusLocal(0);
+            setDateLocal(dayjs(new Date()).toString());
+        }
 
-        serviceEdit.pictureUrls.forEach(element => {
-            if (pictures === undefined) {
-                setPictures([element.url]);
-            }
-            else {
-                setPictures(previousState => [...previousState, element.url]);
-            }
-        });
+        agent.Account.users()
+            .then(users => setUsers(users))
+            .catch(error => console.log(error))
+            .finally(() => setLoadingUsers(false));
+
+        agent.Service.GetServices(user!.email)
+            .then(service => dispatch(setServices(service)))
+            .catch(error => console.log(error))
+            .finally(() => setLoadingS(false))
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serviceEdit.id])
+    }, [])
 
     function handleOnSubmitAddService(data: FieldValues) {
         setLoadingSubmit(true);
@@ -92,6 +95,7 @@ export default function ServiceForm() {
         data.Price = data.Price * 100;
         data.currentStatus = statusLocal * 1;
         data.plannedDateOfCompletion = dateLocal;
+        data.clientEmail = users.find((x: User) => x.username === data.ClientUsername)?.email;
 
         agent.Service
             .addService(data)
@@ -111,11 +115,12 @@ export default function ServiceForm() {
 
     function handleOnSubmitEditService(data: FieldValues) {
         setLoadingSubmit(true);
-        data.Id = serviceEdit.id;
+        data.Id = id;
         data.files = pictures;
         data.Price = data.Price * 100;
         data.currentStatus = statusLocal * 1;
         data.plannedDateOfCompletion = dateLocal;
+        data.clientEmail = users.find((x: User) => x.username === data.ClientUsername)?.email;
 
         agent.Service
             .updateService(data)
@@ -129,7 +134,7 @@ export default function ServiceForm() {
 
         function finishActions() {
             setLoadingSubmit(false);
-            navigate(location.state?.from || '/services/' + serviceEdit.id);
+            navigate(location.state?.from || '/services/' + id);
         }
     }
 
@@ -137,6 +142,12 @@ export default function ServiceForm() {
         let file = event.target.files[0];
         EncryptPictureToArray(file, setPictures);
     }
+
+    if (loadingUsers || loadingS)
+        return <LoadingComponent message='Loading form...' />
+
+    if (!service?.find(x => x.id === parseInt(id!)) && !newService)
+        return <NotFound />
 
     if (selectedImage)
         return <ServicePreviewImage selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
@@ -146,7 +157,7 @@ export default function ServiceForm() {
             <Grid item xs={12}>
                 <AppTextInput
                     label={t("name")}
-                    content={serviceEdit!.name}
+                    content={!newService ? findServiceId(service, id).name : ''}
                     name='name'
                     control={control}
                     fullWidth
@@ -193,9 +204,22 @@ export default function ServiceForm() {
                         <TableBody>
                             <TableRow>
                                 <TableCell>
+                                    <AppSelectList
+                                        label={t("clientName")}
+                                        items={users.map(element => {
+                                            return element.username;
+                                        })}
+                                        name="ClientUsername"
+                                        control={control}
+                                        value={!newService ? findServiceId(service, id).clientUsername : ''}
+                                    />
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>
                                     <AppTextInput
                                         label={t("description")}
-                                        content={serviceEdit!.description}
+                                        content={!newService ? findServiceId(service, id).description : ''}
                                         name="Description"
                                         control={control}
                                         fullWidth
@@ -208,7 +232,7 @@ export default function ServiceForm() {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label={t("finishDate")}
-                                            defaultValue={serviceEdit!.plannedDateOfCompletion ? dayjs(serviceEdit!.plannedDateOfCompletion) : dayjs(new Date())}
+                                            defaultValue={!newService && findServiceId(service, id).plannedDateOfCompletion ? dayjs(findServiceId(service, id).plannedDateOfCompletion) : dayjs(new Date())}
                                             onChange={(e) => {
                                                 setDateLocal(CreateSendDate(e!.year(), (e!.month() + 1), e!.date()))
                                             }}
@@ -220,7 +244,7 @@ export default function ServiceForm() {
                                 <TableCell>
                                     <AppTextInput
                                         label={t("price")}
-                                        content={serviceEdit!.price.toString()}
+                                        content={!newService ? (findServiceId(service, id).price / 100).toString() : '0'}
                                         name="Price"
                                         control={control}
                                         fullWidth
@@ -228,7 +252,7 @@ export default function ServiceForm() {
                                         inputProps={{
                                             step: 0.5,
                                             min: 0,
-                                          }}
+                                        }}
                                     />
                                 </TableCell>
                             </TableRow>

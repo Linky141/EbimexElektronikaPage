@@ -5,7 +5,6 @@ import agent from "../../app/api/agent";
 import { router } from "../../app/router/Router";
 import { toast } from "react-toastify";
 import { t } from "i18next";
-import { service } from "../../app/service/configureService";
 
 interface AccountState {
     user: User | null;

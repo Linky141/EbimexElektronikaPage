@@ -3,6 +3,8 @@ namespace API.Entities;
 public class Service
 {
     public int Id { get; set; }
+    public string ClientEmail { get; set; }
+    public string ClientUsername { get; set; }
     public string Name { get; set; }
     public List<PictureUrl> PictureUrls { get; set; } = new();
     public StatusOfService CurrentStatus { get; set; } = StatusOfService.NotStarted;

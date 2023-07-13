@@ -4,10 +4,11 @@ import { UseControllerProps, useController } from "react-hook-form";
 interface Props extends UseControllerProps {
     label: string;
     items: string[];
+    value?: string;
 }
 
 export default function AppSelectList(props: Props) {
-    const {fieldState, field} = useController({...props, defaultValue: ''})
+    const {fieldState, field} = useController({...props, defaultValue: props.value})
 
     return (
     <FormControl fullWidth error={!!fieldState.error}>

@@ -5,17 +5,38 @@ public class ServicesController : BaseApiController
     private readonly ServiceContext serviceContext;
     private readonly IMapper mapper;
     private readonly ApiServices.ImageService imageService;
-    public ServicesController(ServiceContext serviceContext, IMapper mapper, ApiServices.ImageService imageService)
+    private readonly UserManager<Entities.User> userManager;
+    public ServicesController(ServiceContext serviceContext, IMapper mapper, ApiServices.ImageService imageService, UserManager<Entities.User> userManager)
     {
+        this.userManager = userManager;
         this.imageService = imageService;
         this.mapper = mapper;
         this.serviceContext = serviceContext;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<DTOs.ServiceDto>>> GetServices()
     {
         var services = await RetrieveServices();
+        if (services == null)
+            return NotFound();
+        return Ok(services.Select(service => mapper.Map<DTOs.ServiceDto>(service)).ToList());
+    }
+
+    [Authorize(Roles = "Member")]
+    [HttpGet("GetServices/{email}")]
+    public async Task<ActionResult<List<DTOs.ServiceDto>>> GetServices(string email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+        var roles = await userManager.GetRolesAsync(user);
+        var isAdmin = roles.Contains("Admin");
+
+        List<Entities.Service> services = null;
+        if (isAdmin)
+            services = await RetrieveServices();
+        else
+            services = await RetrieveServices(email);
         if (services == null)
             return NotFound();
         return Ok(services.Select(service => mapper.Map<DTOs.ServiceDto>(service)).ToList());
@@ -82,7 +103,7 @@ public class ServicesController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem updating service" });
     }
 
-    [Authorize(Roles = "Admin,Member")]
+    [Authorize(Roles = "Member")]
     [HttpPost("AddNewComment")]
     public async Task<ActionResult<Entities.Service>> AddNewComment(DTOs.AddNewCommentDto commentsDto)
     {
@@ -157,11 +178,23 @@ public class ServicesController : BaseApiController
             return BadRequest(new ProblemDetails { Title = "Problem removing" });
     }
 
-    private async Task<List<Entities.Service>> RetrieveServices()
+    private async Task<List<Entities.Service>> RetrieveServices(string email = null)
     {
-        return await serviceContext.Services
-        .Include(c => c.Comments)
-        .Include(p => p.PictureUrls).ToListAsync();
+        if (email == null)
+        {
+            return await serviceContext.Services
+            .Include(c => c.Comments)
+            .Include(p => p.PictureUrls)
+            .ToListAsync();
+        }
+        else
+        {
+            return await serviceContext.Services
+            .Include(c => c.Comments)
+            .Include(p => p.PictureUrls)
+            .Where(x => x.ClientEmail == email)
+            .ToListAsync();
+        }
     }
 
     private async Task<Entities.Service> RetrieveService(int id)

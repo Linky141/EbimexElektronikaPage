@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAdded2 : Migration
+    public partial class AddedUserToServices : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -104,6 +104,8 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    ClientEmail = table.Column<string>(type: "TEXT", nullable: true),
+                    ClientUsername = table.Column<string>(type: "TEXT", nullable: true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     CurrentStatus = table.Column<int>(type: "INTEGER", nullable: false),
                     Price = table.Column<int>(type: "INTEGER", nullable: false),
@@ -311,8 +313,8 @@ namespace API.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "b960eaa5-33b9-4833-bb4f-702adacac0cf", null, "Member", "MEMBER" },
-                    { "d764bee1-a37c-41af-a2c5-aaf7c5529077", null, "Admin", "ADMIN" }
+                    { "3dea0458-44a2-45ab-9336-2453685ea0ce", null, "Member", "MEMBER" },
+                    { "6102ba97-d1c5-4c11-8fd3-144e4516e53e", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

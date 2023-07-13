@@ -1,5 +1,5 @@
 import { Button, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Moment from 'moment';
 import ServiceStatus from "./ServiceStatus";
@@ -15,6 +15,7 @@ import ServiceDetailsComments from "./ServiceDetailsComments";
 import { findServiceId } from "../../app/utils/ServicesUtils";
 import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
 import { toast } from "react-toastify";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default function ServiceDetails() {
     const { id } = useParams<{ id: string }>();
@@ -26,6 +27,15 @@ export default function ServiceDetails() {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const { user } = useAppSelector(state => state.account);
+    const [loadingS, setLoadingS] = useState(true);
+
+
+    useEffect(() => {
+        agent.Service.GetServices(user!.email)
+            .then(service => dispatch(setServices(service)))
+            .catch(error => console.log(error))
+            .finally(() => setLoadingS(false))
+    }, [dispatch, user])
 
     function handleOnSubmitAddComment(data: FieldValues) {
         if (data.content.replace(/\s+/g, '') === '') {
@@ -53,6 +63,8 @@ export default function ServiceDetails() {
 
     }
 
+    if (loadingS)
+    return <LoadingComponent message='Loading service...' />
     if (!service?.find(x => x.id === parseInt(id!)))
         return <NotFound />
     if (selectedImage)
@@ -84,6 +96,14 @@ export default function ServiceDetails() {
                 <TableContainer>
                     <Table>
                         <TableBody>
+                            <TableRow>
+                                <TableCell>{t("clientName")}</TableCell>
+                                <TableCell><AppShowTextMultiline content={findServiceId(service, id).clientUsername} /></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>{t("clientEmail")}</TableCell>
+                                <TableCell><AppShowTextMultiline content={findServiceId(service, id).clientEmail} /></TableCell>
+                            </TableRow>
                             <TableRow>
                                 <TableCell>{t("description")}</TableCell>
                                 <TableCell><AppShowTextMultiline content={findServiceId(service, id).description} /></TableCell>

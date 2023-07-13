@@ -35,6 +35,9 @@ export default function ServiceCard({ service }: Props) {
     return (
         <Card>
             <CardContent>
+                <Typography variant="h6" component="div">
+                    {service.clientUsername}
+                </Typography>
                 <ServiceStatus status={service.currentStatus} fontSize={14} color={"text.secondary"} gutterBottom={true} />
                 <Typography variant="h5" component="div">
                     {service.name}
