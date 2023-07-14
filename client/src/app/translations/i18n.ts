@@ -93,6 +93,13 @@ i18n.use(initReactI18next).init({
                 loggedOut: "Succesfly logged out",
                 clientName: "Client name",
                 clientEmail: "Client email address",
+                configuration: "Settings",
+                settingsRestored: "Settings restored",
+                everyone: "Everyone",
+                members: "Members",
+                disabled: "Disabled",
+                reset: "Reset",
+                accesses: "Accesses",
             }
         },
         pl: {
@@ -180,6 +187,13 @@ i18n.use(initReactI18next).init({
                 loggedOut: "Wylogowano pomyślnie",
                 clientName: "Nazwa klienta",
                 clientEmail: "Adres email klienta",
+                configuration: "Ustawienia",
+                settingsRestored: "Przywrócono ustawienia",
+                everyone: "Każdy",
+                members: "Użytkownicy",
+                disabled: "Wyłączone",
+                reset: "Reset",
+                accesses: "Dostęp",
             }
         },
     }

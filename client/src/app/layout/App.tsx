@@ -11,6 +11,7 @@ import LoadingComponent from "./LoadingComponent";
 import { setInfos } from "../../features/infoPage/infoSlice";
 import i18n from "../translations/i18n";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
+import { setConfiguration } from "../../features/configurationPage/configurationSlice";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ function App() {
     }
   })
   const [loading, setLoading] = useState(true);
+  const [loadingConf, setLoadingConf] = useState(true);
   const [loadingC, setLoadingC] = useState(true);
   const [loadingI, setLoadingI] = useState(true);
   // const [loadingS, setLoadingS] = useState(true);
@@ -43,6 +45,11 @@ function App() {
         .then(info => dispatch(setInfos(info)))
         .catch(error => console.log(error))
         .finally(() => setLoadingI(false))
+
+      agent.Configuration.get()
+        .then(configuration => dispatch(setConfiguration(configuration)))
+        .catch(error => console.log(error))
+        .finally(() => setLoadingConf(false))
 
       // agent.Service.GetServices(JSON.parse(localStorage.getItem('user')!).email)
       //   .then(service => dispatch(setServices(service)))
@@ -68,7 +75,7 @@ function App() {
   };
 
   // if (loading || loadingC || loadingI || loadingS)
-  if (loading || loadingC || loadingI)
+  if (loading || loadingC || loadingI || loadingConf)
     return <LoadingComponent message='Loading app...' />
 
   return (

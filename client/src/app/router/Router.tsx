@@ -10,6 +10,7 @@ import NotFound from "../errors/NotFound";
 import ServiceForm from "../../features/servicesPage/ServiceForm";
 import LoginPage from "../../features/account/LoginPage";
 import RegisterPage from "../../features/account/RegisterPage";
+import ConfigurationPage from "../../features/configurationPage/ConfigurationPage";
 
 export const router = createBrowserRouter([
     {
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
             {path: 'serviceFrom/:id', element: <ServiceForm/>},
             {path: 'login', element: <LoginPage/>},
             {path: 'register', element: <RegisterPage/>},
+            {path: 'configuration', element: <ConfigurationPage/>},
             {path: '*', element: <Navigate replace to='not-found'/> },
         ]
     }

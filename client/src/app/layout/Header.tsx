@@ -26,7 +26,14 @@ const navStyles = {
 
 export default function Header({ darkMode, handleThemeChange, appLanguage, handleLanguageChange }: Props) {
     const { user } = useAppSelector(state => state.account);
+    const { configuration } = useAppSelector(state => state.configuration)
 
+
+    function getConfig() {
+        return configuration!.find(x => x.id === 1)!;
+    }
+
+    console.log(configuration);
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -41,14 +48,31 @@ export default function Header({ darkMode, handleThemeChange, appLanguage, handl
                         <HomeIcon sx={{ fontSize: 40, marginTop: 1, marginLeft: 2 }} />
                     </Typography>
                     {user ? (
-                        <Typography variant="h6" sx={{marginTop: 1.5, marginLeft: 2 }}> {user?.email.toUpperCase()}</Typography>
+                        <Typography variant="h6" sx={{ marginTop: 1.5, marginLeft: 2 }}> {user?.email.toUpperCase()}</Typography>
                     ) : (<></>)}
                 </Box>
-                <List sx={{ display: 'flex'}}>
+                <List sx={{ display: 'flex' }}>
+
+                    {configuration && (getConfig().infoEnabled === 0 || (getConfig().infoEnabled === 1 && user?.roles?.includes('Member')) || user?.roles?.includes('Admin')) &&
                         <ListItem component={NavLink} to='/info' key='/info' sx={navStyles}>{t("info").toUpperCase()}</ListItem>
+                    }
+
+                    {configuration && (getConfig().contactsEnabled === 0 || (getConfig().contactsEnabled === 1 && user?.roles?.includes('Member')) || user?.roles?.includes('Admin')) &&
                         <ListItem component={NavLink} to='/contact' key='/contact' sx={navStyles}>{t("contact").toUpperCase()}</ListItem>
-                        {user && (user.roles?.includes('Admin') || user.roles?.includes('Member')) && <ListItem component={NavLink} to='/services' key='/services' sx={navStyles}>{t("services").toUpperCase()}</ListItem>}
-                        
+                    }
+
+                    {configuration && (getConfig().servicesEnabled === 0 || (getConfig().servicesEnabled === 1 && user?.roles?.includes('Member')) || user?.roles?.includes('Admin')) &&
+                        <>
+                            {user && (user.roles?.includes('Admin') || user.roles?.includes('Member')) &&
+                                <ListItem component={NavLink} to='/services' key='/services' sx={navStyles}>{t("services").toUpperCase()}</ListItem>
+                            }
+                        </>
+                    }
+
+                    {user && (user.roles?.includes('Admin')) &&
+                        <ListItem component={NavLink} to='/configuration' key='/configuration' sx={navStyles}>{t("configuration").toUpperCase()}</ListItem>
+                    }
+
                 </List>
                 <Box width={100}>
                     <Typography variant="h6"> EBIMEX </Typography>

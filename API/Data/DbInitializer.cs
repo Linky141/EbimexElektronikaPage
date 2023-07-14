@@ -4,34 +4,50 @@ public static class DbInitializer
 {
     public static async Task Initialize(ServiceContext serviceContext, UserManager<Entities.User> userManager)
     {
-        if(!userManager.Users.Any()){
-            var user1 = new Entities.User {
+        if (!userManager.Users.Any())
+        {
+            var user1 = new Entities.User
+            {
                 UserName = "Member1",
                 Email = "member1@test.com"
-             };
+            };
 
-             await userManager.CreateAsync(user1, "zaq1@WSX");
-             await userManager.AddToRoleAsync(user1, "Member");
+            await userManager.CreateAsync(user1, "zaq1@WSX");
+            await userManager.AddToRoleAsync(user1, "Member");
 
-              var user2 = new Entities.User {
+            var user2 = new Entities.User
+            {
                 UserName = "Member2",
                 Email = "member2@test.com"
-             };
+            };
 
-             await userManager.CreateAsync(user2, "zaq1@WSX");
-             await userManager.AddToRoleAsync(user2, "Member");
+            await userManager.CreateAsync(user2, "zaq1@WSX");
+            await userManager.AddToRoleAsync(user2, "Member");
 
-                var admin = new Entities.User {
+            var admin = new Entities.User
+            {
                 UserName = "Admin",
                 Email = "admin@test.com"
-             };
+            };
 
-             await userManager.CreateAsync(admin, "zaq1@WSX");
-             await userManager.AddToRolesAsync(admin, new[] {"Member", "Admin"});
+            await userManager.CreateAsync(admin, "zaq1@WSX");
+            await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" });
         }
 
-        if (serviceContext.Services.Any() || serviceContext.Infos.Any() || serviceContext.Contacts.Any())
+        if (serviceContext.Services.Any() ||
+            serviceContext.Infos.Any() ||
+            serviceContext.Contacts.Any() ||
+            serviceContext.Configurations.Any())
             return;
+
+        var configurations = new List<Entities.Configuration>
+        {
+            new Entities.Configuration{
+                ContactsEnabled = Entities.ConfigurationEnabledSections.All,
+                InfoEnabled = Entities.ConfigurationEnabledSections.All,
+                ServicesEnabled = Entities.ConfigurationEnabledSections.All
+            }
+        };
 
         var services = new List<Entities.Service>
         {
@@ -436,6 +452,11 @@ public static class DbInitializer
         foreach (var contact in contacts)
         {
             serviceContext.Contacts.Add(contact);
+        }
+
+        foreach (var configuration in configurations)
+        {
+            serviceContext.Configurations.Add(configuration);
         }
 
         serviceContext.SaveChanges();

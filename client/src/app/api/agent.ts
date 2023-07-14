@@ -95,12 +95,18 @@ const Account = {
     users: () => requests.get('account/users')
 }
 
+const Configuration = {
+    get: () => requests.get('configuration'),
+    post: (body: any) => requests.post(`configuration`, body),
+}
+
 const agent = {
     Info,
     Contact,
     Service,
     TestErrors,
-    Account
+    Account,
+    Configuration
 }
 
 export default agent;

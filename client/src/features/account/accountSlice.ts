@@ -46,7 +46,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     }
 )
 
-export const AccountSlice = createSlice({
+export const accountSlice = createSlice({
     name: 'account',
     initialState,
     reducers: {
@@ -79,4 +79,4 @@ export const AccountSlice = createSlice({
     })
 })
 
-export const { signOut, setUser } = AccountSlice.actions;
+export const { signOut, setUser } = accountSlice.actions;

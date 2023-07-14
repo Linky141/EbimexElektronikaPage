@@ -64,7 +64,7 @@ export default function ServiceDetails() {
     }
 
     if (loadingS)
-    return <LoadingComponent message='Loading service...' />
+        return <LoadingComponent message='Loading service...' />
     if (!service?.find(x => x.id === parseInt(id!)))
         return <NotFound />
     if (selectedImage)
