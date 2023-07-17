@@ -11,7 +11,7 @@ interface Props {
     announcement: InfoAnnouncement;
     setEditingAnnouncementMode: (id: number) => void;
     handleSubmit: UseFormHandleSubmit<FieldValues, undefined>;
-    handleUpdateData: (data: FieldValues) => void;
+    submitForm: (data: FieldValues) => void;
     setLoadingSubmit: (data: number) => void;
     loadingSubmit: number;
     handleDeleteAnnouncement: () => void;
@@ -35,7 +35,7 @@ export default function InfoAnnouncementBoxShow(props: Props) {
                             onClick={() => {
                                 props.setLoadingSubmit(props.announcement.id);
                                 props.handleDeleteAnnouncement();
-                                props.handleSubmit(props.handleUpdateData)();
+                                props.handleSubmit(props.submitForm)();
                             }}
                             color="error"
                             variant="outlined">{t("delete")}</LoadingButton>

@@ -9,7 +9,7 @@ import { configurationSlice } from "../../features/configurationPage/configurati
 export const service = configureStore({
     reducer: {
         contacts: contactsSlice.reducer,
-        infos: infoSlice.reducer,
+        info: infoSlice.reducer,
         services: serviceSlice.reducer,
         account: accountSlice.reducer,
         configuration: configurationSlice.reducer

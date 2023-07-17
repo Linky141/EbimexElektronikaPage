@@ -8,7 +8,7 @@ import { setContacts } from "../../features/contactPage/contactSlice";
 import agent from "../api/agent";
 import { useAppDispatch } from "../service/configureService";
 import LoadingComponent from "./LoadingComponent";
-import { setInfos } from "../../features/infoPage/infoSlice";
+import { fetchInfoAsync, setInfo } from "../../features/infoPage/infoSlice";
 import i18n from "../translations/i18n";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 import { setConfiguration } from "../../features/configurationPage/configurationSlice";
@@ -29,22 +29,23 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [loadingConf, setLoadingConf] = useState(true);
   const [loadingC, setLoadingC] = useState(true);
-  const [loadingI, setLoadingI] = useState(true);
+  // const [loadingI, setLoadingI] = useState(true);
   // const [loadingS, setLoadingS] = useState(true);
 
   const initApp = useCallback(async () => {
     try {
       await dispatch(fetchCurrentUser());
-
+      await dispatch(fetchInfoAsync());
+      
       agent.Contact.list()
         .then(contacts => dispatch(setContacts(contacts)))
         .catch(error => console.log(error))
         .finally(() => setLoadingC(false))
 
-      agent.Info.list()
-        .then(info => dispatch(setInfos(info)))
-        .catch(error => console.log(error))
-        .finally(() => setLoadingI(false))
+      // agent.Info.list()
+      //   .then(info => dispatch(setInfos(info)))
+      //   .catch(error => console.log(error))
+      //   .finally(() => setLoadingI(false))
 
       agent.Configuration.get()
         .then(configuration => dispatch(setConfiguration(configuration)))
@@ -75,7 +76,7 @@ function App() {
   };
 
   // if (loading || loadingC || loadingI || loadingS)
-  if (loading || loadingC || loadingI || loadingConf)
+  if (loading || loadingC || loadingConf)
     return <LoadingComponent message='Loading app...' />
 
   return (

@@ -11,8 +11,8 @@ interface Props {
     open: string;
     close: string;
     editMode: boolean;
-    control: Control<any>;
-    setValue: UseFormSetValue<any>;
+    control?: Control<any>;
+    setValue?: UseFormSetValue<any>;
 }
 
 export default function InfoOpenedHoursTableRow(props: Props) {
@@ -23,12 +23,12 @@ export default function InfoOpenedHoursTableRow(props: Props) {
 
     function ChangeClosed() {
         if (!isClosed) {
-            props.setValue(props.nameStart, "Closed");
-            props.setValue(props.nameEnd, "Closed");
+            props.setValue!(props.nameStart, "Closed");
+            props.setValue!(props.nameEnd, "Closed");
         }
         else {
-            props.setValue(props.nameStart, "");
-            props.setValue(props.nameEnd, "");
+            props.setValue!(props.nameStart, "");
+            props.setValue!(props.nameEnd, "");
         }
         setIsClosed(!isClosed);
     }
@@ -84,6 +84,7 @@ export default function InfoOpenedHoursTableRow(props: Props) {
                                 control={props.control}
                             />
                             <FormControlLabel
+                                sx={{paddingTop: 1, paddingLeft: 1}}
                                 control={
                                     <Checkbox checked={isClosed} onChange={ChangeClosed} />
                                 }

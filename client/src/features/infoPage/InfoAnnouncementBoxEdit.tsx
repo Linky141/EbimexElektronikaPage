@@ -6,13 +6,14 @@ import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
 
 interface Props {
     announcement: InfoAnnouncement;
     setEditingAnnouncementMode: (id: number) => void;
     editingAnnouncementMode: number;
     handleSubmit: UseFormHandleSubmit<FieldValues, undefined>;
-    handleUpdateData: (data: FieldValues) => void;
+    submitForm: (data: FieldValues) => void;
     setLoadingSubmit: (data: number) => void;
     loadingSubmit: number;
     handleEditAnnouncement: (contentAnnouncement: string) => void;
@@ -40,7 +41,7 @@ export default function InfoAnnouncementBoxEdit(props: Props) {
                                     else {
                                         props.setLoadingSubmit(props.announcement.id);
                                         props.handleEditAnnouncement(announcementContent);
-                                        props.handleSubmit(props.handleUpdateData)();
+                                        props.handleSubmit(props.submitForm)();
                                     }
                                 }}
                                 color="success"
@@ -65,7 +66,7 @@ export default function InfoAnnouncementBoxEdit(props: Props) {
                         </Grid>
                     </>
                 ) : (<>
-                    {props.announcement.content}
+                    <AppShowTextMultiline content={props.announcement.content}/>
                 </>)}
             </Grid>
         </Box>
