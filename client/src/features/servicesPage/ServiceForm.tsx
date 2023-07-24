@@ -26,7 +26,7 @@ import NotFound from "../../app/errors/NotFound";
 
 export default function ServiceForm() {
     const { id } = useParams<{ id: string }>();
-    const { service } = useAppSelector(state => state.services);
+    const { services } = useAppSelector(state => state.services);
     const [pictures, setPictures] = useState<string[]>([]);
     const [newService, setNewService] = useState(true);
     const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -58,10 +58,10 @@ export default function ServiceForm() {
         if (id !== '0')
         {
             setNewService(false);
-            setStatusLocal(findServiceId(service, id).currentStatus);
-            setDateLocal(findServiceId(service, id).plannedDateOfCompletion);
+            setStatusLocal(findServiceId(services, id).currentStatus);
+            setDateLocal(findServiceId(services, id).plannedDateOfCompletion);
 
-            findServiceId(service, id).pictureUrls.forEach(element => {
+            findServiceId(services, id).pictureUrls.forEach(element => {
                 if (pictures === undefined) {
                     setPictures([element.url]);
                 }
@@ -145,7 +145,7 @@ export default function ServiceForm() {
     if (loadingUsers || loadingS)
         return <LoadingComponent message='Loading form...' />
 
-    if (!service?.find(x => x.id === parseInt(id!)) && !newService)
+    if (!services?.find(x => x.id === parseInt(id!)) && !newService)
         return <NotFound />
 
     if (selectedImage)
@@ -156,7 +156,7 @@ export default function ServiceForm() {
             <Grid item xs={12}>
                 <AppTextInput
                     label={t("name")}
-                    content={!newService ? findServiceId(service, id).name : ''}
+                    content={!newService ? findServiceId(services, id).name : ''}
                     name='name'
                     control={control}
                     fullWidth
@@ -210,7 +210,7 @@ export default function ServiceForm() {
                                         })}
                                         name="ClientUsername"
                                         control={control}
-                                        value={!newService ? findServiceId(service, id).clientUsername : ''}
+                                        value={!newService ? findServiceId(services, id).clientUsername : ''}
                                     />
                                 </TableCell>
                             </TableRow>
@@ -218,7 +218,7 @@ export default function ServiceForm() {
                                 <TableCell>
                                     <AppTextInput
                                         label={t("description")}
-                                        content={!newService ? findServiceId(service, id).description : ''}
+                                        content={!newService ? findServiceId(services, id).description : ''}
                                         name="Description"
                                         control={control}
                                         fullWidth
@@ -231,7 +231,7 @@ export default function ServiceForm() {
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
                                             label={t("finishDate")}
-                                            defaultValue={!newService && findServiceId(service, id).plannedDateOfCompletion ? dayjs(findServiceId(service, id).plannedDateOfCompletion) : dayjs(new Date())}
+                                            defaultValue={!newService && findServiceId(services, id).plannedDateOfCompletion ? dayjs(findServiceId(services, id).plannedDateOfCompletion) : dayjs(new Date())}
                                             onChange={(e) => {
                                                 setDateLocal(CreateSendDate(e!.year(), (e!.month() + 1), e!.date()))
                                             }}
@@ -243,7 +243,7 @@ export default function ServiceForm() {
                                 <TableCell>
                                     <AppTextInput
                                         label={t("price")}
-                                        content={!newService ? (findServiceId(service, id).price / 100).toString() : '0'}
+                                        content={!newService ? (findServiceId(services, id).price / 100).toString() : '0'}
                                         name="Price"
                                         control={control}
                                         fullWidth

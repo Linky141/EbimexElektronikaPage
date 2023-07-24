@@ -13,13 +13,13 @@ interface Props {
 }
 
 export default function ContactContactsEditAddingNewEntry(props: Props) {
+    const { t } = useTranslation();
     const [newNameState, setNewNameState] = useState<string>('');
     const [newContentState, setNewContentState] = useState<string>('');
-    const { t } = useTranslation();
 
     function handleAddNewCustomContact(name: string, content: string) {
         const lastItem = props.customContacts.length > 0 ? props.customContacts[props.customContacts.length - 1] : undefined;
-        const newItemId = lastItem && lastItem.id ? lastItem.id + 1 : 0;
+        const newItemId = lastItem ? lastItem.id + 1 : 0;
         const newItem: ContactCustom = { id: newItemId, name: newNameState, content: newContentState }
         props.setCustomContacts(prevState => {
             return [...prevState, newItem]
@@ -65,13 +65,11 @@ export default function ContactContactsEditAddingNewEntry(props: Props) {
                                             </TableCell>
                                             <TableCell>
                                                 <Button color="success" onClick={() => {
-                                                    if (newNameState === '' || newContentState === '') {
+                                                    if (newNameState === '' || newContentState === '')
                                                         toast.error(t("nameAndContantAreMandatory"))
-                                                    }
-                                                    else {
+                                                    else
                                                         handleAddNewCustomContact(newNameState, newContentState)
-                                                    }
-                                                }}>{t("submit")}</Button>
+                                                }}>{t("add")}</Button>
                                                 <Button color="error" onClick={handleCancelAddNewCustomContact}>{t("cancel")}</Button>
                                             </TableCell>
                                         </TableRow>

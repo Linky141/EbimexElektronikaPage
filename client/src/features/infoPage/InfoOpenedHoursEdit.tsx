@@ -22,9 +22,7 @@ export default function InfoOpenedHoursEdit(props: Props) {
     const { info } = useAppSelector(state => state.info);
 
     async function submitForm(data: FieldValues) {
-        console.log(data);
         try {
-            data.Id = 1;
             await dispatch(updateOpenHoursAsync(data));
         } catch (error) {
             console.log(error);
@@ -46,7 +44,7 @@ export default function InfoOpenedHoursEdit(props: Props) {
                     loading={isSubmitting}
                     onClick={handleSubmit(submitForm)}
                     color="success"
-                >{t("submit")}</LoadingButton>
+                >{t("save")}</LoadingButton>
                 <Button
                     onClick={() => props.setEditingOpenedHoursMode(false)}
                     color="error"

@@ -3,6 +3,7 @@ import InfoOpenedHoursTableRow from "./InfoOpenedHoursTableRow";
 import { useTranslation } from "react-i18next";
 import { useAppSelector } from "../../app/service/configureService";
 import LoadingComponent from "../../app/layout/LoadingComponent";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
 interface Props {
     setEditingOpenedHoursMode: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +22,7 @@ export default function InfoOpenedHoursShow(props: Props) {
             <Grid item>
                 <Typography variant="h4">{t("openHours")}</Typography>
             </Grid>
-            {user && user.roles?.includes('Admin') &&
+            {isAdmin(user) &&
                 <Grid item>
                     <Button onClick={() => props.setEditingOpenedHoursMode(true)}>{t("edit")}</Button>
                 </Grid>

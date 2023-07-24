@@ -16,10 +16,11 @@ import { findServiceId } from "../../app/utils/ServicesUtils";
 import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
 import { toast } from "react-toastify";
 import LoadingComponent from "../../app/layout/LoadingComponent";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
 export default function ServiceDetails() {
     const { id } = useParams<{ id: string }>();
-    const { service } = useAppSelector(state => state.services);
+    const { services } = useAppSelector(state => state.services);
     const [addingCommentState, setaddingCommentState] = useState(false);
     const [loadingSubmitNewComment, setLoadingSubmitNewComment] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -65,7 +66,7 @@ export default function ServiceDetails() {
 
     if (loadingS)
         return <LoadingComponent message='Loading service...' />
-    if (!service?.find(x => x.id === parseInt(id!)))
+    if (!services?.find(x => x.id === parseInt(id!)))
         return <NotFound />
     if (selectedImage)
         return <ServicePreviewImage selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
@@ -73,16 +74,16 @@ export default function ServiceDetails() {
     return (
         <Grid container spacing={6}>
             <Grid item xs={12}>
-                {user && user.roles?.includes('Admin') &&
-                    <Button size="small" component={Link} to={`/serviceFrom/${findServiceId(service, id).id}`}>{t("edit")}</Button>
+                {isAdmin(user) &&
+                    <Button size="small" component={Link} to={`/serviceFrom/${findServiceId(services, id).id}`}>{t("edit")}</Button>
                 }
                 <Typography variant="h3">
-                    {findServiceId(service, id).name}
+                    {findServiceId(services, id).name}
                 </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Grid container>
-                    {findServiceId(service, id).pictureUrls.map(({ url, id }) => (
+                    {findServiceId(services, id).pictureUrls.map(({ url, id }) => (
                         <Grid item key={id} xs={4}>
                             <Button onClick={() => setSelectedImage(url)}>
                                 <img src={url} alt={url} style={{ margin: '10px', width: '300px' }} />
@@ -98,28 +99,28 @@ export default function ServiceDetails() {
                         <TableBody>
                             <TableRow>
                                 <TableCell>{t("clientName")}</TableCell>
-                                <TableCell><AppShowTextMultiline content={findServiceId(service, id).clientUsername} /></TableCell>
+                                <TableCell><AppShowTextMultiline content={findServiceId(services, id).clientUsername} /></TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>{t("clientEmail")}</TableCell>
-                                <TableCell><AppShowTextMultiline content={findServiceId(service, id).clientEmail} /></TableCell>
+                                <TableCell><AppShowTextMultiline content={findServiceId(services, id).clientEmail} /></TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>{t("description")}</TableCell>
-                                <TableCell><AppShowTextMultiline content={findServiceId(service, id).description} /></TableCell>
+                                <TableCell><AppShowTextMultiline content={findServiceId(services, id).description} /></TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>{t("finishDate")}</TableCell>
-                                <TableCell>{Moment(findServiceId(service, id).plannedDateOfCompletion).format('DD-MM-YYYY')}</TableCell>
+                                <TableCell>{Moment(findServiceId(services, id).plannedDateOfCompletion).format('DD-MM-YYYY')}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>{t("price")}</TableCell>
-                                <TableCell>{(findServiceId(service, id).price / 100).toFixed(2)} PLN</TableCell>
+                                <TableCell>{(findServiceId(services, id).price / 100).toFixed(2)} PLN</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell>{t("status")}</TableCell>
                                 <TableCell>
-                                    <ServiceStatus status={findServiceId(service, id).currentStatus} fontSize={14} color={"text.secondary"} gutterBottom={true} />
+                                    <ServiceStatus status={findServiceId(services, id).currentStatus} fontSize={14} color={"text.secondary"} gutterBottom={true} />
                                 </TableCell>
                             </TableRow>
                         </TableBody>
@@ -127,7 +128,7 @@ export default function ServiceDetails() {
                 </TableContainer>
             </Grid>
             <ServiceDetailsComments
-                service={findServiceId(service, id)}
+                service={findServiceId(services, id)}
                 addingCommentState={addingCommentState}
                 control={control}
                 loadingSubmitNewComment={loadingSubmitNewComment}

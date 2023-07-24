@@ -45,7 +45,7 @@ export default function InfoAnnouncementBoxEdit(props: Props) {
                                     }
                                 }}
                                 color="success"
-                            >{t("submit")}</LoadingButton>
+                            >{t("save")}</LoadingButton>
                             <Button onClick={() => props.setEditingAnnouncementMode(-1)} color="error">{t("cancel")}</Button>
                         </>
                     ) : (<></>)}

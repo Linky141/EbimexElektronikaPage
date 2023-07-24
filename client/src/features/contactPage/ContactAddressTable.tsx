@@ -10,19 +10,19 @@ interface Props {
     contact: Contact;
 }
 
-export default function ContactAddressTable({ editAddressMode, control, contact }: Props) {
+export default function ContactAddressTable(props: Props) {
     const { t } = useTranslation();
-    
+
     return (
         <TableContainer>
             <Table>
                 <TableBody>
-                    <ContactAddressTableRow label={t("country")} content={contact.addressCountry} control={control} editaddressmode={editAddressMode} name="AddressCountry" />
-                    <ContactAddressTableRow label={t("city")} content={contact.addressCity} control={control} editaddressmode={editAddressMode} name="AddressCity" />
-                    <ContactAddressTableRow label={t("postalCode")} content={contact.addressPostal} control={control} editaddressmode={editAddressMode} name="AddressPostal" />
-                    <ContactAddressTableRow label={t("street")} content={contact.addressStreet} control={control} editaddressmode={editAddressMode} name="AddressStreet" />
-                    <ContactAddressTableRow label={t("buildingNumber")} content={contact.addressNumber1} control={control} editaddressmode={editAddressMode} name="AddressNumber1" />
-                    <ContactAddressTableRow label={t("apartmentNumber")} content={contact.addressNumber2} control={control} editaddressmode={editAddressMode} name="AddressNumber2" />
+                    <ContactAddressTableRow label={t("country")} content={props.contact.addressCountry} control={props.control} editaddressmode={props.editAddressMode} name="AddressCountry" />
+                    <ContactAddressTableRow label={t("city")} content={props.contact.addressCity} control={props.control} editaddressmode={props.editAddressMode} name="AddressCity" />
+                    <ContactAddressTableRow label={t("postalCode")} content={props.contact.addressPostal} control={props.control} editaddressmode={props.editAddressMode} name="AddressPostal" />
+                    <ContactAddressTableRow label={t("street")} content={props.contact.addressStreet} control={props.control} editaddressmode={props.editAddressMode} name="AddressStreet" />
+                    <ContactAddressTableRow label={t("buildingNumber")} content={props.contact.addressNumber1} control={props.control} editaddressmode={props.editAddressMode} name="AddressNumber1" />
+                    <ContactAddressTableRow label={t("apartmentNumber")} content={props.contact.addressNumber2} control={props.control} editaddressmode={props.editAddressMode} name="AddressNumber2" />
                 </TableBody>
             </Table>
         </TableContainer>

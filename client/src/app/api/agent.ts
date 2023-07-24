@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.request.use(config => {
+axios.interceptors.request.use(async config => {
     const token = service.getState().account.user?.token;
     if (token)
         config.headers.Authorization = `Bearer ${token}`;

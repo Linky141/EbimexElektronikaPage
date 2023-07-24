@@ -1,75 +1,83 @@
-import { Grid } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Contact, ContactCustom } from "../../app/models/contact";
+import { Button, Grid, Typography } from "@mui/material";
+import { useState } from "react";
+import { ContactCustom } from "../../app/models/contact";
 import { FieldValues, useForm } from "react-hook-form";
-import { useAppDispatch } from "../../app/service/configureService";
-import agent from "../../app/api/agent";
-import { setContacts } from "./contactSlice";
-import ContactContactsShow from "./ContactContactsShow";
-import ContactContactsEdit from "./ContactContactsEdit";
+import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
+import { t } from "i18next";
+import { LoadingButton } from "@mui/lab";
+import ContactContactsTable from "./ContactContactsTable";
+import ContactContactsEditAddingNewEntry from "./ContactContactsEditAddingNewEntry";
+import { updateContactContacts } from "./contactSlice";
+import LoadingComponent from "../../app/layout/LoadingComponent";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
-interface Props {
-    contact: Contact;
-}
-
-export default function ContactContacts({ contact }: Props) {
-    const { control, handleSubmit } = useForm();
+export default function ContactContacts() {
     const dispatch = useAppDispatch();
-    const [customContacts, setCustomContacts] = useState<ContactCustom[]>([]);
-
-    const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const { control, handleSubmit, formState: { isSubmitting } } = useForm();
+    const { user } = useAppSelector(state => state.account);
+    const { contact } = useAppSelector(state => state.contact);
+    const [editingCustomContact, setEditingCustomContact] = useState(-1);
+    const [addingNewCustomContact, setaddingNewCustomContact] = useState(false);
+    const [customContacts, setCustomContacts] = useState<ContactCustom[]>(contact!.contactCustoms);
     const [editContactsMode, setEditContactsMode] = useState(false);
-    const [customContactsLoaded, setCustomContactsLoaded] = useState(false);
 
-    useEffect(() => {
-        if (!customContactsLoaded) {
-            contact.contactCustoms.forEach(element => {
-                setCustomContacts(contact.contactCustoms);
-            });
-        }
-        setCustomContactsLoaded(true);
-    }, [contact.contactCustoms, customContactsLoaded])
-
-    function handleUpdateData(data: FieldValues) {
-        setLoadingSubmit(true);
-        data.Id = 1;
-        data.contactCustoms = customContacts;
-        agent.Contact
-            .updateContact(data)
-            .then(contacts => dispatch(setContacts(contacts)))
-            .catch(error => console.log(error))
-            .finally(finishActions);
-
-        function finishActions() {
-            setLoadingSubmit(false);
+    async function submitForm(data: FieldValues) {
+        try {
+            data.contactCustoms = customContacts;
+            await dispatch(updateContactContacts(data));
+        } catch (error) {
+            console.log(error);
+        } finally {
             setEditContactsMode(false);
         }
     }
 
+    if (!contact)
+    return <LoadingComponent />;
+
     return (
         <Grid item xs={12}>
             {!editContactsMode ? (
-                <ContactContactsShow
-                    contact={contact}
-                    control={control}
-                    customContacts={customContacts}
-                    editContactsMode={editContactsMode}
-                    setCustomContacts={setCustomContacts}
-                    setEditContactsMode={setEditContactsMode}
-                />
+                <Grid container>
+                    <Grid item>
+                        <Typography variant="h4">{t("contact")}</Typography>
+                    </Grid>
+                    {isAdmin(user) &&
+                        <Grid item>
+                            <Button onClick={() => setEditContactsMode(true)}>{t("edit")}</Button>
+                        </Grid>
+                    }
+                </Grid>
             ) : (
-                <ContactContactsEdit
-                    contact={contact}
-                    control={control}
-                    customContacts={customContacts}
-                    editContactsMode={editContactsMode}
-                    setCustomContacts={setCustomContacts}
-                    setEditContactsMode={setEditContactsMode}
-                    handleSubmit={handleSubmit}
-                    handleUpdateData={handleUpdateData}
-                    loadingSubmit={loadingSubmit}
-                />
+                <Grid container>
+                    <Grid item>
+                        <Typography variant="h4">{t("contact")}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <LoadingButton loading={isSubmitting} onClick={handleSubmit(submitForm)} color="success">{t("save")}</LoadingButton>
+                        <Button onClick={() => setEditContactsMode(false)} color="error">{t("cancel")}</Button>
+                    </Grid>
+                </Grid>
             )}
+            <ContactContactsTable
+                control={control}
+                contact={contact}
+                editContactsMode={editContactsMode}
+                editingCustomContact={editingCustomContact}
+                setEditingCustomContact={setEditingCustomContact}
+                addingNewCustomContact={addingNewCustomContact}
+                customContacts={customContacts}
+                setCustomContacts={setCustomContacts}
+            />
+            {editContactsMode ? (
+                <ContactContactsEditAddingNewEntry
+                    addingNewCustomContact={addingNewCustomContact}
+                    customContacts={customContacts}
+                    editingCustomContact={editingCustomContact}
+                    setCustomContacts={setCustomContacts}
+                    setaddingNewCustomContact={setaddingNewCustomContact}
+                />
+            ) : (<></>)}
         </Grid>
     )
 }

@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../app/service/configureServi
 import { updateAnnouncementsAsync } from "./infoSlice";
 import { useState } from "react";
 import moment from "moment";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
 interface Props {
     setEditingAnnouncementMode: React.Dispatch<React.SetStateAction<number>>;
@@ -61,7 +62,7 @@ export default function InfoAnnouncementsShow(props: Props) {
                     loadingSubmit={props.loadingSubmit}
                 />
             ))}
-            {user && user.roles?.includes('Admin') &&
+            {isAdmin(user) &&
                 <>
                     <Grid marginLeft="30px" marginRight="30px">
                         <TextField

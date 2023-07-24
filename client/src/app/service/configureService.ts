@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { contactsSlice } from "../../features/contactPage/contactSlice";
 import { infoSlice } from "../../features/infoPage/infoSlice";
 import { serviceSlice } from "../../features/servicesPage/servicesSlice";
 import { accountSlice } from "../../features/account/accountSlice";
 import { configurationSlice } from "../../features/configurationPage/configurationSlice";
+import { contactSlice } from "../../features/contactPage/contactSlice";
 
 export const service = configureStore({
     reducer: {
-        contacts: contactsSlice.reducer,
+        contact: contactSlice.reducer,
         info: infoSlice.reducer,
         services: serviceSlice.reducer,
         account: accountSlice.reducer,

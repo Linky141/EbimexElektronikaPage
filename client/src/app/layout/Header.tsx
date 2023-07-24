@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import OptionsMenu from "./OptionsMenu";
 import HomeIcon from '@mui/icons-material/Home';
 import { useAppSelector } from "../service/configureService";
+import { isAdmin, isMember } from "../utils/RolesUtils";
 
 interface Props {
     darkMode: boolean;
@@ -33,7 +34,6 @@ export default function Header({ darkMode, handleThemeChange, appLanguage, handl
         return configuration!.find(x => x.id === 1)!;
     }
 
-    console.log(configuration);
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -53,23 +53,23 @@ export default function Header({ darkMode, handleThemeChange, appLanguage, handl
                 </Box>
                 <List sx={{ display: 'flex' }}>
 
-                    {configuration && (getConfig().infoEnabled === 0 || (getConfig().infoEnabled === 1 && user?.roles?.includes('Member')) || user?.roles?.includes('Admin')) &&
+                    {configuration && (getConfig().infoEnabled === 0 || (getConfig().infoEnabled === 1 && isMember(user)) || isAdmin(user)) &&
                         <ListItem component={NavLink} to='/info' key='/info' sx={navStyles}>{t("info").toUpperCase()}</ListItem>
                     }
 
-                    {configuration && (getConfig().contactsEnabled === 0 || (getConfig().contactsEnabled === 1 && user?.roles?.includes('Member')) || user?.roles?.includes('Admin')) &&
+                    {configuration && (getConfig().contactsEnabled === 0 || (getConfig().contactsEnabled === 1 && isMember(user)) || isAdmin(user)) &&
                         <ListItem component={NavLink} to='/contact' key='/contact' sx={navStyles}>{t("contact").toUpperCase()}</ListItem>
                     }
 
-                    {configuration && (getConfig().servicesEnabled === 0 || (getConfig().servicesEnabled === 1 && user?.roles?.includes('Member')) || user?.roles?.includes('Admin')) &&
+                    {configuration && (getConfig().servicesEnabled === 0 || (getConfig().servicesEnabled === 1 && isMember(user)) || isAdmin(user)) &&
                         <>
-                            {user && (user.roles?.includes('Admin') || user.roles?.includes('Member')) &&
+                            {isMember(user) &&
                                 <ListItem component={NavLink} to='/services' key='/services' sx={navStyles}>{t("services").toUpperCase()}</ListItem>
                             }
                         </>
                     }
 
-                    {user && (user.roles?.includes('Admin')) &&
+                    {isAdmin(user) &&
                         <ListItem component={NavLink} to='/configuration' key='/configuration' sx={navStyles}>{t("configuration").toUpperCase()}</ListItem>
                     }
 

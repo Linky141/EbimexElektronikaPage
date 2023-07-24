@@ -1,61 +1,67 @@
-import { Grid } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
-import { Contact } from "../../app/models/contact";
-import agent from "../../app/api/agent";
+import { t } from "i18next";
+import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
+import ContactAddressTable from "./ContactAddressTable";
+import { LoadingButton } from "@mui/lab";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import { FieldValues, useForm } from "react-hook-form";
-import { setContacts } from "./contactSlice";
-import { useAppDispatch } from "../../app/service/configureService";
-import ContactAddressShow from "./ContactAddressShow";
-import ContactAddressEdit from "./ContactAddressEdit";
+import { updateContactAddress } from "./contactSlice";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
-interface Props {
-    contact: Contact;
-}
-
-export default function ContactAddress({ contact }: Props) {
-    const { control, handleSubmit } = useForm();
+export default function ContactAddress() {
     const dispatch = useAppDispatch();
-
+    const { control, handleSubmit, formState: { isSubmitting } } = useForm();
+    const { user } = useAppSelector(state => state.account);
+    const { contact } = useAppSelector(state => state.contact);
     const [editAddressMode, setEditAddressMode] = useState(false);
-    const [loadingSubmit, setLoadingSubmit] = useState(false);
 
-    function handleOnSubmitAddress(data: FieldValues) {
-        setLoadingSubmit(true);
-        data.Id = 1;
-
-        agent.Contact
-            .updateAddress(data)
-            .then(contacts => dispatch(setContacts(contacts)))
-            .catch(error => console.log(error))
-            .finally(finishActions);
-
-        function finishActions() {
-            setLoadingSubmit(false);
+    async function submitForm(data: FieldValues) {
+        try {
+            await dispatch(updateContactAddress(data));
+        } catch (error) {
+            console.log(error);
+        } finally {
             setEditAddressMode(false);
         }
     }
 
+    if (!contact)
+        return <LoadingComponent />
+
     return (
         <Grid item xs={12}>
             {!editAddressMode ? (
-                <ContactAddressShow
-                    contact={contact}
-                    control={control}
-                    editAddressMode={editAddressMode}
-                    setEditAddressMode={setEditAddressMode}
-                />
+                <Grid container>
+                    <Grid item>
+                        <Typography variant="h4">{t("address")}</Typography>
+                    </Grid>
+                    {isAdmin(user) &&
+                        <Grid item>
+                            <Button onClick={() => setEditAddressMode(true)}>{t("edit")}</Button>
+                        </Grid>
+                    }
+                </Grid>
             ) : (
-                <ContactAddressEdit
-                    contact={contact}
-                    control={control}
-                    editAddressMode={editAddressMode}
-                    setEditAddressMode={setEditAddressMode}
-                    handleOnSubmitAddress={handleOnSubmitAddress}
-                    handleSubmit={handleSubmit}
-                    loadingSubmit={loadingSubmit}
-                />
+                <Grid container>
+                    <Grid item>
+                        <Typography variant="h4">{t("address")}</Typography>
+                    </Grid>
+                    <Grid item>
+                        <LoadingButton
+                            loading={isSubmitting}
+                            onClick={handleSubmit(submitForm)}
+                            color="success"
+                        >{t("save")}</LoadingButton>
+                        <Button onClick={() => setEditAddressMode(false)} color="error">{t("cancel")}</Button>
+                    </Grid>
+                </Grid>
             )}
-
+            <ContactAddressTable
+                contact={contact}
+                control={control}
+                editAddressMode={editAddressMode}
+            />
         </Grid>
     )
 }

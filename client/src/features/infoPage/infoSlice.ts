@@ -14,13 +14,13 @@ const initialState: InfoState = {
 }
 
 export const fetchInfoAsync = createAsyncThunk<Info>(
-    'basket/fetchInfoAsync',
+    'infos/fetchInfoAsync',
     async (_, thunkAPI) => {
         try {
             const infos = await agent.Info.list();
             return infos[0];
         } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data })
+            return thunkAPI.rejectWithValue({ error: error.data });
         }
     }
 )

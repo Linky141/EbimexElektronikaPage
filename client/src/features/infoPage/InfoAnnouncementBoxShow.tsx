@@ -6,6 +6,7 @@ import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
 import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
 import { useAppSelector } from "../../app/service/configureService";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
 interface Props {
     announcement: InfoAnnouncement;
@@ -27,7 +28,7 @@ export default function InfoAnnouncementBoxShow(props: Props) {
                 <Grid item xs={6} color="text.secondary">
                     {Moment(props.announcement.dateAndTime).format('DD-MM-YYYY HH:mm')}
                 </Grid>
-                {user && user.roles?.includes('Admin') &&
+                {isAdmin(user) &&
                     <Grid item xs={6} display="flex" justifyContent="flex-end" color="text.secondary">
                         <Button onClick={() => props.setEditingAnnouncementMode(props.announcement.id)}>{t("edit")}</Button>
                         <LoadingButton
