@@ -1,28 +1,65 @@
-import { Button, ButtonGroup, Container, Typography } from "@mui/material";
-import agent from "../../app/api/agent";
-import { toast } from "react-toastify";
+import useTheme from '@mui/material/styles/useTheme';
+import BearCarousel, { TBearSlideItemDataList, BearSlideImage, elClassName } from 'bear-react-carousel';
+import 'bear-react-carousel/dist/index.css';
 
 export default function HomePage() {
+    const theme = useTheme();
+
+    const CarouselButtonTheme = {
+        background: 'transparent',
+        borderWidth: 2,
+        borderStyle: 'solid',
+        borderColor: theme.palette.info.main,
+        color: theme.palette.info.main,
+        borderRadius: 20,
+    }
+
+    const images = [
+        { id: 1, imageUrl: "https://picsum.photos/400" },
+        { id: 2, imageUrl: "https://picsum.photos/400" },
+        { id: 3, imageUrl: "https://picsum.photos/400" },
+        { id: 4, imageUrl: "https://picsum.photos/400" },
+        { id: 5, imageUrl: "https://picsum.photos/400" },
+    ];
+
+    const data: TBearSlideItemDataList = images.map(row => {
+        return {
+            key: row.id,
+            children: <BearSlideImage imageUrl={row.imageUrl} style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", }} />
+        };
+    });
+
     return (
-        <Container>
-            <Typography variant="h1">
-                Test error
-            </Typography>
-            <ButtonGroup fullWidth>
-                <Button variant="contained" onClick={() => agent.TestErrors.get400Error().catch(error => console.log(error))}>400</Button>
-                <Button variant="contained" onClick={() => agent.TestErrors.get401Error().catch(error => console.log(error))}>401</Button>
-                <Button variant="contained" onClick={() => agent.TestErrors.get404Error().catch(error => console.log(error))}>404</Button>
-                <Button variant="contained" onClick={() => agent.TestErrors.get500Error().catch(error => console.log(error))}>500</Button>
-                <Button variant="contained" onClick={() => agent.TestErrors.getValidationError().catch(error => console.log(error))}>Validation</Button>
-                <Button variant="contained" onClick={() => {
-                    toast.error("error");
-                    toast.info("info");
-                    toast.dark("dark");
-                    toast.success("success");
-                    toast.warn("warn");
-                    toast.warning("warning");
-                }}>Toast</Button>
-            </ButtonGroup>
-        </Container>
+
+        <>
+            <BearCarousel
+                data={data}
+                height="200px"
+                autoPlayTime={8000}
+                isEnableAutoPlay
+                isCenteredSlides
+                isEnableLoop
+                isEnableNavButton
+                isEnablePagination
+                isEnableMouseMove
+                moveTime={3000}
+                style={{
+                    width: '100%',
+                    height: '500px'
+                }}
+                renderNavButton={(toPrev, toNext) => {
+                    return <div className={elClassName.navGroup}>
+                        <button type="button" className={elClassName.navPrevButton} onClick={toPrev} style={CarouselButtonTheme}>
+                            く
+                        </button>
+                        <button type="button" className={elClassName.navNextButton} onClick={toNext} style={CarouselButtonTheme}>
+                            く
+                        </button>
+                    </div>
+                }}
+
+            />
+        </>
+
     )
 }

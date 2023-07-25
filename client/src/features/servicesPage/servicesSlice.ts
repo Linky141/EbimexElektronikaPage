@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { Service } from "../../app/models/service";
 import agent from "../../app/api/agent";
 import { RootState } from "../../app/service/configureService";
+import { FieldValues } from "react-hook-form";
 
 interface ServiceState {
     services: Service[] | null;
@@ -19,40 +20,67 @@ export const fetchServicesAsync = createAsyncThunk<Service[]>(
         try {
             const state = thunkAPI.getState() as RootState;
             const services = await agent.Service.GetServices(state.account.user?.email!);
-            return services;
+            if (services)
+                return services;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
         }
     }
 )
 
-export const removeServiceAsync = createAsyncThunk<void, { id: number, name?: string}>(
+export const removeServiceAsync = createAsyncThunk<void, { id: number, name?: string }>(
     'services/removeServiceAsync',
-    async ({id}, thunkAPI) => {
+    async ({ id }, thunkAPI) => {
         try {
-            agent.Service.removeService(id);            
+            await agent.Service.removeService(id);
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
         }
     }
 )
 
+export const addCommentAsync = createAsyncThunk<Service, FieldValues>(
+    'services/addCommentAsync',
+    async (data, thunkAPI) => {
+        try {
+            const service = await agent.Service.addComment(data);
+            if (service)
+                return service;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+)
 
+export const updateServicesAsync = createAsyncThunk<Service, FieldValues>(
+    'services/updateServicesAsync',
+    async (data, thunkAPI) => {
+        try {
+            const service = await agent.Service.updateService(data);
+            if (service)
+                return service
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+)
 
-
-
-
-
-
-
+export const addServicesAsync = createAsyncThunk<void, FieldValues>(
+    'services/addServicesAsync',
+    async (data, thunkAPI) => {
+        try {
+            await agent.Service.addService(data);
+            await thunkAPI.dispatch(fetchServicesAsync());
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        } 
+    }
+)
 
 export const serviceSlice = createSlice({
     name: 'services',
     initialState,
     reducers: {
-        setServices: (state, action) => {
-            state.services = action.payload
-        },
         addService: (state, action) => {
             const { service } = action.payload;
             if (service === undefined)
@@ -61,8 +89,18 @@ export const serviceSlice = createSlice({
         }
     },
     extraReducers: (builder => {
+
         builder.addCase(removeServiceAsync.pending, (state, action) => {
             state.status = 'pendingRemoveItem' + action.meta.arg.id + action.meta.arg.name;
+        });
+        builder.addCase(updateServicesAsync.pending, (state, action) => {
+            state.status = 'pendingUpdateService' + action.meta.arg.id;
+        });
+        builder.addCase(addServicesAsync.pending, (state, action) => {
+            state.status = 'pendingAddingService';
+        });
+        builder.addCase(addCommentAsync.pending, (state, action) => {
+            state.status = 'pendingAddCommnet';
         });
         builder.addCase(removeServiceAsync.fulfilled, (state, action) => {
             const Id = action.meta.arg.id;
@@ -72,18 +110,24 @@ export const serviceSlice = createSlice({
             state.services?.splice(serviceIndex, 1);
             state.status = 'idle';
         });
-        builder.addCase(removeServiceAsync.rejected, (state, action) => {
-            state.status = 'idle';
-            console.log(action.payload);
-        });
-        // builder.addMatcher(isAnyOf(fetchServicesAsync.pending), (state, action) => {
-        //     state.status = 'pendingServices';
-        // });
-        builder.addMatcher(isAnyOf(fetchServicesAsync.fulfilled), (state, action) => {
+        builder.addCase(fetchServicesAsync.fulfilled, (state, action) => {
             state.services = action.payload;
             state.status = 'idle';
         });
-        builder.addMatcher(isAnyOf(fetchServicesAsync.rejected), (state, action) => {
+        builder.addCase(addServicesAsync.fulfilled, (state, action) => {
+            state.status = 'idle';
+        });
+        builder.addMatcher(isAnyOf(addCommentAsync.fulfilled, updateServicesAsync.fulfilled), (state, action) => {
+            const service = action.payload;
+            if (service === undefined)
+                return;
+            let newServices = state.services!.map(item => (
+                item.id === service.id ? service : item
+            ));
+            state.services = newServices;
+            state.status = 'idle';
+        });
+        builder.addMatcher(isAnyOf(fetchServicesAsync.rejected, addCommentAsync.rejected, removeServiceAsync.rejected, updateServicesAsync.rejected), (state, action) => {
             state.status = 'idle';
             console.log(action.payload);
         });
@@ -91,4 +135,4 @@ export const serviceSlice = createSlice({
     })
 })
 
-export const { setServices, addService } = serviceSlice.actions;
+export const { addService } = serviceSlice.actions;

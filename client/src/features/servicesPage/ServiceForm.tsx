@@ -1,12 +1,10 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Card, CardActions, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import AppTextInput from "../../app/components/AppTextInput";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
-import agent from "../../app/api/agent";
-import { setServices } from "./servicesSlice";
 import { useTranslation } from "react-i18next";
 import { EncryptPictureToArray } from "../../app/utils/Base64Utils";
 import ServicePreviewImage from "./ServicePreviewImage";
@@ -19,31 +17,29 @@ import { CreateSendDate, findServiceId } from "../../app/utils/ServicesUtils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ServiceFormSchema } from "../Validations/ServicesPageValidations";
 import AppSelectList from "../../app/components/AppSelectList";
-import LoadingComponent from "../../app/layout/LoadingComponent";
 import { User } from "../../app/models/user";
 import NotFound from "../../app/errors/NotFound";
+import { addServicesAsync, updateServicesAsync } from "./servicesSlice";
 
 
 export default function ServiceForm() {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const { id } = useParams<{ id: string }>();
     const { services } = useAppSelector(state => state.services);
-    const [pictures, setPictures] = useState<string[]>([]);
-    const [newService, setNewService] = useState(true);
-    const [loadingSubmit, setLoadingSubmit] = useState(false);
-    const [loadingUsers, setLoadingUsers] = useState(true);
-    const [statusLocal, setStatusLocal] = useState<number>(-1);
-    const [dateLocal, setDateLocal] = useState<string>('0001-01-01T00:00:00');
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const { control, handleSubmit } = useForm<any>({
+    const { control, handleSubmit, formState: { isSubmitting } } = useForm<any>({
         resolver: yupResolver(ServiceFormSchema())
     });
-    const dispatch = useAppDispatch();
-    const location = useLocation();
-    const navigate = useNavigate();
     const { t } = useTranslation();
-    const [users, setUsers] = useState<User[]>([]);
-    const { user } = useAppSelector(state => state.account);
-    const [loadingS, setLoadingS] = useState(true);
+    const { users } = useAppSelector(state => state.account);
+
+    const [pictures, setPictures] = useState<string[]>(id === '0' ? () => {return []} : () => {return findServiceId(services, id).pictureUrls.map(element => element.url)});
+    const [statusLocal, setStatusLocal] = useState<number>(id === '0' ? () => {return 0} : () => {return findServiceId(services, id).currentStatus});
+    const [dateLocal, setDateLocal] = useState<string>(id === '0' ? () => {return dayjs(new Date()).toISOString()} : () => {return findServiceId(services, id).plannedDateOfCompletion});
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [newService] = useState(id === '0');
 
     const statusItems = [
         { value: 0, label: t("notStarted") },
@@ -54,85 +50,33 @@ export default function ServiceForm() {
         { value: 5, label: t("releasedToCustomer") }
     ];
 
-    useEffect(() => {
-        if (id !== '0')
-        {
-            setNewService(false);
-            setStatusLocal(findServiceId(services, id).currentStatus);
-            setDateLocal(findServiceId(services, id).plannedDateOfCompletion);
-
-            findServiceId(services, id).pictureUrls.forEach(element => {
-                if (pictures === undefined) {
-                    setPictures([element.url]);
-                }
-                else {
-                    setPictures(previousState => [...previousState, element.url]);
-                }
-            });
-        }
-        else {
-            setStatusLocal(0);
-            setDateLocal(dayjs(new Date()).toString());
-        }
-
-        agent.Account.users()
-            .then(users => setUsers(users))
-            .catch(error => console.log(error))
-            .finally(() => setLoadingUsers(false));
-
-        agent.Service.GetServices(user!.email)
-            .then(service => dispatch(setServices(service)))
-            .catch(error => console.log(error))
-            .finally(() => setLoadingS(false))
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    function handleOnSubmitAddService(data: FieldValues) {
-        setLoadingSubmit(true);
-        data.files = pictures;
-        data.Price = data.Price * 100;
-        data.currentStatus = statusLocal * 1;
-        data.plannedDateOfCompletion = dateLocal;
-        data.clientEmail = users.find((x: User) => x.username === data.ClientUsername)?.email;
-
-        agent.Service
-            .addService(data)
-            .catch(error => console.log(error))
-            .finally(() => {
-                agent.Service.list()
-                    .then(service => dispatch(setServices(service)))
-                    .catch(error => console.log(error))
-                    .finally(finishActions)
-            });
-
-        function finishActions() {
-            setLoadingSubmit(false);
+    async function submitFormAdd(data: FieldValues) {
+        try {
+            data.files = pictures;
+            data.Price = data.Price * 100;
+            data.currentStatus = statusLocal * 1;
+            data.plannedDateOfCompletion = dateLocal;
+            data.clientEmail = users!.find((x: User) => x.username === data.ClientUsername)?.email;
+            await dispatch(addServicesAsync(data));
+        } catch (error) {
+            console.log(error);
+        } finally {
             navigate(location.state?.from || '/services');
         }
     }
 
-    function handleOnSubmitEditService(data: FieldValues) {
-        setLoadingSubmit(true);
-        data.Id = id;
-        data.files = pictures;
-        data.Price = data.Price * 100;
-        data.currentStatus = statusLocal * 1;
-        data.plannedDateOfCompletion = dateLocal;
-        data.clientEmail = users.find((x: User) => x.username === data.ClientUsername)?.email;
-
-        agent.Service
-            .updateService(data)
-            .catch(error => console.log(error))
-            .finally(() => {
-                agent.Service.list()
-                    .then(service => dispatch(setServices(service)))
-                    .catch(error => console.log(error))
-                    .finally(finishActions)
-            });
-
-        function finishActions() {
-            setLoadingSubmit(false);
+    async function submitFormEdit(data: FieldValues) {
+        try {
+            data.Id = id;
+            data.files = pictures;
+            data.Price = data.Price * 100;
+            data.currentStatus = statusLocal * 1;
+            data.plannedDateOfCompletion = dateLocal;
+            data.clientEmail = users!.find((x: User) => x.username === data.ClientUsername)?.email;
+            await dispatch(updateServicesAsync(data));
+        } catch (error) {
+            console.log(error);
+        } finally {
             navigate(location.state?.from || '/services/' + id);
         }
     }
@@ -142,12 +86,8 @@ export default function ServiceForm() {
         EncryptPictureToArray(file, setPictures);
     }
 
-    if (loadingUsers || loadingS)
-        return <LoadingComponent message='Loading form...' />
-
     if (!services?.find(x => x.id === parseInt(id!)) && !newService)
         return <NotFound />
-
     if (selectedImage)
         return <ServicePreviewImage selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
 
@@ -205,7 +145,7 @@ export default function ServiceForm() {
                                 <TableCell>
                                     <AppSelectList
                                         label={t("clientName")}
-                                        items={users.map(element => {
+                                        items={users!.map(element => {
                                             return element.username;
                                         })}
                                         name="ClientUsername"
@@ -272,20 +212,20 @@ export default function ServiceForm() {
             <Grid item xs={6}>
                 {newService ? (
                     <LoadingButton
-                        loading={loadingSubmit}
-                        onClick={handleSubmit(handleOnSubmitAddService)}
+                        loading={isSubmitting}
+                        onClick={handleSubmit(submitFormAdd)}
                         fullWidth
                         color="success"
                         variant="outlined"
                     >{t("add")}</LoadingButton>
                 ) : (
                     <LoadingButton
-                        loading={loadingSubmit}
-                        onClick={handleSubmit(handleOnSubmitEditService)}
+                        loading={isSubmitting}
+                        onClick={handleSubmit(submitFormEdit)}
                         fullWidth
                         color="success"
                         variant="outlined"
-                    >{t("submit")}</LoadingButton>
+                    >{t("save")}</LoadingButton>
                 )}
 
             </Grid>

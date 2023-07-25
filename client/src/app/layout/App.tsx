@@ -5,13 +5,12 @@ import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import { fetchContactsAsync } from "../../features/contactPage/contactSlice";
-import agent from "../api/agent";
-import { useAppDispatch, useAppSelector } from "../service/configureService";
+import { useAppDispatch } from "../service/configureService";
 import LoadingComponent from "./LoadingComponent";
 import { fetchInfoAsync } from "../../features/infoPage/infoSlice";
 import i18n from "../translations/i18n";
-import { fetchCurrentUser } from "../../features/account/accountSlice";
-import { setConfiguration } from "../../features/configurationPage/configurationSlice";
+import { fetchCurrentUser, fetchUsersAsync } from "../../features/account/accountSlice";
+import { fetchConfigurationAsync } from "../../features/configurationPage/configurationSlice";
 import { fetchServicesAsync } from "../../features/servicesPage/servicesSlice";
 
 function App() {
@@ -28,19 +27,15 @@ function App() {
     }
   })
   const [loading, setLoading] = useState(true);
-  const [loadingConf, setLoadingConf] = useState(true);
 
   const initApp = useCallback(async () => {
     try {
       await dispatch(fetchCurrentUser());
+      await dispatch(fetchUsersAsync());
       await dispatch(fetchInfoAsync());
       await dispatch(fetchContactsAsync());
       await dispatch(fetchServicesAsync());
-
-      agent.Configuration.get()
-        .then(configuration => dispatch(setConfiguration(configuration)))
-        .catch(error => console.log(error))
-        .finally(() => setLoadingConf(false))
+      await dispatch(fetchConfigurationAsync());
 
     } catch (error) {
       console.log(error);
@@ -60,7 +55,7 @@ function App() {
     i18n.changeLanguage(appLanguage ? 'en' : 'pl');
   };
 
-  if (loading || loadingConf)
+  if (loading)
     return <LoadingComponent message='Loading app...' />
 
   return (

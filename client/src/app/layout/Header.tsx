@@ -29,11 +29,6 @@ export default function Header({ darkMode, handleThemeChange, appLanguage, handl
     const { user } = useAppSelector(state => state.account);
     const { configuration } = useAppSelector(state => state.configuration)
 
-
-    function getConfig() {
-        return configuration!.find(x => x.id === 1)!;
-    }
-
     return (
         <AppBar position="static" sx={{ mb: 4 }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -53,15 +48,15 @@ export default function Header({ darkMode, handleThemeChange, appLanguage, handl
                 </Box>
                 <List sx={{ display: 'flex' }}>
 
-                    {configuration && (getConfig().infoEnabled === 0 || (getConfig().infoEnabled === 1 && isMember(user)) || isAdmin(user)) &&
+                    {configuration && (configuration.infoEnabled === 0 || (configuration.infoEnabled === 1 && isMember(user)) || isAdmin(user)) &&
                         <ListItem component={NavLink} to='/info' key='/info' sx={navStyles}>{t("info").toUpperCase()}</ListItem>
                     }
 
-                    {configuration && (getConfig().contactsEnabled === 0 || (getConfig().contactsEnabled === 1 && isMember(user)) || isAdmin(user)) &&
+                    {configuration && (configuration.contactsEnabled === 0 || (configuration.contactsEnabled === 1 && isMember(user)) || isAdmin(user)) &&
                         <ListItem component={NavLink} to='/contact' key='/contact' sx={navStyles}>{t("contact").toUpperCase()}</ListItem>
                     }
 
-                    {configuration && (getConfig().servicesEnabled === 0 || (getConfig().servicesEnabled === 1 && isMember(user)) || isAdmin(user)) &&
+                    {configuration && (configuration.servicesEnabled === 0 || (configuration.servicesEnabled === 1 && isMember(user)) || isAdmin(user)) &&
                         <>
                             {isMember(user) &&
                                 <ListItem component={NavLink} to='/services' key='/services' sx={navStyles}>{t("services").toUpperCase()}</ListItem>
