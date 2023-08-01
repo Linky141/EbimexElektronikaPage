@@ -1,5 +1,6 @@
-import { TableRow, TableCell, TextField } from "@mui/material";
+import { TableRow, TableCell } from "@mui/material";
 import { UseControllerProps, useController } from "react-hook-form";
+import AppTextInput from "../../app/components/AppTextInput";
 
 interface Props extends UseControllerProps {
     label: string;
@@ -24,11 +25,13 @@ export default function ContactAddressTableRow(props: Props) {
             ) : (
                 <TableRow>
                     <TableCell>
-                        <TextField
+                        <AppTextInput
                             {...field}
+                            content={props.content}
                             defaultValue={props.defaultValue}
                             fullWidth
                             label={props.label}
+                            control={props.control}
                         />
                     </TableCell>
                 </TableRow>

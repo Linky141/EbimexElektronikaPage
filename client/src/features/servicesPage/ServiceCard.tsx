@@ -4,11 +4,10 @@ import Moment from 'moment';
 import { Link } from "react-router-dom";
 import ServiceStatus from "./ServiceStatus";
 import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
-import { setServices } from "./servicesSlice";
-import agent from "../../app/api/agent";
+import { removeServiceAsync } from "./servicesSlice";
 import { LoadingButton } from "@mui/lab";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
 interface Props {
     service: Service;
@@ -16,21 +15,9 @@ interface Props {
 
 export default function ServiceCard({ service }: Props) {
     const dispatch = useAppDispatch();
-    const [loadingSubmit, setLoadingSubmit] = useState(false);
     const { t } = useTranslation();
     const { user } = useAppSelector(state => state.account);
-
-    function RemoveService() {
-        setLoadingSubmit(true);
-        agent.Service.removeService(service.id)
-            .catch(error => console.log(error))
-            .finally(() => {
-                agent.Service.list()
-                    .then(service => dispatch(setServices(service)))
-                    .catch(error => console.log(error))
-                    .finally(() => setLoadingSubmit(false))
-            })
-    }
+    const { status } = useAppSelector(state => state.services);
 
     return (
         <Card>
@@ -54,10 +41,18 @@ export default function ServiceCard({ service }: Props) {
             </CardContent>
             <CardActions>
                 <Button size="small" component={Link} to={`/services/${service.id}`}>{t("view")}</Button>
-                {user && user.roles?.includes('Admin') &&
+                {isAdmin(user) &&
                     <>
                         <Button size="small" component={Link} to={`/serviceFrom/${service.id}`}>{t("edit")}</Button>
-                        <LoadingButton loading={loadingSubmit} size="small" onClick={RemoveService} variant="outlined" color="error">{t("delete")}</LoadingButton>
+                        <LoadingButton
+                            loading={status === 'pendingRemoveItem' + service.id + 'rem'}
+                            size="small"
+                            onClick={() => {
+                                dispatch(removeServiceAsync({ id: service.id, name: 'rem' }));
+                            }}
+                            variant="outlined"
+                            color="error"
+                        >{t("delete")}</LoadingButton>
                     </>
                 }
             </CardActions>

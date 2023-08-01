@@ -1,30 +1,43 @@
-import { Info } from "../../app/models/info";
+import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
 import InfoAnnouncementBox from "./InfoAnnouncementBox";
-import { FieldValues, UseFormHandleSubmit, UseFormSetValue } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
+import { updateAnnouncementsAsync } from "./infoSlice";
 
 interface Props {
-    info: Info;
-    handleUpdateData: (data: FieldValues) => void;
-    setValue: UseFormSetValue<FieldValues>;
-    handleSubmit: UseFormHandleSubmit<FieldValues, undefined>;
     setEditingAnnouncementMode: React.Dispatch<React.SetStateAction<number>>;
     editingAnnouncementMode: number;
     setLoadingSubmit: React.Dispatch<React.SetStateAction<number>>;
     loadingSubmit: number;
 }
 
+
 export default function InfoAnnouncementsEdit(props: Props) {
+    const dispatch = useAppDispatch();
+    const { info } = useAppSelector(state => state.info);
+    const { handleSubmit, setValue, } = useForm();
+
+
+    async function submitForm(data: FieldValues) {
+        try {
+            data.Id = 1;
+            await dispatch(updateAnnouncementsAsync(data));
+        } catch (error) {
+            console.log(error);
+        } finally {
+            props.setLoadingSubmit(-1);
+            props.setEditingAnnouncementMode(-1);
+        }
+    }
 
     return (
         <>
-            {props.info.infoAnnouncements.map(announcement => (
+            {info && info.infoAnnouncements && info.infoAnnouncements.map(announcement => (
                 <InfoAnnouncementBox
-                    handleUpdateData={props.handleUpdateData}
-                    setValue={props.setValue}
-                    info={props.info}
+                    submitForm={submitForm}
+                    setValue={setValue}
                     key={announcement.id}
                     announcement={announcement}
-                    handleSubmit={props.handleSubmit}
+                    handleSubmit={handleSubmit}
                     setEditingAnnouncementMode={props.setEditingAnnouncementMode}
                     editingAnnouncementMode={props.editingAnnouncementMode}
                     setLoadingSubmit={props.setLoadingSubmit}

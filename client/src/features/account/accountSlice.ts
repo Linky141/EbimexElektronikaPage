@@ -8,10 +8,12 @@ import { t } from "i18next";
 
 interface AccountState {
     user: User | null;
+    users: User[] | null;
 }
 
 const initialState: AccountState = {
-    user: null
+    user: null,
+    users: null
 }
 
 export const signInUser = createAsyncThunk<User, FieldValues>(
@@ -46,6 +48,20 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     }
 )
 
+export const fetchUsersAsync = createAsyncThunk<User[]>(
+    'account/fetchUsersAsync',
+    async (_, thunkAPI) => {
+        try {
+            const users = await agent.Account.users();
+            if (users) {
+                return users;
+            }
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+)
+
 export const accountSlice = createSlice({
     name: 'account',
     initialState,
@@ -67,6 +83,9 @@ export const accountSlice = createSlice({
             localStorage.removeItem('user');
             toast.error(t('sessionExpired'));
             router.navigate('/');
+        });
+        builder.addCase(fetchUsersAsync.fulfilled, (state, action) => {
+            state.users = action.payload;
         });
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
             let claims = JSON.parse(atob(action.payload.token.split('.')[1]));

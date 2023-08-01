@@ -15,7 +15,7 @@ export default function SignedinMenuOptions() {
             <MenuItem onClick={() => {
                 dispatch(signOut());
                 toast.info(t('loggedOut'));
-                }}>Logout</MenuItem>
+                }}>{t('logout')}</MenuItem>
         </>
     );
 }

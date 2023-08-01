@@ -1,16 +1,13 @@
 import { Grid } from "@mui/material";
-import { Service } from "../../app/models/service";
 import ServiceCard from "./ServiceCard";
+import { useAppSelector } from "../../app/service/configureService";
 
-interface Props {
-    services: Service[];
-}
-
-export default function ServiceList({ services }: Props) {
+export default function ServiceList() {
+    const { services } = useAppSelector(state => state.services);
 
     return (
         <Grid container spacing={4}>
-            {services.map(service => (
+            {services && services.map(service => (
                 <Grid item xs={4} key={service.id}>
                     <ServiceCard service={service} />
                 </Grid>

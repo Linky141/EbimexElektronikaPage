@@ -1,8 +1,7 @@
 import { Grid, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
 import { useState } from "react";
-import agent from "../../app/api/agent";
-import { setConfiguration } from "./configurationSlice";
+import { fetchConfigurationAsync, setConfiguration, updateConfigurationAsync } from "./configurationSlice";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -10,17 +9,14 @@ import { LoadingButton } from "@mui/lab";
 import { FieldValues, useForm } from "react-hook-form";
 
 export default function ConfigurationPage() {
-    const { configuration } = useAppSelector(state => state.configuration);
     const dispatch = useAppDispatch();
-    const [loadingSubmit, setLoadingSubmit] = useState(false);
+    const { configuration } = useAppSelector(state => state.configuration);
+    const { t } = useTranslation();
+    const { handleSubmit, formState: { isSubmitting } } = useForm();
     const [loadingReset, setLoadingReset] = useState(false);
-    const { t } = useTranslation(); 
-    const { handleSubmit } = useForm();
 
-    function init() {
-        return agent.Configuration.get()
-            .then(configuration => dispatch(setConfiguration(configuration)))
-            .catch(error => console.log(error))
+    async function init() {
+        await dispatch(fetchConfigurationAsync());
     }
 
     function ResetSelected(info: boolean) {
@@ -32,21 +28,17 @@ export default function ConfigurationPage() {
         })
     }
 
-    function handleOnSubmit(data: FieldValues) {
-        setLoadingSubmit(true);
-        data.id = 1;
-        data.infoEnabled = getConfig().infoEnabled;
-        data.contactsEnabled = getConfig().contactsEnabled;
-        data.servicesEnabled = getConfig().servicesEnabled;
-
-        agent.Configuration
-            .post(data)
-            .catch(error => console.log(error))
-            .finally(() => {
-                init().finally(() => {
-                    setLoadingSubmit(false);
-                })
-            });
+    async function submitForm(data: FieldValues) {
+        try {
+            data.infoEnabled = configuration!.infoEnabled;
+            data.contactsEnabled = configuration!.contactsEnabled;
+            data.servicesEnabled = configuration!.servicesEnabled;
+            await dispatch(updateConfigurationAsync(data));
+        } catch (error) {
+            console.log(error);
+        } finally {
+            init();
+        }
     }
 
     const statusItems = [
@@ -60,15 +52,11 @@ export default function ConfigurationPage() {
         { value: 2, label: t("disabled") }
     ];
 
-    function getConfig() {
-        return configuration!.find(x => x.id === 1)!;
-    }
-
     return (
         <Grid container>
             <Grid item xs={12} marginBottom={3}>
-                <LoadingButton variant="outlined" color="success" style={{width: '65%', margin: 5}}  loading={loadingSubmit} onClick={handleSubmit(handleOnSubmit)}>{t('submit')}</LoadingButton>
-                <LoadingButton variant="outlined" color="secondary" style={{width: '25%', margin: 5}}   loading={loadingReset} onClick={() => ResetSelected(true)}>{t('reset')}</LoadingButton>
+                <LoadingButton variant="outlined" color="success" style={{ width: '65%', margin: 5 }} loading={isSubmitting} onClick={handleSubmit(submitForm)}>{t('submit')}</LoadingButton>
+                <LoadingButton variant="outlined" color="secondary" style={{ width: '25%', margin: 5 }} loading={loadingReset} onClick={() => ResetSelected(true)}>{t('reset')}</LoadingButton>
             </Grid>
             <Grid item xs={12}>
                 <Typography variant="h4" marginBottom={1}>{t('accesses')}</Typography>
@@ -77,14 +65,13 @@ export default function ConfigurationPage() {
                         <Typography variant="h6">{t('info')}</Typography>
                         <RadioButtonGroup
                             options={statusItems}
-                            selectedValue={getConfig().infoEnabled}
+                            selectedValue={configuration!.infoEnabled}
                             onChange={(e) =>
-                                dispatch(setConfiguration([{
-                                    id: 1,
+                                dispatch(setConfiguration({
                                     infoEnabled: parseInt(e.target.value),
-                                    contactsEnabled: getConfig().contactsEnabled,
-                                    servicesEnabled: getConfig().servicesEnabled
-                                }]))
+                                    contactsEnabled: configuration!.contactsEnabled,
+                                    servicesEnabled: configuration!.servicesEnabled
+                                }))
                             }
                         />
                     </Grid>
@@ -92,14 +79,13 @@ export default function ConfigurationPage() {
                         <Typography variant="h6">{t('contact')}</Typography>
                         <RadioButtonGroup
                             options={statusItems}
-                            selectedValue={getConfig().contactsEnabled}
+                            selectedValue={configuration!.contactsEnabled}
                             onChange={(e) =>
-                                dispatch(setConfiguration([{
-                                    id: 1,
-                                    infoEnabled: getConfig().infoEnabled,
+                                dispatch(setConfiguration({
+                                    infoEnabled: configuration!.infoEnabled,
                                     contactsEnabled: parseInt(e.target.value),
-                                    servicesEnabled: getConfig().servicesEnabled
-                                }]))
+                                    servicesEnabled: configuration!.servicesEnabled
+                                }))
                             }
                         />
                     </Grid>
@@ -107,14 +93,13 @@ export default function ConfigurationPage() {
                         <Typography variant="h6">{t('services')}</Typography>
                         <RadioButtonGroup
                             options={statusItemsNoAll}
-                            selectedValue={getConfig().servicesEnabled}
+                            selectedValue={configuration!.servicesEnabled}
                             onChange={(e) =>
-                                dispatch(setConfiguration([{
-                                    id: 1,
-                                    infoEnabled: getConfig().infoEnabled,
-                                    contactsEnabled: getConfig().contactsEnabled,
+                                dispatch(setConfiguration({
+                                    infoEnabled: configuration!.infoEnabled,
+                                    contactsEnabled: configuration!.contactsEnabled,
                                     servicesEnabled: parseInt(e.target.value)
-                                }]))
+                                }))
                             }
                         />
                     </Grid>

@@ -100,6 +100,8 @@ i18n.use(initReactI18next).init({
                 disabled: "Disabled",
                 reset: "Reset",
                 accesses: "Accesses",
+                save: "Save",
+                logout: "Logout",
             }
         },
         pl: {
@@ -194,6 +196,8 @@ i18n.use(initReactI18next).init({
                 disabled: "Wyłączone",
                 reset: "Reset",
                 accesses: "Dostęp",
+                save: "Zapisz",
+                logout: "Wyloguj",
             }
         },
     }

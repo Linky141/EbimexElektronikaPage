@@ -14,9 +14,9 @@ interface Props {
 }
 
 export default function ContactContactsTableCustomsRow(props: Props) {
+    const { t } = useTranslation();
     const [nameState, setNameState] = useState<string>(props.customContact.name);
     const [contentState, setContentState] = useState<string>(props.customContact.content);
-    const { t } = useTranslation();
 
     function submitEditCustomContact(id: number, name: string, content: string) {
         const tmp: ContactCustom[] = props.customContacts.map(contact => {
@@ -30,7 +30,7 @@ export default function ContactContactsTableCustomsRow(props: Props) {
         props.setEditingCustomContact(-1);
     }
 
-    function removeCustomContact(id: number) {
+    function submitRemoveCustomContact(id: number) {
         props.setCustomContacts(
             props.customContacts.filter(a =>
                 a.id !== id
@@ -48,7 +48,7 @@ export default function ContactContactsTableCustomsRow(props: Props) {
                         {(props.editingCustomContact === -1 && !props.addingNewCustomContact) ? (
                             <>
                                 <Button onClick={() => props.setEditingCustomContact(props.customContact.id)}>{t("edit")}</Button>
-                                <Button onClick={() => removeCustomContact(props.customContact.id)} color="error" variant="outlined">{t("delete")}</Button>
+                                <Button onClick={() => submitRemoveCustomContact(props.customContact.id)} color="error" variant="outlined">{t("delete")}</Button>
                             </>
                         ) : (<></>)}
 
@@ -80,7 +80,7 @@ export default function ContactContactsTableCustomsRow(props: Props) {
                             else {
                                 submitEditCustomContact(props.customContact.id, nameState, contentState);
                             }
-                        }} color="success">{t("submit")}</Button>
+                        }} color="success">{t("save")}</Button>
                         <Button onClick={() => props.setEditingCustomContact(-1)} color="error">{t("cancel")}</Button>
                     </TableCell>
                 </TableRow>

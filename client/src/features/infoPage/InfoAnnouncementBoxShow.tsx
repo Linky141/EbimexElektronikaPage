@@ -6,12 +6,13 @@ import { LoadingButton } from "@mui/lab";
 import { useTranslation } from "react-i18next";
 import AppShowTextMultiline from "../../app/components/AppShowTextMultiline";
 import { useAppSelector } from "../../app/service/configureService";
+import { isAdmin } from "../../app/utils/RolesUtils";
 
 interface Props {
     announcement: InfoAnnouncement;
     setEditingAnnouncementMode: (id: number) => void;
     handleSubmit: UseFormHandleSubmit<FieldValues, undefined>;
-    handleUpdateData: (data: FieldValues) => void;
+    submitForm: (data: FieldValues) => void;
     setLoadingSubmit: (data: number) => void;
     loadingSubmit: number;
     handleDeleteAnnouncement: () => void;
@@ -27,7 +28,7 @@ export default function InfoAnnouncementBoxShow(props: Props) {
                 <Grid item xs={6} color="text.secondary">
                     {Moment(props.announcement.dateAndTime).format('DD-MM-YYYY HH:mm')}
                 </Grid>
-                {user && user.roles?.includes('Admin') &&
+                {isAdmin(user) &&
                     <Grid item xs={6} display="flex" justifyContent="flex-end" color="text.secondary">
                         <Button onClick={() => props.setEditingAnnouncementMode(props.announcement.id)}>{t("edit")}</Button>
                         <LoadingButton
@@ -35,7 +36,7 @@ export default function InfoAnnouncementBoxShow(props: Props) {
                             onClick={() => {
                                 props.setLoadingSubmit(props.announcement.id);
                                 props.handleDeleteAnnouncement();
-                                props.handleSubmit(props.handleUpdateData)();
+                                props.handleSubmit(props.submitForm)();
                             }}
                             color="error"
                             variant="outlined">{t("delete")}</LoadingButton>
