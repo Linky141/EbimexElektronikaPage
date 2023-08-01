@@ -1,9 +1,13 @@
 import useTheme from '@mui/material/styles/useTheme';
 import BearCarousel, { TBearSlideItemDataList, BearSlideImage, elClassName } from 'bear-react-carousel';
 import 'bear-react-carousel/dist/index.css';
+import AppShowTextMultiline from '../../app/components/AppShowTextMultiline';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 
 export default function HomePage() {
     const theme = useTheme();
+    const {t} = useTranslation();
 
     const CarouselButtonTheme = {
         background: 'transparent',
@@ -16,10 +20,10 @@ export default function HomePage() {
 
     const images = [
         { id: 1, imageUrl: "https://picsum.photos/400" },
-        { id: 2, imageUrl: "https://picsum.photos/400" },
-        { id: 3, imageUrl: "https://picsum.photos/400" },
-        { id: 4, imageUrl: "https://picsum.photos/400" },
-        { id: 5, imageUrl: "https://picsum.photos/400" },
+        { id: 2, imageUrl: "https://picsum.photos/1000" },
+        { id: 3, imageUrl: "https://picsum.photos/500" },
+        { id: 4, imageUrl: "https://picsum.photos/600" },
+        { id: 5, imageUrl: "https://picsum.photos/200" },
     ];
 
     const data: TBearSlideItemDataList = images.map(row => {
@@ -32,6 +36,8 @@ export default function HomePage() {
     return (
 
         <>
+            <Button>{t('edit')}</Button>
+            <AppShowTextMultiline content='Test test test test test test test test test test test' variant='h3'/>
             <BearCarousel
                 data={data}
                 height="200px"
@@ -57,8 +63,8 @@ export default function HomePage() {
                         </button>
                     </div>
                 }}
-
             />
+            <AppShowTextMultiline content='Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test' variant='h4'/>
         </>
 
     )
