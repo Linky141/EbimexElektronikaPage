@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(ServiceContext))]
-    partial class ServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20230802193816_addedHomePage")]
+    partial class addedHomePage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
@@ -211,32 +214,13 @@ namespace API.Data.Migrations
                     b.ToTable("InfoAnnouncement");
                 });
 
-            modelBuilder.Entity("API.Entities.PictureUrlHomePage", b =>
+            modelBuilder.Entity("API.Entities.PictureUrl", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("HomePageId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("PublicId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HomePageId");
-
-                    b.ToTable("PictureUrlHomePage");
-                });
-
-            modelBuilder.Entity("API.Entities.PictureUrlService", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("HomePageId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PublicId")
@@ -250,9 +234,11 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HomePageId");
+
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("PictureUrlService");
+                    b.ToTable("PictureUrl");
                 });
 
             modelBuilder.Entity("API.Entities.Service", b =>
@@ -379,13 +365,13 @@ namespace API.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8d08099a-4d4e-4d48-aa6c-9c2c8445c33c",
+                            Id = "ff5fcd07-ac22-446c-b093-174e8597bc40",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
-                            Id = "37536715-3dfd-4600-bc6f-0b3bae12f28c",
+                            Id = "b2ee132a-009d-485e-ac31-c8824b85c5e2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -526,19 +512,12 @@ namespace API.Data.Migrations
                     b.Navigation("Info");
                 });
 
-            modelBuilder.Entity("API.Entities.PictureUrlHomePage", b =>
+            modelBuilder.Entity("API.Entities.PictureUrl", b =>
                 {
-                    b.HasOne("API.Entities.HomePage", "HomePage")
+                    b.HasOne("API.Entities.HomePage", null)
                         .WithMany("PictureUrls")
-                        .HasForeignKey("HomePageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HomePageId");
 
-                    b.Navigation("HomePage");
-                });
-
-            modelBuilder.Entity("API.Entities.PictureUrlService", b =>
-                {
                     b.HasOne("API.Entities.Service", "Service")
                         .WithMany("PictureUrls")
                         .HasForeignKey("ServiceId")

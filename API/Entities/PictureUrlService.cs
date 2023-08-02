@@ -1,6 +1,6 @@
 namespace API.Entities;
 
-public class PictureUrl
+public class PictureUrlService
 {
     public int Id { get; set; }
     public string Url { get; set; }

@@ -8,10 +8,12 @@ public class MappingProfiles : AutoMapper.Profile
         CreateMap<DTOs.UpdateServiceDto, Entities.Service>();
         CreateMap<DTOs.AddNewCommentDto, Entities.Service>();
         CreateMap<DTOs.AddServiceDto, Entities.Service>();
-        CreateMap<Entities.PictureUrl, DTOs.PictureUrlDto>();
-        CreateMap<DTOs.PictureUrlDto, Entities.PictureUrl>();
+        CreateMap<Entities.PictureUrlService, DTOs.PictureUrlDto>();
+        CreateMap<DTOs.PictureUrlDto, Entities.PictureUrlService>();
         CreateMap<Entities.Comment, DTOs.CommentDto>();
         CreateMap<DTOs.CommentDto, Entities.Comment>();
+        CreateMap<Entities.HomePage, DTOs.HomePageDto>();
+        CreateMap<Entities.PictureUrlHomePage, DTOs.PictureUrlDto>();
 
 
         CreateMap<Entities.Contact, DTOs.ContactDto>();

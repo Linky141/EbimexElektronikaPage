@@ -6,7 +6,7 @@ public class Service
     public string ClientEmail { get; set; }
     public string ClientUsername { get; set; }
     public string Name { get; set; }
-    public List<PictureUrl> PictureUrls { get; set; } = new();
+    public List<PictureUrlService> PictureUrls { get; set; } = new();
     public StatusOfService CurrentStatus { get; set; } = StatusOfService.NotStarted;
     public int Price { get; set; }
     public DateTime PlannedDateOfCompletion { get; set; }
