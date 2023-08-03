@@ -12,6 +12,7 @@ import i18n from "../translations/i18n";
 import { fetchCurrentUser, fetchUsersAsync } from "../../features/account/accountSlice";
 import { fetchConfigurationAsync } from "../../features/configurationPage/configurationSlice";
 import { fetchServicesAsync } from "../../features/servicesPage/servicesSlice";
+import { fetchHomePageAsync } from "../../features/homePage/homePageSlice";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -36,7 +37,7 @@ function App() {
       await dispatch(fetchContactsAsync());
       await dispatch(fetchServicesAsync());
       await dispatch(fetchConfigurationAsync());
-
+      await dispatch(fetchHomePageAsync())
     } catch (error) {
       console.log(error);
     }

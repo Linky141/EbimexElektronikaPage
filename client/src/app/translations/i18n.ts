@@ -102,6 +102,7 @@ i18n.use(initReactI18next).init({
                 accesses: "Accesses",
                 save: "Save",
                 logout: "Logout",
+                header: "Header",
             }
         },
         pl: {
@@ -198,6 +199,7 @@ i18n.use(initReactI18next).init({
                 accesses: "Dostęp",
                 save: "Zapisz",
                 logout: "Wyloguj",
+                header: "Nagłówek",
             }
         },
     }

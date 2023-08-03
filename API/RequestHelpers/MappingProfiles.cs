@@ -14,7 +14,7 @@ public class MappingProfiles : AutoMapper.Profile
         CreateMap<DTOs.CommentDto, Entities.Comment>();
         CreateMap<Entities.HomePage, DTOs.HomePageDto>();
         CreateMap<Entities.PictureUrlHomePage, DTOs.PictureUrlDto>();
-
+        CreateMap<DTOs.UpdateHomePageDto, Entities.HomePage>();
 
         CreateMap<Entities.Contact, DTOs.ContactDto>();
         CreateMap<Entities.ContactCustom, DTOs.ContactCustomDto>();

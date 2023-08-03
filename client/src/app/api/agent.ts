@@ -97,7 +97,12 @@ const Account = {
 
 const Configuration = {
     get: () => requests.get('configuration'),
-    post: (body: any) => requests.post(`configuration`, body),
+    post: (body: any) => requests.post('configuration', body),
+}
+
+const HomePage = {
+    get: () => requests.get('HomePage'),
+    update: (body: any) => requests.put('HomePage/UpdateHomePage', body),
 }
 
 const agent = {
@@ -106,7 +111,8 @@ const agent = {
     Service,
     TestErrors,
     Account,
-    Configuration
+    Configuration,
+    HomePage
 }
 
 export default agent;
