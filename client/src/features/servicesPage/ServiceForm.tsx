@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/service/configureService";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, Card, CardActions, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import AppTextInput from "../../app/components/AppTextInput";
 import { FieldValues, useForm } from "react-hook-form";
@@ -20,13 +20,14 @@ import AppSelectList from "../../app/components/AppSelectList";
 import { User } from "../../app/models/user";
 import NotFound from "../../app/errors/NotFound";
 import { addServicesAsync, updateServicesAsync } from "./servicesSlice";
+import { fetchUsersAsync } from "../account/accountSlice";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 
 export default function ServiceForm() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-
     const { id } = useParams<{ id: string }>();
     const { services } = useAppSelector(state => state.services);
     const { control, handleSubmit, formState: { isSubmitting } } = useForm<any>({
@@ -34,12 +35,12 @@ export default function ServiceForm() {
     });
     const { t } = useTranslation();
     const { users } = useAppSelector(state => state.account);
-
-    const [pictures, setPictures] = useState<string[]>(id === '0' ? () => {return []} : () => {return findServiceId(services, id).pictureUrls.map(element => element.url)});
-    const [statusLocal, setStatusLocal] = useState<number>(id === '0' ? () => {return 0} : () => {return findServiceId(services, id).currentStatus});
-    const [dateLocal, setDateLocal] = useState<string>(id === '0' ? () => {return dayjs(new Date()).toISOString()} : () => {return findServiceId(services, id).plannedDateOfCompletion});
+    const [pictures, setPictures] = useState<string[]>(id === '0' ? () => { return [] } : () => { return findServiceId(services, id).pictureUrls.map(element => element.url) });
+    const [statusLocal, setStatusLocal] = useState<number>(id === '0' ? () => { return 0 } : () => { return findServiceId(services, id).currentStatus });
+    const [dateLocal, setDateLocal] = useState<string>(id === '0' ? () => { return dayjs(new Date()).toISOString() } : () => { return findServiceId(services, id).plannedDateOfCompletion });
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [newService] = useState(id === '0');
+    const [loadingUsers, setLoadingUsers] = useState(true);
 
     const statusItems = [
         { value: 0, label: t("notStarted") },
@@ -49,6 +50,18 @@ export default function ServiceForm() {
         { value: 4, label: t("readyToBePickedUp") },
         { value: 5, label: t("releasedToCustomer") }
     ];
+
+    const initUsers = useCallback(async () => {
+        try {
+            await dispatch(fetchUsersAsync());
+        } catch (error) {
+            console.log(error);
+        }
+    }, [dispatch])
+
+    useEffect(() => {
+        initUsers().then(() => setLoadingUsers(false));
+    }, [initUsers])
 
     async function submitFormAdd(data: FieldValues) {
         try {
@@ -86,6 +99,8 @@ export default function ServiceForm() {
         EncryptPictureToArray(file, setPictures);
     }
 
+    if (loadingUsers)
+        return <LoadingComponent />
     if (!services?.find(x => x.id === parseInt(id!)) && !newService)
         return <NotFound />
     if (selectedImage)

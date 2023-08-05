@@ -45,7 +45,7 @@ public static class DbInitializer
             new Entities.Configuration{
                 ContactsEnabled = Entities.ConfigurationEnabledSections.All,
                 InfoEnabled = Entities.ConfigurationEnabledSections.All,
-                ServicesEnabled = Entities.ConfigurationEnabledSections.All
+                ServicesEnabled = Entities.ConfigurationEnabledSections.Members
             }
         };
 

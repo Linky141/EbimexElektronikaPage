@@ -86,6 +86,9 @@ export const serviceSlice = createSlice({
             if (service === undefined)
                 return;
             state.services?.push(service);
+        },
+        clearServices: (state) => {
+            state.services = null;
         }
     },
     extraReducers: (builder => {
@@ -135,4 +138,4 @@ export const serviceSlice = createSlice({
     })
 })
 
-export const { addService } = serviceSlice.actions;
+export const { addService, clearServices } = serviceSlice.actions;

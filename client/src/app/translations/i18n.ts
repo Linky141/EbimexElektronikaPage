@@ -103,6 +103,7 @@ i18n.use(initReactI18next).init({
                 save: "Save",
                 logout: "Logout",
                 header: "Header",
+                nameCanContainsOnlylettersAndDigits: "Name can contains only letters and digits",
             }
         },
         pl: {
@@ -200,6 +201,7 @@ i18n.use(initReactI18next).init({
                 save: "Zapisz",
                 logout: "Wyloguj",
                 header: "Nagłówek",
+                nameCanContainsOnlylettersAndDigits: "Nazwa może zawierać tylko litery i cyfry",
             }
         },
     }
