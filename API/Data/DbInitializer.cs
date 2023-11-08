@@ -45,7 +45,7 @@ public static class DbInitializer
             new Entities.Configuration{
                 ContactsEnabled = Entities.ConfigurationEnabledSections.All,
                 InfoEnabled = Entities.ConfigurationEnabledSections.All,
-                ServicesEnabled = Entities.ConfigurationEnabledSections.All
+                ServicesEnabled = Entities.ConfigurationEnabledSections.Members
             }
         };
 
@@ -59,10 +59,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -78,10 +78,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.Opened,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -97,10 +97,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.ReadyToBePickedUp,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -116,10 +116,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.ReleasedToCustomer,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -135,10 +135,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.Testing,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -154,10 +154,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.WaitingForComponents,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -173,10 +173,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -192,10 +192,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -211,10 +211,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -230,10 +230,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -249,10 +249,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -268,10 +268,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -287,10 +287,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -306,10 +306,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -325,10 +325,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -344,10 +344,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -363,10 +363,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -382,10 +382,10 @@ public static class DbInitializer
                 CurrentStatus = Entities.StatusOfService.NotStarted,
                 Price = 1000,
                 PlannedDateOfCompletion = DateTime.UtcNow,
-                PictureUrls = new List<Entities.PictureUrl> {
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"},
-                    new Entities.PictureUrl {Url = "https://picsum.photos/2000"}
+                PictureUrls = new List<Entities.PictureUrlService> {
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"},
+                    new Entities.PictureUrlService {Url = "https://picsum.photos/2000"}
                 },
                 Comments = new List<Entities.Comment> {
                     new Entities.Comment {Content = "Comment 1 content", DateTime = DateTime.UtcNow, User="Sample user"},
@@ -439,6 +439,22 @@ public static class DbInitializer
             }
         };
 
+        var homePages = new List<Entities.HomePage>
+        {
+            new Entities.HomePage{
+                Description = "Description",
+                Header = "Header",
+                PictureUrls = new List<Entities.PictureUrlHomePage> {
+                    new Entities.PictureUrlHomePage {Url = "https://picsum.photos/400"},
+                    new Entities.PictureUrlHomePage {Url = "https://picsum.photos/1000"},
+                    new Entities.PictureUrlHomePage {Url = "https://picsum.photos/500"},
+                    new Entities.PictureUrlHomePage {Url = "https://picsum.photos/600"},
+                    new Entities.PictureUrlHomePage {Url = "https://picsum.photos/200"},
+                    new Entities.PictureUrlHomePage {Url = "https://picsum.photos/100"}
+                },
+            }
+        };
+
         foreach (var service in services)
         {
             serviceContext.Services.Add(service);
@@ -457,6 +473,11 @@ public static class DbInitializer
         foreach (var configuration in configurations)
         {
             serviceContext.Configurations.Add(configuration);
+        }
+
+        foreach (var homePage in homePages)
+        {
+            serviceContext.HomePages.Add(homePage);
         }
 
         serviceContext.SaveChanges();

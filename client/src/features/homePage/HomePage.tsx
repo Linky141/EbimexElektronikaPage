@@ -4,10 +4,15 @@ import 'bear-react-carousel/dist/index.css';
 import AppShowTextMultiline from '../../app/components/AppShowTextMultiline';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
+import { useAppSelector } from '../../app/service/configureService';
+import { isAdmin } from '../../app/utils/RolesUtils';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
     const theme = useTheme();
-    const {t} = useTranslation();
+    const { t } = useTranslation();
+    const { homePage } = useAppSelector(state => state.homePage);
+    const { user } = useAppSelector(state => state.account);
 
     const CarouselButtonTheme = {
         background: 'transparent',
@@ -18,30 +23,23 @@ export default function HomePage() {
         borderRadius: 20,
     }
 
-    const images = [
-        { id: 1, imageUrl: "https://picsum.photos/400" },
-        { id: 2, imageUrl: "https://picsum.photos/1000" },
-        { id: 3, imageUrl: "https://picsum.photos/500" },
-        { id: 4, imageUrl: "https://picsum.photos/600" },
-        { id: 5, imageUrl: "https://picsum.photos/200" },
-    ];
-
-    const data: TBearSlideItemDataList = images.map(row => {
+    const data: TBearSlideItemDataList = homePage!.pictureUrls.map(row => {
         return {
             key: row.id,
-            children: <BearSlideImage imageUrl={row.imageUrl} style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", }} />
+            children: <BearSlideImage imageUrl={row.url} style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", }} />
         };
     });
 
     return (
-
         <>
-            <Button>{t('edit')}</Button>
-            <AppShowTextMultiline content='Test test test test test test test test test test test' variant='h3'/>
+            {isAdmin(user) &&
+                <Button size="small" component={Link} to={`/homePageEdit`}>{t("edit")}</Button>
+            }
+            <AppShowTextMultiline content={homePage!.header} variant='h3' containerStyle={{paddingBottom: 20}}/>
             <BearCarousel
                 data={data}
                 height="200px"
-                autoPlayTime={8000}
+                autoPlayTime={6000}
                 isEnableAutoPlay
                 isCenteredSlides
                 isEnableLoop
@@ -64,8 +62,7 @@ export default function HomePage() {
                     </div>
                 }}
             />
-            <AppShowTextMultiline content='Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test' variant='h4'/>
+            <AppShowTextMultiline content={homePage!.description} variant='h4' containerStyle={{paddingTop: 20}}/>
         </>
-
     )
 }

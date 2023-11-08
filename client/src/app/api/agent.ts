@@ -6,7 +6,7 @@ import { t } from "i18next";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
-axios.defaults.baseURL = "http://localhost:5000/api/";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -19,7 +19,8 @@ axios.interceptors.request.use(async config => {
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep();
+    if (process.env.NODE_ENV === 'development')
+        await sleep();
     return response;
 }, (error: AxiosError) => {
     const { data, status } = error.response as AxiosResponse;
@@ -97,7 +98,12 @@ const Account = {
 
 const Configuration = {
     get: () => requests.get('configuration'),
-    post: (body: any) => requests.post(`configuration`, body),
+    post: (body: any) => requests.post('configuration', body),
+}
+
+const HomePage = {
+    get: () => requests.get('HomePage'),
+    update: (body: any) => requests.put('HomePage/UpdateHomePage', body),
 }
 
 const agent = {
@@ -106,7 +112,8 @@ const agent = {
     Service,
     TestErrors,
     Account,
-    Configuration
+    Configuration,
+    HomePage
 }
 
 export default agent;

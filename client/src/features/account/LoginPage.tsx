@@ -10,8 +10,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import { useAppDispatch } from '../../app/service/configureService';
-import { signInUser } from './accountSlice';
+import { fetchCurrentUser, signInUser } from './accountSlice';
 import { useTranslation } from 'react-i18next';
+import { fetchServicesAsync } from '../servicesPage/servicesSlice';
 
 export default function LoginPage() {
     const { t } = useTranslation();
@@ -27,6 +28,9 @@ export default function LoginPage() {
             navigate('/services');
         } catch (error) {
             console.log(error);
+        } finally {
+            await dispatch(fetchCurrentUser());
+            await dispatch(fetchServicesAsync());
         }
     }
 

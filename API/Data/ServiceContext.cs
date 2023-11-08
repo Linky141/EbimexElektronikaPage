@@ -9,6 +9,7 @@ public class ServiceContext : IdentityDbContext<Entities.User>
     public DbSet<Entities.Contact> Contacts { get; set; }
     public DbSet<Entities.Info> Infos { get; set; }
     public DbSet<Entities.Configuration> Configurations { get; set; }
+      public DbSet<Entities.HomePage> HomePages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

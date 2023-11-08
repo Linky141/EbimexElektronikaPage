@@ -67,7 +67,7 @@ public class ServicesController : BaseApiController
             if (!string.IsNullOrEmpty(file.PublicId) && !serviceDto.Files.Contains(file.Url))
                 await imageService.DeleteImageAsync(file.PublicId);
         }
-        List<Entities.PictureUrl> tmpPicUrl = new();
+        List<Entities.PictureUrlService> tmpPicUrl = new();
 
         foreach (var file in serviceDto.Files)
         {
@@ -86,7 +86,7 @@ public class ServicesController : BaseApiController
                     var imageResult = await imageService.AddImageAsync(iFile);
                     if (imageResult.Error != null)
                         return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
-                    Entities.PictureUrl url = new Entities.PictureUrl
+                    Entities.PictureUrlService url = new Entities.PictureUrlService
                     {
                         PublicId = imageResult.PublicId,
                         Url = imageResult.SecureUrl.ToString()
@@ -139,7 +139,7 @@ public class ServicesController : BaseApiController
                 var imageResult = await imageService.AddImageAsync(iFile);
                 if (imageResult.Error != null)
                     return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
-                Entities.PictureUrl url = new Entities.PictureUrl
+                Entities.PictureUrlService url = new Entities.PictureUrlService
                 {
                     PublicId = imageResult.PublicId,
                     Url = imageResult.SecureUrl.ToString()

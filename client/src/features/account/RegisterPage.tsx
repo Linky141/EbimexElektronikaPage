@@ -55,7 +55,13 @@ export default function RegisterPage() {
                     fullWidth
                     label={t('username')}
                     autoFocus
-                    {...register('username', { required: t('usernameIsRequired') })}
+                    {...register('username', { 
+                        required: t('usernameIsRequired'),  
+                        pattern: {
+                            value: /^([a-zA-Z0-9]){1,99}$/,
+                            message: t('nameCanContainsOnlylettersAndDigits')
+                        }
+                    })}
                     error={!!errors.username}
                     helperText={errors.username?.message as string}
                 />

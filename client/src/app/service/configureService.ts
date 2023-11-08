@@ -5,6 +5,7 @@ import { serviceSlice } from "../../features/servicesPage/servicesSlice";
 import { accountSlice } from "../../features/account/accountSlice";
 import { configurationSlice } from "../../features/configurationPage/configurationSlice";
 import { contactSlice } from "../../features/contactPage/contactSlice";
+import { homePageSlice } from "../../features/homePage/homePageSlice";
 
 export const service = configureStore({
     reducer: {
@@ -12,7 +13,8 @@ export const service = configureStore({
         info: infoSlice.reducer,
         services: serviceSlice.reducer,
         account: accountSlice.reducer,
-        configuration: configurationSlice.reducer
+        configuration: configurationSlice.reducer,
+        homePage: homePageSlice.reducer
     }
 })
 

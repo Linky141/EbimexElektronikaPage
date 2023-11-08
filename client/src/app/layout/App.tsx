@@ -9,9 +9,10 @@ import { useAppDispatch } from "../service/configureService";
 import LoadingComponent from "./LoadingComponent";
 import { fetchInfoAsync } from "../../features/infoPage/infoSlice";
 import i18n from "../translations/i18n";
-import { fetchCurrentUser, fetchUsersAsync } from "../../features/account/accountSlice";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 import { fetchConfigurationAsync } from "../../features/configurationPage/configurationSlice";
 import { fetchServicesAsync } from "../../features/servicesPage/servicesSlice";
+import { fetchHomePageAsync } from "../../features/homePage/homePageSlice";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -31,12 +32,11 @@ function App() {
   const initApp = useCallback(async () => {
     try {
       await dispatch(fetchCurrentUser());
-      await dispatch(fetchUsersAsync());
       await dispatch(fetchInfoAsync());
       await dispatch(fetchContactsAsync());
       await dispatch(fetchServicesAsync());
       await dispatch(fetchConfigurationAsync());
-
+      await dispatch(fetchHomePageAsync())
     } catch (error) {
       console.log(error);
     }

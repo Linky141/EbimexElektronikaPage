@@ -1,0 +1,8 @@
+Postgres cluster ebimex-service-page-db created
+  Username:    postgres
+  Password:    mlXzw7X9dkplsjR
+  Hostname:    ebimex-service-page-db.internal
+  Flycast:     fdaa:2:51e7:0:1::5
+  Proxy port:  5432
+  Postgres port:  5433
+  Connection string: postgres://postgres:mlXzw7X9dkplsjR@ebimex-service-page-db.flycast:5432

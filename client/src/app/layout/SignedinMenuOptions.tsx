@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { signOut } from '../../features/account/accountSlice';
 import { useAppDispatch } from '../service/configureService';
 import { toast } from 'react-toastify';
+import { clearServices } from '../../features/servicesPage/servicesSlice';
 
 
 export default function SignedinMenuOptions() {
@@ -14,6 +15,7 @@ export default function SignedinMenuOptions() {
         <>
             <MenuItem onClick={() => {
                 dispatch(signOut());
+                dispatch(clearServices());
                 toast.info(t('loggedOut'));
                 }}>{t('logout')}</MenuItem>
         </>

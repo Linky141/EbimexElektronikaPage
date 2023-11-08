@@ -11,23 +11,30 @@ import ServiceForm from "../../features/servicesPage/ServiceForm";
 import LoginPage from "../../features/account/LoginPage";
 import RegisterPage from "../../features/account/RegisterPage";
 import ConfigurationPage from "../../features/configurationPage/ConfigurationPage";
+import HomePageForm from "../../features/homePage/HomePageForm";
+import RequireAuth from "./RequireAuth";
 
 export const router = createBrowserRouter([
     {
         path: '/',
         element: <App/>,
         children:[
+            {element: <RequireAuth/>, children: [
+                {path: 'services', element: <ServicesPage/>},
+                {path: 'services/:id', element: <ServiceDetails/>},
+            ]},
+            {element: <RequireAuth roles={['Admin']}/>, children: [
+                {path: 'configuration', element: <ConfigurationPage/>},
+                {path: 'homePageEdit', element: <HomePageForm/>},
+                {path: 'serviceFrom/:id', element: <ServiceForm/>},
+            ]},
             {path: '', element: <HomePage/>},
             {path: 'contact', element: <ContactPage/>},
             {path: 'info', element: <InfoPage/>},
-            {path: 'services', element: <ServicesPage/>},
-            {path: 'services/:id', element: <ServiceDetails/>},
             {path: 'server-error', element: <ServerError/>},
             {path: 'not-found', element: <NotFound/>},
-            {path: 'serviceFrom/:id', element: <ServiceForm/>},
             {path: 'login', element: <LoginPage/>},
             {path: 'register', element: <RegisterPage/>},
-            {path: 'configuration', element: <ConfigurationPage/>},
             {path: '*', element: <Navigate replace to='not-found'/> },
         ]
     }
