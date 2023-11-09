@@ -24,7 +24,7 @@ public class ServicesController : BaseApiController
         return Ok(services.Select(service => mapper.Map<DTOs.ServiceDto>(service)).ToList());
     }
 
-    [Authorize(Roles = "Member")]
+    [Authorize]
     [HttpGet("GetServices/{email}")]
     public async Task<ActionResult<List<DTOs.ServiceDto>>> GetServices(string email)
     {
