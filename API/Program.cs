@@ -32,9 +32,9 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-bool pushLocalConnectionString = true;
+bool forceLocalConnectionString = false;
 string connString;
-if (builder.Environment.IsDevelopment() || pushLocalConnectionString)
+if (builder.Environment.IsDevelopment() || forceLocalConnectionString)
     connString = builder.Configuration.GetConnectionString("DefaultConnection");
 else
 {
