@@ -58,6 +58,7 @@ public class InfosController : BaseApiController
     [HttpPut("UpdateAnnouncements")]
     public async Task<ActionResult<Entities.Contact>> UpdateAnnouncements(DTOs.UpdateInfoAnnouncementsDto updateInfoAnnouncementsDto)
     {
+        try{
         var info = RetrieveInfo(updateInfoAnnouncementsDto.Id).Result;
         if (info == null)
             return NotFound();
@@ -82,6 +83,11 @@ public class InfosController : BaseApiController
         if (result)
             return CreatedAtRoute("GetInfo", new List<DTOs.InfoDto>() { mapper.Map<DTOs.InfoDto>(info) });
         return BadRequest(new ProblemDetails { Title = "Problem updating announcements" });
+        }
+        catch (Exception ex){
+            Log.Error("UpdateAnnouncements => {@err}", ex.Message);
+        }
+        return BadRequest(new ProblemDetails { Title = "Nothing changed" }); 
     }
 
     private async Task<List<Entities.Info>> RetrieveInfos()
