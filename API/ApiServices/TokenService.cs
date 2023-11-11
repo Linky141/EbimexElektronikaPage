@@ -14,7 +14,7 @@ public class TokenService
     public async Task<string> GenerateToken(Entities.User user)
     {
         var claims = new List<Claim>{
-            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Email, user.Email + "dupa"),
             new Claim(ClaimTypes.Name, user.UserName)
         };
 
