@@ -14,11 +14,13 @@ public class TokenService
     public async Task<string> GenerateToken(Entities.User user)
     {
         var claims = new List<Claim>{
-            new Claim(ClaimTypes.Email, user.Email + "test"),
+            new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Name, user.UserName)
         };
 
         var roles = await userManager.GetRolesAsync(user);
+        Log.Information("GenerateToken Roles => {@roles}", roles);
+        
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
