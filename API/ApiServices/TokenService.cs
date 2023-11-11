@@ -19,8 +19,6 @@ public class TokenService
         };
 
         var roles = await userManager.GetRolesAsync(user);
-        Log.Information("GenerateToken Roles => {@roles}", roles);
-        
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
