@@ -85,7 +85,7 @@ public class InfosController : BaseApiController
         return BadRequest(new ProblemDetails { Title = "Problem updating announcements" });
         }
         catch (Exception ex){
-            Log.Error("UpdateAnnouncements => {@err}", ex.Message);
+            Log.Error("UpdateAnnouncements => {@err}", ex.InnerException);
         }
         return BadRequest(new ProblemDetails { Title = "Nothing changed" }); 
     }
