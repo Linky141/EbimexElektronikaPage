@@ -109,6 +109,7 @@ public class ServicesController : BaseApiController
     [HttpPost("AddNewComment")]
     public async Task<ActionResult<Entities.Service>> AddNewComment(DTOs.AddNewCommentDto commentsDto)
     {
+        commentsDto.DateTime = commentsDto.DateTime.ToUniversalTime();
         var service = RetrieveService(commentsDto.Id).Result;
 
         if (service == null)
