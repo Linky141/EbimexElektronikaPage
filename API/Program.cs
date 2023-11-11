@@ -74,6 +74,10 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<API.ApiServices.TokenService>();
 builder.Services.AddScoped<API.ApiServices.ImageService>();
 
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+builder.Host.UseSerilog();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -86,6 +90,8 @@ if (app.Environment.IsDevelopment())
         c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
     });
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
