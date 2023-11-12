@@ -1,18 +1,18 @@
-# fly.toml app configuration file generated for ebimex-service-page on 2023-11-07T21:28:08+01:00
+# fly.toml app configuration file generated for ebimex on 2023-11-12T12:12:44+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "ebimex-service-page"
+app = "ebimex"
 primary_region = "waw"
 
 [build]
-  image = "linky141/ebimexpage:latest"
+  image = "linky141/ebimex:latest"
 
 [env]
   ASPNETCORE_URLS = "http://+:8080"
-  Cloudinary__CloudName="dll5swiyg"
-  Cloudinary__ApiKey="688555847835986"
+  Cloudinary__ApiKey = "688555847835986"
+  Cloudinary__CloudName = "dll5swiyg"
 
 [http_service]
   internal_port = 8080
