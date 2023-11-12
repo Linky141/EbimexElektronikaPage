@@ -1,13 +1,13 @@
 # fly.toml app configuration file generated for ebimex on 2023-11-12T12:12:44+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-# 
+#
 
 app = "ebimex"
 primary_region = "waw"
 
 [build]
-  image = "linky141/ebimex:latest"
+  image = "linky141/ebimexpage:latest"
 
 [env]
   ASPNETCORE_URLS = "http://+:8080"
